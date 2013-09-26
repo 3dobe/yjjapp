@@ -1,0 +1,7 @@
+
+html, body {
+	font-family: "微软雅黑";
+}
+a, label, input[type="checkbox"], input[type="radio"] {
+	cursor: pointer;
+}
