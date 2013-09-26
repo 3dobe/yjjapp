@@ -1,7 +1,7 @@
 {
 	"name": "yjjapp",
 	"version": "0.0.0",
-	"description": "一个连接讲端和听端，有助于各种互动(如发送资料、问答、投票、抽奖)的演讲应用",
+	"description": "一个连接讲端和听端，催化各类互动环节的演讲应用",
 	"main": "app.js",
 	"author": "3dobe",
 	"dependencies": {

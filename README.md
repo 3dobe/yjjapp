@@ -1,4 +1,4 @@
-worldmin
+yjjapp
 ======
 
-An online site with support for Weixin, based on Node.js
+一个连接讲端和听端，催化各类互动环节的演讲应用
