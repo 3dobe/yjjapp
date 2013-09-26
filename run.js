@@ -1,30 +1,30 @@
 
 var taffy = require('taffydb').taffy,
-	my = require('./lib/my'),
-	speechList = taffy([]),
-	bitsSpeechUID = 4, bitsSpeechPwd = 6;
+	sys = require('./lib/sys'),
+	lectureList = taffy([]),
+	bitsLectureID = 4, bitsLecturePwd = 6;
 
 module.exports = function(app) {
 	// 讲端操作
 	app.get('/do/s/open', function(req, res) {
-		var uid = (function() {
-			var uid = my.getUID(bitsSpeechUID);
-			while (speechList({uid: uid}).count() > 0) {	// 避免 uid 重复
-				uid = my.getUID(bitsSpeechUID);
+		var id = (function() {
+			var uid = sys.getUID(bitsLectureID);
+			while (lectureList({id: uid}).count() > 0) {	// 避免 id 重复
+				uid = sys.getUID(bitsLectureID);
 			}
 			return uid;
-		})(), newSpeech = {
-			uid: uid,
-			password: my.getUID(bitsSpeechPwd)
+		})(), newLecture = {
+			id: id,
+			password: sys.getUID(bitsLecturePwd)
 		}
-		speechList.insert(newSpeech);
+		lectureList.insert(newLecture);
 		
 		req.session.s = {
-			uid: newSpeech.uid
+			id: newLecture.id
 		}
 		res.send({
-			uid: newSpeech.uid,
-			password: newSpeech.password
+			id: newLecture.id,
+			password: newLecture.password
 		});
 	});
 	app.get('/do/s/reset_pwd', function(req, res) {
