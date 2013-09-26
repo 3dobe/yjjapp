@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<head>
+<!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
+<meta charset="utf-8" />
+<title>创建空间页面</title>
+<!-- css -->
+<link rel="stylesheet" href="../lib/css/bootstrap.min.css">
+<link rel="stylesheet" href="../lib/css/bootstrap-theme.min.css">
+<style>
+body {
+	font-family: "微软雅黑";
+}
+.container {
+	width: 100%;
+	min-width: 0;
+	max-width: 1080px;
+	margin: auto;
+}
+@media (min-width: 1200px) {
+	.container {
+		width: 90%;
+		max-width: 9999px;
+	}
+}
+</style>
+</head>
+
+<body>
+<div id="aaa" class="container">
+	<div class="open">
+		<h1>申请空间</h1>
+		<p>xxxx xx xxxx</p>
+		<form name="form1" method="post" action="">
+		  <input type="submit" value="创建空间">
+		</form>
+
+		<form id="reset" method="post" action="">
+		  <label>重置密码</label>
+		  <input type="password">
+		  <button type="submit" class="btn btn-danger btn-lg">提交</button>
+		</form>
+	</div>
+</div>
+
+<!-- js -->
+<script src="../lib/js/jquery.min.js"></script>
+<script src="../lib/js/bootstrap.min.js"></script>
+<script>
+$('#reset').on('submit', function(event) {
+	event.preventDefault();
+	alert("sadasd");
+});
+</script>
+</body>
+</html>
