@@ -1,21 +1,21 @@
 
 var http = require('http'),
-    fs = require('fs'),
-    assert = require('assert'),
+	fs = require('fs'),
+	assert = require('assert'),
 	express = require('express'),
 	mkdirp = require('mkdirp'),
-    mode = 'local',// 运行模式
-    config = (function() {
-        var configFile = './config/' + mode + '.js';
-        // 确保配置文件存在
-        assert(fs.existsSync(configFile), 'Config file not found');
-        return require(configFile);
-    })(),
-    app = express();
+	mode = 'local', // 运行模式
+	config = (function() {
+		var configFile = './config/' + mode + '.js';
+		// 确保配置文件存在
+		assert(fs.existsSync(configFile), 'Config file not found');
+		return require(configFile);
+	})(),
+	app = express();
 
 app.configure(function() {
 	app.set('env', config.env);
-	mkdirp.sync(config.tmpDir);     // 确保临时文件夹存在
+	mkdirp.sync(config.tmpDir);	 // 确保临时文件夹存在
 	app.use(express.favicon());
 	app.use(express.bodyParser({uploadDir: config.tmpDir}));
 	app.use(express.cookieParser());
