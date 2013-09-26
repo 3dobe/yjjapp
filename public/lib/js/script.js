@@ -1,7 +1,7 @@
-
+﻿
 var $mainFrame = $('#main-frame'),
 	env = ['development', 'production'][0],
-	hrefSubPage = 'welcome.html';
+	hrefSubPage = location.hash.substr(1) || 'welcome.html';
 
 // 绑定链接
 $('body').delegate('[href]', 'click', function(event) {
@@ -21,7 +21,7 @@ if (env === 'development') {
 // hash改变时自动加载子页面
 $(window).on('hashchange', function(event) {
 	event.preventDefault();
-	var href = window.location.hash.substr(1);
+	var href = location.hash.substr(1);
 	if (href && href !== hrefSubPage) {
 		loadSubPage(href);
 	}
