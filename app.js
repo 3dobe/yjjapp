@@ -6,9 +6,9 @@ var http = require('http'),
 	mkdirp = require('mkdirp'),
 	mode = 'local', // 运行模式
 	config = (function() {
-		var configFile = './config/' + mode + '.js';
+		var configFile = __dirname + '/config/' + mode + '.js';
 		// 确保配置文件存在
-		assert(fs.existsSync(configFile), 'Config file not found');
+		assert(fs.existsSync(configFile), '配置文件不存在');
 		return require(configFile);
 	})(),
 	app = express();
@@ -24,6 +24,9 @@ app.configure(function() {
 
 require('./run')(app);
 app.use(express.static(config.publicDir));
-http.createServer(app).listen(config.port, function() {
-	console.log('Server running on ' + config.port);
+http.createServer(app).on('error', function(err) {
+    assert(false, '服务运行失败，可能是端口' + config.port + '被占用');
+}).listen(config.port, function() {
+    console.log('服务成功运行于端口' + config.port);
 });
+
