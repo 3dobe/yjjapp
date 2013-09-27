@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>演讲家</title>
+		<title>演讲家App</title>
 		<meta charset="utf-8" />
 		<link rel="stylesheet" href="/lib/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/lib/css/bootstrap-theme.min.css" />
@@ -11,17 +11,36 @@
 	</head>
 	<body>
 		<div id="body-wrapper">
-			<header>
-				<a href="/s/open.html" class="button button-rounded button-flat-primary button-large">申请</a>
-				<a href="/s/enter.html" class="button button-rounded button-flat-primary button-large">进入</a>
-				<a href="/s/view.html" class="button button-rounded button-flat-primary button-large">管理</a>
-				<a href="/a/join.html" class="button button-rounded button-flat-primary button-large">加入</a>
-				<a href="/a/view.html" class="button button-rounded button-flat-primary button-large">查看</a>
-			</header>
+            <div id="nav-wrapper">
+                <nav id="nav" class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a data-toggle="page" href="/welcome.html" class="navbar-brand">演讲家App</a>
+                        </div>
+
+                        <div class="collapse navbar-collapse navbar-ex1-collapse">
+                            <ul class="nav navbar-nav">
+                                <li class="active">
+                                    <a data-toggle="page" href="/s/open.html">开辟讲座</a>
+                                </li>
+                                <li>
+                                    <a data-toggle="page" href="/s/enter.html">管理讲座</a>
+                                </li>
+                                <li>
+                                    <a data-toggle="page" href="/a/join.html">加入讲座</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
 			<div id="main-frame" class="container"></div>
-			<footer>
-				
-			</footer>
 		</div>
 		
 		<script src="/lib/js/jquery.min.js"></script>

@@ -1,6 +1,7 @@
 
-html, body {
-	font-family: "微软雅黑";
+body {
+    background-color: #fafafa;
+    font-family: "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 a, label, input[type="checkbox"], input[type="radio"] {
 	cursor: pointer;
@@ -18,4 +19,23 @@ a:hover {
 }
 #body-wrapper>footer {
 	margin-top: 20px;
+}
+
+#nav-wrapper {
+    height: 50px;
+    margin-bottom: 20px;
+}
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav li a {
+    color: #dddddd;
+}
+#nav {
+    background: url(../../images/octicons-bg.png) center repeat;
+    background-color: #222;
+}
+#nav li.active > a {
+    background-color: rgba(30, 130, 200, 0.3);
+}
+#nav li.active > a {
+    background-color: rgba(30, 130, 200, 0.3);
 }
