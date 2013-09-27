@@ -1,8 +1,8 @@
 
 var _ = require('underscore'),
-	sys = require('../lib/sys'),
+	yjj = require('../lib/yjj'),
 	bits = 4;
 
 _.times(10, function() {
-	console.log(sys.getUID(bits));
+	console.log(yjj.getRandomCode(bits), 36);
 });
