@@ -1,7 +1,7 @@
 ﻿
 var $mainFrame = $('#main-frame'),
 	env = ['development', 'production'][0],
-	hrefSubPage = location.hash.substr(1) || 'welcome.html';
+	hashSubPage = location.hash || '#/welcome';
 
 // 绑定链接
 $('body').delegate('[href]', 'click', function(event) {
@@ -13,8 +13,14 @@ $('body').delegate('[href]', 'click', function(event) {
 }).delegate('form [type="submit"]', 'click', function() {
     $(this).closest('form').submit();
 });
+
+var $nav = $('#nav');
+$nav.find('#nav-collapse').delegate('[href]', 'click', function() {
+    $nav.find('.navbar-toggle').click();
+});
+
 // 加载默认子页
-loadSubPage(hrefSubPage);
+loadSubPage(hashSubPage);
 
 // 开发模式下 禁用一切缓存
 if (env === 'development') {
@@ -26,19 +32,19 @@ if (env === 'development') {
 // hash改变时自动加载子页面
 $(window).on('hashchange', function(event) {
 	event.preventDefault();
-	var href = location.hash.substr(1);
-	if (href && href !== hrefSubPage) {
-		loadSubPage(href);
+	var hash = location.hash;
+	if (hash && hash !== '#' && hash !== hashSubPage) {
+		loadSubPage(hash);
 	}
 });
 
 // 加载子页面
-function loadSubPage(href) {
+function loadSubPage(hash) {
 	$.ajax({
 		type: 'get',
-		url: href,
+		url: hash.substr(1) + '.html',
 		success: function(htmlTxt) {
-			window.location.hash = hrefSubPage = href;
+			window.location.hash = hashSubPage = hash;
 			$mainFrame.html(htmlTxt);
 		}
 	});

@@ -24,7 +24,7 @@ module.exports = function(app) {
 	app.all('/do/s/open', function(req, res) {
         var action = 'open';
         var result = Number(req.body["valisum"]);
-        if(/*req.session["valisum"] &&*/ req.session["valisum"][action] === result){
+        if(req.session["valisum"] && req.session["valisum"][action] === result){
             res.send({
                  ok : 1,
                 msg : "成功了,yoyoyo"
