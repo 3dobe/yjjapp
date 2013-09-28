@@ -10,6 +10,8 @@ $('body').delegate('[href]', 'click', function(event) {
 }).delegate('[data-toggle="page"]', 'click', function() {
     $('[data-toggle="page"]').parent('li').removeClass('active');
     $(this).parent('li').addClass('active');
+}).delegate('form [type="submit"]', 'click', function() {
+    $(this).closest('form').submit();
 });
 // 加载默认子页
 loadSubPage(hrefSubPage);

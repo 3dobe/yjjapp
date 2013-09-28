@@ -1,27 +1,60 @@
 ﻿
 <!-- css -->
-
+<style>
+    #canvas {
+        width: 140px;
+        height: 40px;
+    }
+</style>
 
 <div id="main-wrapper">
 	<h1>申请空间</h1>
-	<p>xxxx xx xxxx</p>
-	<form name="form1" method="post" action="">
-	  <input type="submit" value="创建空间">
+
+	<form id="form-open">
+        <canvas id="canvas" width="70" height="20"></canvas><br />
+        <input type="text" name="valisum" placeholder="验证码">
+        <span class="button-wrap">
+            <a type="submit" class="button button-circle button-primary">创建空间</a>
+        </span>
 	</form>
 
-	<form id="reset" method="post" action="">
-	  <label>重置密码</label>
-	  <input type="password">
-	  <button type="submit" class="btn btn-danger btn-lg">提交</button>
-	</form>
+	<form>
+	  <input type="password" placeholder="重置密码">
+	 <!-- <button type="submit" class="btn btn-danger btn-lg">提交</button>
+	</form>-->
+<button type="button" class="btn btn-primary btn-lg active">提交</button>
+</form>
 </div>
 
 <!-- js -->
+<script src="/lib/js/drawVerificationCode.js"></script>
 <script>
-$('#reset').on('submit', function(event) {
-	event.preventDefault();
-	alert("sadasd");
-});
+    showValicode();
+
+    $('#form-open').ajaxForm({
+        url: '/do/s/open',
+        type: 'post',
+        success: function(resObj) {
+            var ok = resObj['ok'],
+                msg = resObj['msg'];
+            if (ok) {
+                loadSubPage('/s/view.html');
+            } else {
+                alert(msg);
+                showValicode();
+            }
+        }
+    });
+
+
+    function showValicode() {
+        $.get('/do/valicode', {
+            'action': 'open'
+        }, function(resObj) {
+            var num1 = resObj['num1'], num2 = resObj['num2'], oper = resObj['oper'];
+            drawVerificationCode(num1, num2, oper);
+        });
+    }
 </script>
 
 
