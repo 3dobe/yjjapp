@@ -1,4 +1,4 @@
-
+﻿
 var Client = require('../lib/client'),
     client = new Client('localhost:3088');
 
@@ -15,7 +15,7 @@ client.post('/do/valicode', {
             '－': num1 - num2,
             '×': num1 * num2
         }[oper];
-    console.log('运算结果为: ' + result);
+    console.log('运算结果为: '+ result);
 
     client.post('/do/s/open', {
         'action': 'open',
