@@ -8,13 +8,13 @@
 </style>
 
 <div id="main-wrapper">
-	<h1>申请空间</h1>
+	<h1>申请讲座</h1>
 
 	<form id="form-open">
         <canvas id="canvas" width="70" height="20"></canvas><br />
         <input type="text" name="valisum" placeholder="验证码">
         <span class="button-wrap">
-            <a type="submit" class="button button-circle button-primary">创建空间</a>
+            <a type="submit" class="button button-circle button-primary">创建</a>
         </span>
 	</form>
 
@@ -38,7 +38,7 @@
             var ok = resObj['ok'],
                 msg = resObj['msg'];
             if (ok) {
-                loadSubPage('/s/view.html');
+                loadSubPage('#/s/view');
             } else {
                 alert(msg);
                 showValicode();
