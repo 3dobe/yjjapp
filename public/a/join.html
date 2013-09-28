@@ -1,27 +1,36 @@
-﻿<!DOCTYPE html>
-<head>
-<!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
-<meta charset="utf-8" />
-<title>进入页面</title>
+﻿
 <!-- css -->
-</head>
-
-<body>
 
 
-<p>欢迎使用演讲家</p>
+<div id="main-wrapper">
 
-<form>
-演讲者ID: 
-<input type="text" name="firstname" />
+
+
+<h1>欢迎使用演讲家</h1>
+
+
+<form method="post" action="/do/a/join">
+	<div class="row">
+   		<div class="col-sm-4 col-sm-offset-2">
+        	<div class="form-group">
+            	<input type="text" class="form-control" name="id" placeholder="演讲ID">
+            </div>
+        	<div class="form-group">
+            	<button type="submit" class="btn btn-primary btn-block">进入空间</button>
+            </div>
+        </div>
+    </div>
 </form>
-<form>
-  <input type="button" value="进入空间">
-</form>
 
 
-
+</div>
 
 <!-- js -->
-</body>
-</html>
+<script>
+$('#main-wrapper').find('form').ajaxForm({
+	success: function(resObj) {
+		var msg = resObj['msg'];
+		alert(msg);
+	}
+});
+</script>
