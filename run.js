@@ -6,9 +6,10 @@ module.exports = function(app) {
     app.all('/do/valicode', function(req, res) {
         var action = req.query['action'];
         var session = req.session;
-        var num1 = Math.floor(Math.random() * 9) + 1,
-            num2 = Math.floor(Math.random() * 9) + 1,
-            r = Math.floor(Math.random() * 3),
+        var num1 = Math.floor(Math.random() * 5) + 5,
+            num2 = Math.floor(Math.random() * 6) + 0;
+
+        var     r = Math.floor(Math.random() * 3),
             oper = ['＋', '－', '×'][r],
             result = [num1 + num2, num1 - num2, num1 * num2][r];
         req.session['valisum'] = req.session['valisum'] || {};
