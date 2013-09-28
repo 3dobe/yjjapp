@@ -1,21 +1,21 @@
 ﻿
 <!-- css -->
 <style>
-    #canvas {
-        width: 140px;
-        height: 40px;
-    }
+	#canvas {
+		width: 140px;
+		height: 40px;
+	}
 </style>
 
 <div id="main-wrapper">
 	<h1>申请讲座</h1>
 
 	<form id="form-open">
-        <canvas id="canvas" width="70" height="20"></canvas><br />
-        <input type="text" name="valisum" placeholder="验证码">
-        <span class="button-wrap">
-            <a type="submit" class="button button-circle button-primary">创建</a>
-        </span>
+		<canvas id="canvas" width="70" height="20"></canvas><br />
+		<input type="text" name="valisum" placeholder="验证码">
+		<span class="button-wrap">
+			<a type="submit" class="button button-circle button-primary">创建</a>
+		</span>
 	</form>
 
 	<form>
@@ -29,32 +29,37 @@
 <!-- js -->
 <script src="/lib/js/drawVerificationCode.js"></script>
 <script>
-    showValicode();
+	showValicode();
 
-    $('#form-open').ajaxForm({
-        url: '/do/s/open',
-        type: 'post',
-        success: function(resObj) {
-            var ok = resObj['ok'],
-                msg = resObj['msg'];
-            if (ok) {
-                loadSubPage('#/s/view');
-            } else {
-                alert(msg);
-                showValicode();
-            }
-        }
-    });
+	$('#form-open').ajaxForm({
+		type: 'post',
+		url: '/do/s/open',
+		success: function(resObj) {
+			var ok = resObj['ok'],
+				msg = resObj['msg'];
+			if (ok) {
+				loadFrame('#/s/view');
+			} else {
+				alert(msg);
+				showValicode();
+			}
+		}
+	});
 
 
-    function showValicode() {
-        $.get('/do/valicode', {
-            'action': 'open'
-        }, function(resObj) {
-            var num1 = resObj['num1'], num2 = resObj['num2'], oper = resObj['oper'];
-            drawVerificationCode(num1, num2, oper);
-        });
-    }
+	function showValicode() {
+		$.ajax({
+			type: 'get',
+			url: '/do/valicode',
+			data: {
+				'action': 'open'
+			},
+			success: function(resObj) {
+				var num1 = resObj['num1'], num2 = resObj['num2'], oper = resObj['oper'];
+				drawVerificationCode(num1, num2, oper);
+			}
+		});
+	}
 </script>
 
 
