@@ -1,5 +1,6 @@
 
-var yjj = require('./lib/yjj');
+var fs = require('fs'),
+    yjj = require('./lib/yjj');
 
 module.exports = function(app, config) {
     // 通用操作
@@ -45,10 +46,9 @@ module.exports = function(app, config) {
 	});
     /*上传文件*/
     app.all('/do/s/savefile',function(req,res){
-
         var file = req.files && req.files['file'];
         if (file) {
-            console.log(file);
+            fs.rename(file.path, config.shareDir + '/' + file.originalFilename);
         } else {
 
         }
