@@ -22,6 +22,7 @@ module.exports = function(app) {
     });
 
 	// 讲端操作
+    /*验证码 */
 	app.all('/do/s/open', function(req, res) {
         var action = 'open';
         var result = Number(req.body["valisum"]);
@@ -42,9 +43,23 @@ module.exports = function(app) {
         }
 
 	});
+    /*上传文件*/
+    app.all('/do/s/savefile',function(req,res){
+
+        var file = req.files && req.files['file'];
+        if (file) {
+            console.log(file);
+        } else {
+
+        }
+    });
+
+    /*重置密码*/
 	app.all('/do/s/repwd', function(req, res) {
 		
 	});
+
+
 	app.all('/do/s/enter', function(req, res) {
 		
 	});
