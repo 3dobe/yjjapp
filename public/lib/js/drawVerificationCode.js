@@ -6,6 +6,6 @@ function drawVerificationCode(firstArg,secondArg,operator){
 
     ctx.background = "rgb(0.255.255)";
     ctx.clearRect(0, 0, 70, 20);
-    ctx.fillText(firstArg + operator + secondArg + "= ?" ,10,15);
+    ctx.fillText(firstArg + operator + secondArg + "＝?" ,7,15);
 
 }
