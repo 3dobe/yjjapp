@@ -7,7 +7,7 @@ module.exports = function(app) {
         var action = req.query['action'];
         var session = req.session;
         var num1 = Math.floor(Math.random() * 5) + 5,
-            num2 = Math.floor(Math.random() * 6) + 1;
+            num2 = Math.floor(Math.random() * 5) + 1;
 
         var     r = Math.floor(Math.random() * 3),
             oper = ['＋', '－', '×'][r],
