@@ -7,7 +7,7 @@ $.fn.ajaxForm = function(options) {
 			$.ajax(_.extend({}, {
 				url: $form.attr('action'),
 				type: $form.attr('method'),
-				data: $form.serializeJSON()
+				data: _.extend($form.serializeJSON(), options.data)
 			}, options));
 		});
 	});
