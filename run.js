@@ -1,7 +1,7 @@
 
 var yjj = require('./lib/yjj');
 
-module.exports = function(app) {
+module.exports = function(app, config) {
     // 通用操作
     app.all('/do/valicode', function(req, res) {
         var action = req.query['action'];
