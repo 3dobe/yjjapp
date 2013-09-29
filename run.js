@@ -9,7 +9,7 @@ module.exports = function(app) {
         var num1 = Math.floor(Math.random() * 5) + 5,
             num2 = Math.floor(Math.random() * 5) + 1;
 
-        var     r = Math.floor(Math.random() * 3),
+        var r = Math.floor(Math.random() * 3),
             oper = ['＋', '－', '×'][r],
             result = [num1 + num2, num1 - num2, num1 * num2][r];
         req.session['valisum'] = req.session['valisum'] || {};
