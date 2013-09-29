@@ -52,6 +52,12 @@ module.exports = function(app, config) {
         } else {
 
         }
+        res.send({
+            ok : 1,
+            msg : "yoyoyo"
+        })
+
+
     });
 
     /*重置密码*/
