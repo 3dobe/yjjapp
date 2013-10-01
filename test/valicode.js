@@ -2,7 +2,7 @@
 var Client = require('../lib/client'),
 	client = new Client('localhost:3088');
 
-client.get('/do/valicode', {
+client.get('/do/valicode', {	// 获取验证信息
 	'action': 'open'
 }, {}, function(err, res, resTxt) {
 	console.log('验证码为: ' + resTxt);
@@ -17,7 +17,7 @@ client.get('/do/valicode', {
 	}[oper];
 	console.log('运算结果为: '+ result);
 	
-	client.post('/do/s/open', {
+	client.post('/do/s/open', {	// 输入验证码
 		'valisum': result
 	}, {}, function(err, res, resTxt) {
 		var resObj = JSON.parse(resTxt);
