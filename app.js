@@ -1,13 +1,14 @@
 ﻿
 var http = require('http'),
 	fs = require('fs'),
-	assert = require('assert'),
 	express = require('express'),
 	mode = 'local', // 运行模式
 	config = (function() {
 		var configFile = __dirname + '/config/' + mode + '.js';
 		// 确保配置文件存在
-		assert(fs.existsSync(configFile), 'Config file not found');
+		if (! fs.existsSync(configFile)) {
+			throw new Error('Config file not found');
+		}
 		return require(configFile);
 	})(),
 	app = express();
@@ -27,7 +28,7 @@ app.configure(function() {
 require('./run')(app, config);
 app.use(express.static(config.publicDir));
 http.createServer(app).on('error', function(err) {
-	assert(! err, 'Port ' + config.port + ' occupied');
+	throw new Error('Port ' + config.port + ' occupied');
 }).listen(config.port, function() {
 	console.log('Listening on port ' + config.port);
 });
