@@ -1,4 +1,4 @@
-
+﻿
 var http = require('http'),
 	fs = require('fs'),
 	assert = require('assert'),
@@ -16,7 +16,7 @@ var http = require('http'),
 app.configure(function() {
 	app.set('env', config.env);
 	mkdirp.sync(config.tmpDir);	 // 确保临时文件夹存在
-    mkdirp.sync(config.shareDir);	 // 确保临时文件夹存在
+	mkdirp.sync(config.shareDir);	 // 确保临时文件夹存在
 
 	app.use(express.favicon());
 	app.use(express.bodyParser({uploadDir: config.tmpDir}));
@@ -27,8 +27,8 @@ app.configure(function() {
 require('./run')(app, config);
 app.use(express.static(config.publicDir));
 http.createServer(app).on('error', function(err) {
-    assert(false, '服务运行失败，可能是端口' + config.port + '被占用');
+	assert(false, '服务运行失败，可能是端口' + config.port + '被占用');
 }).listen(config.port, function() {
-    console.log('服务成功运行于端口' + config.port);
+	console.log('服务成功运行于端口' + config.port);
 });
 
