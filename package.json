@@ -7,7 +7,8 @@
 	"dependencies": {
 		"underscore": "1.4.4",
 		"express": "3.4.0",
-		"taffydb": "2.7.2"
+		"taffydb": "2.7.2",
+		"chance": "0.4.3"
 	},
 	"devDependencies": {
 		"bufferhelper": "0.2.0",
