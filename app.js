@@ -3,7 +3,6 @@ var http = require('http'),
 	fs = require('fs'),
 	assert = require('assert'),
 	express = require('express'),
-	mkdirp = require('mkdirp'),
 	mode = 'local', // 运行模式
 	config = (function() {
 		var configFile = __dirname + '/config/' + mode + '.js';
@@ -15,8 +14,9 @@ var http = require('http'),
 
 app.configure(function() {
 	app.set('env', config.env);
-	mkdirp.sync(config.tmpDir);	 // 确保临时文件夹存在
-	mkdirp.sync(config.shareDir);	 // 确保临时文件夹存在
+	// 确保目录存在
+	fs.existsSync(config.tmpDir) || fs.mkdirSync(config.tmpDir);
+	fs.existsSync(config.shareDir) || fs.mkdirSync(config.shareDir);
 
 	app.use(express.favicon());
 	app.use(express.bodyParser({uploadDir: config.tmpDir}));

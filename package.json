@@ -1,17 +1,16 @@
-{
+﻿{
 	"name": "yjjapp",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "一个连接讲端和听端，催化各类互动环节的演讲应用",
 	"main": "app.js",
 	"author": "3dobe",
 	"dependencies": {
 		"underscore": "1.4.4",
 		"express": "3.4.0",
-		"mkdirp": "0.3.5",
 		"taffydb": "2.7.2"
 	},
 	"devDependencies": {
 		"bufferhelper": "0.2.0",
-        "iconv-lite": "0.2.11"
+		"iconv-lite": "0.2.11"
 	}
 }
