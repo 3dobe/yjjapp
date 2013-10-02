@@ -11,22 +11,23 @@ var http = require('http'),
 		}
 		return require(configFile);
 	})(),
+	run = require('./lib/run'),
 	app = express();
+
+// 确保目录存在
+fs.existsSync(config.tmpDir) || fs.mkdirSync(config.tmpDir);
+fs.existsSync(config.shareDir) || fs.mkdirSync(config.shareDir);
 
 app.configure(function() {
 	app.set('env', config.env);
-	// 确保目录存在
-	fs.existsSync(config.tmpDir) || fs.mkdirSync(config.tmpDir);
-	fs.existsSync(config.shareDir) || fs.mkdirSync(config.shareDir);
-	
 	app.use(express.favicon());
 	app.use(express.bodyParser({uploadDir: config.tmpDir}));
 	app.use(express.cookieParser());
 	app.use(express.session({secret: config.secret}));
+	run(app, config);	// 上层运作
+	app.use(express.static(config.publicDir));	// 静态资源
 });
 
-require('./run')(app, config);
-app.use(express.static(config.publicDir));
 http.createServer(app).on('error', function(err) {
 	throw new Error('Port ' + config.port + ' occupied');
 }).listen(config.port, function() {
