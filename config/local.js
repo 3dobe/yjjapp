@@ -1,5 +1,7 @@
 
-var rootDir = __dirname + '/..';
+var rootDir = __dirname + '/..',
+    publicDir = rootDir + '/public',
+    shareDir = publicDir + '/files';
 
 module.exports = {
 	env: 'production',
@@ -8,5 +10,6 @@ module.exports = {
 	secret: '' + Math.random(),
 	rootDir: rootDir,
 	tmpDir: rootDir,
-	publicDir: rootDir + '/public'
+	publicDir: publicDir,
+    shareDir: shareDir
 }

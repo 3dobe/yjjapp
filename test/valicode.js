@@ -1,27 +1,26 @@
-
+﻿
 var Client = require('../lib/client'),
-    client = new Client('localhost:3088');
+	client = new Client('localhost:3088');
 
-client.post('/do/valicode', {
-    'action': 'open'
+client.get('/do/valicode', {	// 获取验证信息
+	'action': 'open'
 }, {}, function(err, res, resTxt) {
-    console.log('验证码为: ' + resTxt);
-    var resObj = JSON.parse(resTxt),
-        num1 = resObj['num1'],
-        num2 = resObj['num2'],
-        oper = resObj['oper'],
-        result = {
-            '＋': num1 + num2,
-            '－': num1 - num2,
-            '×': num1 * num2
-        }[oper];
-    console.log('运算结果为: ' + result);
-
-    client.post('/do/s/open', {
-        'action': 'open',
-        'valisum': result
-    }, {}, function(err, res, resTxt) {
-        var resObj = JSON.parse(resTxt);
-        console.log(resObj);
-    });
+	console.log('验证码为: ' + resTxt);
+	var resObj = JSON.parse(resTxt),
+	num1 = resObj['num1'],
+	num2 = resObj['num2'],
+	oper = resObj['oper'],
+	result = {
+		'＋': num1 + num2,
+		'－': num1 - num2,
+		'×': num1 * num2
+	}[oper];
+	console.log('运算结果为: '+ result);
+	
+	client.post('/do/s/open', {	// 输入验证码
+		'valisum': result
+	}, {}, function(err, res, resTxt) {
+		var resObj = JSON.parse(resTxt);
+		console.log(resObj);
+	});
 });

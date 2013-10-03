@@ -12,7 +12,7 @@ $.ajaxSetup({
 $body.delegate('[href]', 'click', function(event) {
 	event.preventDefault();
 	loadFrame($(this).attr('href'));
-}).delegate('form [type="submit"]', 'click', function() {
+}).delegate('form a[type="submit"]', 'click', function() {
     $(this).closest('form').submit();
 });
 
