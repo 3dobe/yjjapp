@@ -56,3 +56,20 @@
 
 
 </div>
+
+<script src="/lib/js/drawVerificationCode.js"></script>
+<script>
+$.ajax({
+type: 'get',
+url: '/do/s/filelist',
+success: function(resObj) {
+if (resObj['ok']) {
+var fileList = resObj['fileList'];
+alert(fileList);
+} else {
+alert('获取失败');
+}
+}
+});
+
+</script>
