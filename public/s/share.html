@@ -11,7 +11,6 @@
     <table id="table-filelist" class="table table-hover">
         <thead>
         <tr>
-            <th>#</th>
             <th>文件名字</th>
             <th>文件大小</th>
             <th>文件描述</th>
@@ -19,6 +18,7 @@
         </tr>
         </thead>
 
+        <tbody></tbody>
     </table>
 
 
@@ -47,7 +47,7 @@
 
     getFileList();
 
-    function getFileList {
+    function getFileList() {
         $tbody.empty();
         $.ajax({
             type: 'get',
@@ -59,9 +59,9 @@
                         $([
                             '<tr>',
                             '<td>' + val['name'] + '</td>',
-                            '<td>' + val['size'] + '</td>',
+                            '<td>' + Math.ceil(val['size'] / 1024) + ' KB </td>',
                             '<td>' + val['description'] + '</td>',
-                            '<td>' + val['timeDowns'] + '</td>'
+                            '<td>' + val['timesDown'] + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });
