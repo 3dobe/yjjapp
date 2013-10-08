@@ -8,34 +8,17 @@
             <a href="#/view" > back to index.</a>
        </p>
 
-    <table class="table table-hover">
+    <table id="table-filelist" class="table table-hover">
         <thead>
         <tr>
             <th>#</th>
             <th>文件名字</th>
             <th>文件大小</th>
-            <th>文件操作</th>
+            <th>文件描述</th>
+            <th>下载次数</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td><button type="button" class="btn btn-info">文件下载</button></td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-        </tr>
-        </tbody>
+
     </table>
 
 
@@ -59,17 +42,33 @@
 
 <script src="/lib/js/drawVerificationCode.js"></script>
 <script>
-$.ajax({
-type: 'get',
-url: '/do/s/filelist',
-success: function(resObj) {
-if (resObj['ok']) {
-var fileList = resObj['fileList'];
-alert(fileList);
-} else {
-alert('获取失败');
-}
-}
-});
+    var $table = $('#table-filelist'),
+            $tbody = $table.find('tbody');
 
+    getFileList();
+
+    function getFileList {
+        $tbody.empty();
+        $.ajax({
+            type: 'get',
+            url: '/do/s/filelist',
+            success: function(resObj) {
+                if (resObj['ok']) {
+                    var fileList = resObj['fileList'];
+                    _.each(fileList, function(val) {
+                        $([
+                            '<tr>',
+                            '<td>' + val['name'] + '</td>',
+                            '<td>' + val['size'] + '</td>',
+                            '<td>' + val['description'] + '</td>',
+                            '<td>' + val['timeDowns'] + '</td>'
+                            '</tr>'
+                        ].join('')).appendTo($tbody);
+                    });
+                } else {
+                    alert('获取失败');
+                }
+            }
+        });
+    }
 </script>
