@@ -1,22 +1,17 @@
 ﻿
 var http = require('http'),
 	fs = require('fs'),
+	_ = require('underscore'),
 	express = require('express'),
 	mode = 'local', // 运行模式
-	config = (function() {
-		var configFile = __dirname + '/config/' + mode + '.js';
-		// 确保配置文件存在
-		if (! fs.existsSync(configFile)) {
-			throw new Error('Config file not found');
-		}
-		return require(configFile);
-	})(),
+	config = require('./config/')(mode),
 	run = require('./lib/run'),
 	app = express();
 
 // 确保目录存在
-fs.existsSync(config.tmpDir) || fs.mkdirSync(config.tmpDir);
-fs.existsSync(config.shareDir) || fs.mkdirSync(config.shareDir);
+_.each(['tmpDir', 'shareDir'], function(val) {
+	fs.existsSync(config[val]) || fs.mkdirSync(config[val]);
+});
 
 app.configure(function() {
 	app.set('env', config.env);
