@@ -5,7 +5,7 @@ function drawVerificationCode(firstArg,secondArg,operator){
     ctx.font = "15px Handwriting";
 
     ctx.background = "rgb(0.255.255)";
-    ctx.clearRect(0, 0, 70, 20);
+    ctx.clearRect(0, 0, 70, 18);
     ctx.fillText(firstArg + operator + secondArg + "＝?" ,7,15);
 
 }

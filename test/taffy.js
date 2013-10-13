@@ -40,4 +40,4 @@ friends.insert({"id":5,"gender":"F","first":"Jennifer","last":"Gill","city":"Sea
 
 console.log(friends({}).get());
 
-console.log(friends({}))
+console.log(friends({}).get().length)

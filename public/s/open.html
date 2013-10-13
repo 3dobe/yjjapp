@@ -1,0 +1,114 @@
+﻿
+<!-- css -->
+<style>
+	#canvas {
+		width: 140px;
+		height: 36px;
+	}
+	#form-open * {
+		font-size: 20px;
+	}
+    #form-open .form-group {
+        margin-bottom: 5px;
+    }
+	#form-open .form-control {
+		padding: 12px;
+		height: auto;
+	}
+    #form-open button {
+        padding: 12px;
+        height: auto;
+    }
+</style>
+
+<div id="main-wrapper">
+	<h1>申请讲座</h1>
+
+	<form id="form-open">
+		<div class="form-group">
+			<input type="text" class="form-control" name="lname" placeholder="讲座名称">
+		</div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="lpwd" placeholder="讲座密码">
+        </div>
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" class="form-control" name="vcode" placeholder="图中的运算答案">
+                <span class="input-group-addon">
+					<canvas id="canvas" width="70" height="18"></canvas>
+				</span>
+			</div>
+		</div>
+		<button type="submit" class="btn btn-primary btn-lg btn-block">
+			开启讲座
+		</button>
+	</form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">讲座信息</h4>
+			</div>
+			<div class="modal-body">
+			   <div>
+					<input type="password" class="form-control" placeholder="请输入密码">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary">保存</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+</div>
+
+
+
+<!-- js -->
+<script src="/lib/js/drawVerificationCode.js"></script>
+<script>
+	showValicode();
+
+	var $formOpen = $('#form-open');
+	$formOpen.ajaxForm({
+		type: 'post',
+		url: '/do/s/open',
+		success: function(resObj) {
+			if (resObj['ok']) {
+				loadFrame('#/view');
+			} else {
+				alert(resObj['msg']);
+				showValicode();
+			}
+			$formOpen[0].reset();
+		}
+	});
+
+	function showValicode() {
+		$.ajax({
+			type: 'get',
+			url: '/do/vcode',
+			data: {
+				'action': 'open'
+			},
+			success: function(resObj) {
+                if (! resObj['ok']) {
+                    alert('获取验证码失败');
+                    return;
+                }
+				var vcodeInfo = resObj['vcodeInfo'],
+                    num1 = vcodeInfo['num1'],
+					num2 = vcodeInfo['num2'],
+					oper = vcodeInfo['oper'];
+				drawVerificationCode(num1, num2, oper);
+			}
+		});
+	}
+</script>
