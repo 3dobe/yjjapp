@@ -1,7 +1,6 @@
 
-@import url("bootstrap.min.css");
-@import url("bootstrap-theme.min.css");
-@import url("font-awesome.min.css");
+@import url("../bootstrap/css/bootstrap.min.css");
+@import url("../bootstrap/css/bootstrap-theme.min.css");
 
 body {
     background-color: #fafafa;
