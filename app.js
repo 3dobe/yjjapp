@@ -9,9 +9,11 @@ var http = require('http'),
 	app = express();
 
 // 确保目录存在
-_.each(['tmpDir', 'shareDir'], function(val) {
-	fs.existsSync(config[val]) || fs.mkdirSync(config[val]);
-});
+var tmpDir = config.tmpDir,
+    shareDir = config.shareDir;
+fs.existsSync(tmpDir) || fs.mkdirSync(tmpDir);
+removeDirSync(shareDir);
+fs.mkdirSync(shareDir);
 
 app.configure(function() {
 	app.set('env', config.env);
@@ -28,3 +30,19 @@ http.createServer(app).on('error', function(err) {
 }).listen(config.port, function() {
 	console.log('Listening on port ' + config.port);
 });
+
+function removeDirSync(path) {
+    var files = [];
+    if( fs.existsSync(path) ) {
+        files = fs.readdirSync(path);
+        files.forEach(function(file,index){
+            var curPath = path + "/" + file;
+            if(fs.statSync(curPath).isDirectory()) { // recurse
+                removeDirSync(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
+}
