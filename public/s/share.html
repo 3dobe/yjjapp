@@ -39,18 +39,42 @@
 
     getFileList();
 
+    var validExts = [
+        'doc', 'ppt', 'xls', 'txt',
+        'jpg', 'jpeg', 'png', 'bmp', 'gif'
+    ], $form = $('#form-upload');
     $form.on('submit', function(event) {
        event.preventDefault();  // 禁止默认转页行为
     }).find('[name="file"]').ajaxfileupload({
         submit_button: $form.find('[type="submit"]'),
         'action': '/do/s/savefile',
-        valid_extensions: [
-            'doc', 'ppt', 'xls', 'txt',
-            'jpg', 'jpeg', 'png', 'bmp', 'gif'
-        ],
+        valid_extensions: validExts,
+        onCancel: function() {
+            alert('请选择文件');
+        },
         onComplete: function(resObj) {
+            if (_.isObject(resObj) && 'status' in resObj && ! resObj['status']) {
+                alert('仅支持格式 ' + validExts.join(', '));
+                $form[0].reset();
+                return;
+            }
+            if (_.isString(resObj)) {
+                var resTxt = resObj;
+                resTxt.match(/^[^\{]*(\{[\s\S]*\})[^\}]*$/);
+                json = RegExp.$1;
+                resObj = JSON.parse(json);
+            }
+
+            console.log(resObj)
+
+            alert(resObj['msg']);
+            if (! resObj['ok']) {
+                $form[0].reset();
+            } else {
+                reloadFrame();
+            }
             // ok - 显示msg并清空
-            // ! ok 显示msg
+             // ! ok 显示msg
         }
     });
 
