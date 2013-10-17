@@ -4,16 +4,34 @@
 
 <div id="main-wrapper">
 
+    <div>
+        <h1>查看讲座</h1>
+        <p>讲座序列号：<span id="key"></span></p>
+    </div>
+    <div>
+        <button href="#/reaction" class="btn btn-primary btn-lg btn-block">听众动态</button>
+        <button href="#/share" class="btn btn-primary btn-lg btn-block">下载文件</button>
+        <button id="btn-exit" class="btn btn-primary btn-lg btn-block">退出讲座</button>
+    </div>
 
-<form action="/do/a/view" method="post">
 
-
-请输入你想说的话
-
-    <input type="text" name="user" />
-
-    <button type="submit" class="btn btn-default">发送信息</button>
-    
-</form></div>
+</div>
 <!-- js -->
+
+<script>
+    $.get('/do/a/view', function(resObj) {
+        var audienceName = resObj['audiname'],
+            lectureName = resObj['lectname'],
+            lectureKey = resObj['lectkey'];
+
+        $('#key').text(lectureKey);
+    });
+
+    $('#btn-exit').on('click', function() {
+        $.get('/do/a/exit', function(resObj) {
+            alert(resObj['msg']);
+            loadFrame('#/join');
+        });
+    });
+</script>
 

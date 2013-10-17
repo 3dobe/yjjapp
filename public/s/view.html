@@ -3,28 +3,34 @@
 
 
 <div id="main-wrapper">
-	<h1>查看讲座</h1>
-	<p>讲座ID：<span id="key"></span></p>
-	<p>二维码：<span id="qrcode"></span></p>
+
+    <div>
+        <h1>查看讲座</h1>
+        <p>讲座序列号：<span id="key"></span></p>
+        <p>二维码：<span id="qrcode"></span></p>
+    </div>
+     <div>
+         <button href="#/reaction" class="btn btn-primary btn-lg btn-block">听众动态</button>
+         <button href="#/share" class="btn btn-primary btn-lg btn-block">共享文件</button>
+         <button href="#/***" class="btn btn-primary btn-lg btn-block">环节设置</button>
+         <button href="#/open" class="btn btn-primary btn-lg btn-block">退出空间</button>
+     </div>
+
 </div>
- <div>
-     <button href="#/reaction" class="btn btn-primary btn-lg btn-block">听众动态</button>
-     <button href="#/share" class="btn btn-primary btn-lg btn-block">共享文件</button>
-     <button href="#/***" class="btn btn-primary btn-lg btn-block">环节设置</button>
-     <button href="#/open" class="btn btn-primary btn-lg btn-block">退出空间</button>
- </div>
 
 <!-- js -->
 <script src="/lib/js/jquery.qrcode.min.js"></script>
 <script>
-//$.get('/do/s/view', function(resObj) {
-	//var key = resObj['key'];
-	
-	var key = 'asd2';
-	$('#key').text(key);
-	$('#qrcode').qrcode({
-		width: 128, height: 128,
-		text: key
-	});
-//});
+    var hostUrl = 'http://baidu.com';
+
+    $.get('/do/s/view', function(resObj) {
+        var lectureName = resObj['lectname'],
+            lectureKey = resObj['lectkey'];
+
+        $('#key').text(lectureKey);
+        $('#qrcode').qrcode({
+            width: 128, height: 128,
+            text: hostUrl + '/do/a/join?key=' + lectureKey
+        });
+    });
 </script>

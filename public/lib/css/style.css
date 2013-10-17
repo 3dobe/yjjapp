@@ -5,6 +5,7 @@
 body {
     background-color: #fafafa;
     font-family: "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-size: 18px;
 }
 a, label, input[type="checkbox"], input[type="radio"] {
 	cursor: pointer;

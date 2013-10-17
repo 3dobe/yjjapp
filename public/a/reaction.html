@@ -1,0 +1,123 @@
+
+
+<div id="main-wrapper">
+
+    <p>
+        <a href="#/view">返回主页</a>
+    </p>
+
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li><a class="ex-link" href="#tab-msg" data-toggle="tab">发言列表</a></li>
+        <li><a class="ex-link" href="#tab-audience" data-toggle="tab">听众列表</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-msg">
+            <table id="table-msg" class="table table-hover">
+                <thead>
+                <tr>
+                    <th>昵称</th>
+                    <th>发言</th>
+                    <th>发言时间</th>
+                </tr>
+                </thead>
+
+                <tbody></tbody>
+            </table>
+            <form action="/do/a/view" method="post">
+                请输入你想说的话
+                <input type="text" name="user" />
+                <button type="submit" class="btn btn-default">发送信息</button>
+            </form>
+        </div>
+        <div class="tab-pane" id="tab-audience">
+            <table id="table-audience" class="table table-hover">
+                <thead>
+                <tr>
+                    <th>昵称</th>
+                    <th>在线时间</th>
+                </tr>
+                </thead>
+
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+<script>
+    var $table_audience = $('#table-audience');
+
+    $('.nav-tabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show')
+    });
+
+    getAudienceList();
+    var $table_msg = $('#table-msg');
+
+    $('.nav-tabs a').click(function (a) {
+        a.preventDefault();
+        $(this).tab('show')
+    });
+    getMsgList();
+
+    function getAudienceList() {
+        var $tbody = $table_audience.find('tbody');
+        $tbody.empty();
+        $.ajax({
+            type: 'get',
+            url: '/do/a/audiencelist',
+            success: function(resObj) {
+                if (resObj['ok']) {
+                    var audienceList = resObj['audienceList'];
+                    _.each(audienceList, function(audience) {
+                        $([
+                            '<tr>',
+                            '<td>' + audience.name + '</td>',
+                            '<td>' + audience.timeOnline + '</td>',
+                            '</tr>'
+                        ].join('')).appendTo($tbody);
+                    });
+                } else {
+                    alert('听众列表获取失败');
+                }
+            }
+        });
+
+    function getMsgList() {
+        var $tbody = $table_msg.find('tbody');
+        $tbody.empty();
+        $.ajax({
+            type: 'get',
+            url: '/do/a/msglist',
+            success: function(resObj) {
+                if (resObj['ok']) {
+                    var msgList = resObj['msgList'];
+                    _.each(msg, function(msg) {
+                        $([
+                            '<tr>',
+                                '<td>' + audience.name + '</td>',
+                                '<td>' + msg.speechContent + '</td>',
+                                '<td>' + msg.time + '</td>',
+                            '</tr>'
+                        ].join('')).appendTo($tbody);
+                    });
+                } else {
+                    alert('发言列表获取失败');
+                }
+            }
+        });
+    }
+ }
+</script>
+
+
