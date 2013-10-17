@@ -1,58 +1,112 @@
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th>昵称</th>
-        <th>在线时间</th>
-        <th>加入时间</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Tom</td>
-        <td>01:10:37</td>
-        <td>20:50:49</td>
-    </tr>
-    <tr>
-        <td>Larry</td>
-        <td>00:05:55</td>
-        <td>20:52:05</td>
-    </tr>
-
-    </tbody>
-</table>
-<ul class="pagination">
-    <li><a href="#">&laquo;</a></li>
-    <li><a href="#">首页</a></li>
-    <li><a href="#">1</a></li>
-    <li><a href="#">2</a></li>
-    <li><a href="#">3</a></li>
-    <li><a href="#">末页</a></li>
-    <li><a href="#">&raquo;</a></li>
-</ul>
 
 
-<table class="table table-striped">
-    <thead>
-    <tr>
+<div id="main-wrapper">
+    <p>
+        <a href="#/view">返回主页</a>
+    </p>
 
-        <th>昵称</th>
-        <th>发言</th>
-        <th>发言时间</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
 
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-    </tr>
-    <tr>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li><a class="ex-link" href="#tab-msg" data-toggle="tab">发言列表</a></li>
+        <li><a class="ex-link" href="#tab-audience" data-toggle="tab">听众列表</a></li>
+    </ul>
 
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-    </tr>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-msg">
+            <table id="table-msg" class="table table-hover">
+                <thead>
+                <tr>
+                    <th>昵称</th>
+                    <th>发言</th>
+                    <th>发言时间</th>
+                </tr>
+                </thead>
 
-    </tbody>
-</table>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="tab-audience">
+            <table id="table-audience" class="table table-hover">
+                <thead>
+                <tr>
+                    <th>昵称</th>
+                    <th>在线时间</th>
+                </tr>
+                </thead>
+
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $table_audience = $('#table-audience');
+
+    $('.nav-tabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show')
+    }).first().tab('show');
+
+    getAudienceList();
+    var $table_msg = $('#table-msg');
+
+    $('.nav-tabs a').click(function (a) {
+        a.preventDefault();
+        $(this).tab('show')
+    });
+    getMsgList();
+
+    function getAudienceList() {
+        var $tbody = $table_audience.find('tbody');
+        $tbody.empty();
+        $.ajax({
+            type: 'get',
+            url: '/do/s/audiencelist',
+            success: function(resObj) {
+                if (resObj['ok']) {
+                    var audienceList = resObj['audienceList'];
+                    _.each(audienceList, function(audience) {
+                        $([
+                            '<tr>',
+                            '<td>' + audience.name + '</td>',
+                            '<td>' + audience.timeOnline + '</td>',
+                            '</tr>'
+                        ].join('')).appendTo($tbody);
+                    });
+                } else {
+                    alert('听众列表获取失败');
+                }
+            }
+        });
+    }
+
+    function getMsgList() {
+        var $tbody = $table_msg.find('tbody');
+        $tbody.empty();
+        $.ajax({
+            type: 'get',
+            url: '/do/s/msglist',
+            success: function(resObj) {
+                if (resObj['ok']) {
+                    var msgList = resObj['msgList'];
+                    _.each(msg, function(msg) {
+                        $([
+                            '<tr>',
+                                '<td>' + audience.name + '</td>',
+                                '<td>' + msg.speechContent + '</td>',
+                                '<td>' + msg.time + '</td>',
+                            '</tr>'
+                        ].join('')).appendTo($tbody);
+                    });
+                } else {
+                    alert('发言列表获取失败');
+                }
+            }
+        });
+    }
+</script>
+
+

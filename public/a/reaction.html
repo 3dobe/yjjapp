@@ -1,7 +1,6 @@
 
 
 <div id="main-wrapper">
-
     <p>
         <a href="#/view">返回主页</a>
     </p>
@@ -46,11 +45,6 @@
             </table>
         </div>
     </div>
-
-
-
-
-
 </div>
 
 <script>
@@ -59,7 +53,7 @@
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
         $(this).tab('show')
-    });
+    }).first().tab('show');
 
     getAudienceList();
     var $table_msg = $('#table-msg');
@@ -92,6 +86,7 @@
                 }
             }
         });
+    }
 
     function getMsgList() {
         var $tbody = $table_msg.find('tbody');
@@ -117,7 +112,6 @@
             }
         });
     }
- }
 </script>
 
 

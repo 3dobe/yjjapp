@@ -17,24 +17,12 @@
 
         <tbody></tbody>
     </table>
-
-    <form id="form-upload">
-        <div class="form-group">
-            <div class="input-group">
-                <input type="file" class="form-control" name="file" />
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary">提交</button>
-            </span>
-            </div>
-        </div>
-    </form>
 </div>
 
 <script src="/lib/js/drawVerificationCode.js"></script>
 <script>
     var $table = $('#table-filelist'),
-            $tbody = $table.find('tbody'),
-            $form = $('#form-upload');
+            $tbody = $table.find('tbody');
 
     getFileList();
 
