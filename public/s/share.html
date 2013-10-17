@@ -12,6 +12,7 @@
             <th>文件名</th>
             <th>文件大小</th>
             <th>下载次数</th>
+            <th>操作</th>
         </tr>
         </thead>
 
@@ -87,6 +88,7 @@
                                 '<td>' + file['name'] + '</td>',
                                 '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
                                 '<td>' + file['timesDown'] + '</td>',
+                                '<td>' + <a href="#" class="button glow button-rounded button-flat">press me</a> '</td>,'
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });
