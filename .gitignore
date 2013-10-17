@@ -4,4 +4,4 @@
 **/*.txt
 **/*.log
 /node_modules
-/public/files
+/content

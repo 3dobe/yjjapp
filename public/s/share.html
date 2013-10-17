@@ -40,7 +40,7 @@
     getFileList();
 
     var validExts = [
-        'doc', 'ppt', 'xls', 'txt',
+        'doc', 'docx', 'ppt', 'xls', 'txt',
         'jpg', 'jpeg', 'png', 'bmp', 'gif'
     ], $form = $('#form-upload');
     $form.on('submit', function(event) {
@@ -64,17 +64,12 @@
                 json = RegExp.$1;
                 resObj = JSON.parse(json);
             }
-
-            console.log(resObj)
-
             alert(resObj['msg']);
             if (! resObj['ok']) {
                 $form[0].reset();
             } else {
                 reloadFrame();
             }
-            // ok - 显示msg并清空
-             // ! ok 显示msg
         }
     });
 
@@ -86,17 +81,17 @@
             success: function(resObj) {
                 if (resObj['ok']) {
                     var files = resObj['files'];
-                    _.each(files, function(val) {
+                    _.each(files, function(file) {
                         $([
                             '<tr>',
-                            '<td>' + val['name'] + '</td>',
-                            '<td>' + Math.ceil(val['size'] / 1024) + ' KB </td>',
-                            '<td>' + val['timesDown'] + '</td>',
+                                '<td>' + file['name'] + '</td>',
+                                '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
+                                '<td>' + file['timesDown'] + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });
                 } else {
-                    alert('获取失败');
+                    alert('文件列表获取失败');
                 }
             }
         });
