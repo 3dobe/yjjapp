@@ -9,8 +9,10 @@ var http = require('http'),
 	app = express();
 
 // 确保目录存在
-var tmpDir = config.tmpDir,
+var contentDir = config.contentDir,
+    tmpDir = config.tmpDir,
     shareDir = config.shareDir;
+fs.existsSync(contentDir) || fs.mkdirSync(contentDir);
 fs.existsSync(tmpDir) || fs.mkdirSync(tmpDir);
 removeDirSync(shareDir);
 fs.mkdirSync(shareDir);

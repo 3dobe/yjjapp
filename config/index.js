@@ -10,8 +10,9 @@ var path = require('path'),
 module.exports = function(mode) {
 	var config = {
 		rootDir: rootDir,
-		tmpDir: tmpDir,
-		publicDir: publicDir,
+        publicDir: publicDir,
+        contentDir: contentDir,
+        tmpDir: tmpDir,
 		shareDir: shareDir,
 		timezoneOffset: (-60) * 8,  // BJ time
 		secret: '308'
