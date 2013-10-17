@@ -1,4 +1,4 @@
-
+﻿
 
 
 <div id="main-wrapper">
@@ -17,7 +17,6 @@
 
         <tbody></tbody>
     </table>
-
 
     <form id="form-upload">
         <div class="form-group">
@@ -39,54 +38,22 @@
 
     getFileList();
 
-    var validExts = [
-        'doc', 'docx', 'ppt', 'xls', 'txt',
-        'jpg', 'jpeg', 'png', 'bmp', 'gif'
-    ], $form = $('#form-upload');
-    $form.on('submit', function(event) {
-       event.preventDefault();  // 禁止默认转页行为
-    }).find('[name="file"]').ajaxfileupload({
-        submit_button: $form.find('[type="submit"]'),
-        'action': '/do/s/savefile',
-        valid_extensions: validExts,
-        onCancel: function() {
-            alert('请选择文件');
-        },
-        onComplete: function(resObj) {
-            if (_.isObject(resObj) && 'status' in resObj && ! resObj['status']) {
-                alert('仅支持格式 ' + validExts.join(', '));
-                $form[0].reset();
-                return;
-            }
-            if (_.isString(resObj)) {
-                var resTxt = resObj;
-                resTxt.match(/^[^\{]*(\{[\s\S]*\})[^\}]*$/);
-                json = RegExp.$1;
-                resObj = JSON.parse(json);
-            }
-            alert(resObj['msg']);
-            if (! resObj['ok']) {
-                $form[0].reset();
-            } else {
-                reloadFrame();
-            }
-        }
-    });
-
     function getFileList() {
         $tbody.empty();
         $.ajax({
             type: 'get',
-            url: '/do/s/filelist',
+            url: '/do/a/filelist',
             success: function(resObj) {
                 if (resObj['ok']) {
                     var files = resObj['files'];
                     _.each(files, function(file) {
                         $([
                             '<tr>',
-                                '<td>' + file['name'] + '</td>',
-                                '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
-                                '<td>' + file['timesDown'] + '</td>',
+                            '<td>',
+                                '<a class="ex-link" href="/a/downfile?fid='+ file['id'] +'">' + file['name'] + '</a>',
+                            '</td>',
+                            '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
+                            '<td>' + file['timesDown'] + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });

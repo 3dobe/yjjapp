@@ -3,8 +3,9 @@ var path = require('path'),
     _ = require('underscore'),
 	rootDir = path.join(__dirname, '..'),
 	publicDir = path.join(rootDir, 'public'),
-    tmpDir = path.join(publicDir, 'tmp'),
-	shareDir = path.join(publicDir, 'files');
+    contentDir = path.join(rootDir, 'content'),
+    tmpDir = path.join(contentDir, 'tmp'),
+	shareDir = path.join(contentDir, 'files');
 
 module.exports = function(mode) {
 	var config = {
