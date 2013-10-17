@@ -1,9 +1,10 @@
 
-var _ = require('underscore'),
-	rootDir = __dirname + '/..',
-	tmpDir = rootDir,
-	publicDir = rootDir + '/public',
-	shareDir = publicDir + '/files';
+var path = require('path'),
+    _ = require('underscore'),
+	rootDir = path.join(__dirname, '..'),
+	publicDir = path.join(rootDir, 'public'),
+    tmpDir = path.join(publicDir, 'tmp'),
+	shareDir = path.join(publicDir, 'files');
 
 module.exports = function(mode) {
 	var config = {
@@ -11,7 +12,7 @@ module.exports = function(mode) {
 		tmpDir: tmpDir,
 		publicDir: publicDir,
 		shareDir: shareDir,
-		timezoneOffset: 8,
+		timezoneOffset: (-60) * 8,  // BJ time
 		secret: '308'
 	}
 	// 确保配置文件存在

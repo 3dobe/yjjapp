@@ -15,15 +15,13 @@ fs.existsSync(tmpDir) || fs.mkdirSync(tmpDir);
 removeDirSync(shareDir);
 fs.mkdirSync(shareDir);
 
-app.configure(function() {
-	app.set('env', config.env);
-	app.use(express.favicon());
-	app.use(express.bodyParser({uploadDir: config.tmpDir}));
-	app.use(express.cookieParser());
-	app.use(express.session({secret: config.secret}));
-	run(app, config);	// 上层运作
-	app.use(express.static(config.publicDir));	// 静态资源
-});
+app.set('env', config.env);
+app.use(express.favicon());
+app.use(express.bodyParser({uploadDir: config.tmpDir}));
+app.use(express.cookieParser());
+app.use(express.session({secret: config.secret}));
+run(app, config);	// 上层运作
+app.use(express.static(config.publicDir));	// 静态资源
 
 http.createServer(app).on('error', function(err) {
 	throw new Error('Port ' + config.port + ' occupied');
