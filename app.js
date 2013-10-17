@@ -6,6 +6,7 @@ var http = require('http'),
 	mode = 'local', // 运行模式
 	config = require('./config/')(mode),
 	run = require('./lib/run'),
+    removeDir = require('./lib/remove-dir'),
 	app = express();
 
 // 确保目录存在
@@ -14,7 +15,7 @@ var contentDir = config.contentDir,
     shareDir = config.shareDir;
 fs.existsSync(contentDir) || fs.mkdirSync(contentDir);
 fs.existsSync(tmpDir) || fs.mkdirSync(tmpDir);
-removeDirSync(shareDir);
+removeDir(shareDir);
 fs.mkdirSync(shareDir);
 
 app.set('env', config.env);
@@ -30,19 +31,3 @@ http.createServer(app).on('error', function(err) {
 }).listen(config.port, function() {
 	console.log('Listening on port ' + config.port);
 });
-
-function removeDirSync(path) {
-    var files = [];
-    if (fs.existsSync(path)) {
-        files = fs.readdirSync(path);
-        files.forEach(function(file,index){
-            var curPath = path + "/" + file;
-            if(fs.statSync(curPath).isDirectory()) { // recurse
-                removeDirSync(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
-    }
-}
