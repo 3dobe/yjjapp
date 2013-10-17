@@ -41,8 +41,8 @@
     getFileList();
 
     var validExts = [
-        'doc', 'docx', 'ppt', 'xls', 'txt',
-        'jpg', 'jpeg', 'png', 'bmp', 'gif'
+        'doc', 'docx', 'ppt', 'pptx' , 'xls', 'xlsx',
+        'txt', 'jpg', 'jpeg', 'png', 'bmp', 'gif'
     ], $form = $('#form-upload');
     $form.on('submit', function(event) {
        event.preventDefault();  // 禁止默认转页行为
@@ -85,10 +85,14 @@
                     _.each(files, function(file) {
                         $([
                             '<tr>',
-                                '<td>' + file['name'] + '</td>',
+                                '<td>',
+                                    '<a target="_blank" href="/do/downfile?fid='+ file['id'] +'" class="ex-link">'+ file['name'] +'</a>',
+                                '</td>',
                                 '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
                                 '<td>' + file['timesDown'] + '</td>',
-                                '<td>' + <a href="#" class="button glow button-rounded button-flat">press me</a> '</td>,'
+                                '<td>',
+                                    '<a data-fid="'+ file['id'] +'" class="delfile button glow button-rounded button-flat">删除</a>',
+                                '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });
