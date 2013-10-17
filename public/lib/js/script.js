@@ -9,10 +9,10 @@ $.ajaxSetup({
 });
 	
 // 绑定链接
-$body.delegate('[href]', 'click', function(event) {
+$body.delegate('[href]:not(.ex-link)', 'click', function(event) {
 	event.preventDefault();
 	loadFrame($(this).attr('href'));
-}).delegate('form a[type="submit"]', 'click', function() {
+}).delegate('form a[type="submit"]', 'click', function() {  // enable a[type="submit"]
     $(this).closest('form').submit();
 });
 
