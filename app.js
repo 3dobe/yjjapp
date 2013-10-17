@@ -33,7 +33,7 @@ http.createServer(app).on('error', function(err) {
 
 function removeDirSync(path) {
     var files = [];
-    if( fs.existsSync(path) ) {
+    if (fs.existsSync(path)) {
         files = fs.readdirSync(path);
         files.forEach(function(file,index){
             var curPath = path + "/" + file;
