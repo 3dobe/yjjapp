@@ -1,0 +1,66 @@
+﻿
+
+
+<div id="main-wrapper">
+       <p>
+            <a href="#/view" > back to index.</a>
+       </p>
+
+    <table id="table-filelist" class="table table-hover">
+        <thead>
+        <tr>
+            <th>文件名</th>
+            <th>文件大小</th>
+            <th>下载次数</th>
+        </tr>
+        </thead>
+
+        <tbody></tbody>
+    </table>
+
+    <form id="form-upload">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="file" class="form-control" name="file" />
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary">提交</button>
+            </span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/lib/js/drawVerificationCode.js"></script>
+<script>
+    var $table = $('#table-filelist'),
+            $tbody = $table.find('tbody'),
+            $form = $('#form-upload');
+
+    getFileList();
+
+    function getFileList() {
+        $tbody.empty();
+        $.ajax({
+            type: 'get',
+            url: '/do/a/filelist',
+            success: function(resObj) {
+                if (resObj['ok']) {
+                    var files = resObj['files'];
+                    _.each(files, function(file) {
+                        $([
+                            '<tr>',
+                            '<td>',
+                                '<a class="ex-link" href="/a/downfile?fid='+ file['id'] +'">' + file['name'] + '</a>',
+                            '</td>',
+                            '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
+                            '<td>' + file['timesDown'] + '</td>',
+                            '</tr>'
+                        ].join('')).appendTo($tbody);
+                    });
+                } else {
+                    alert('文件列表获取失败');
+                }
+            }
+        });
+    }
+</script>
