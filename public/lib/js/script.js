@@ -41,3 +41,15 @@ function loadFrame(hash, success) {
 function reloadFrame(success) {
 	loadFrame(location.hash, success);
 }
+
+// 计算时间间隔
+function strTimeDiff(oldtime) { // 单位 s
+    var sTotal = Math.round((Date.now() - oldtime) / 1000),
+        h = Math.floor(sTotal/3600),
+        m = Math.floor((sTotal%3600) / 60),
+        s = Math.floor(sTotal%3600%60);
+    h = h < 10 ? '0' + h : h;
+    m = m < 10 ? '0' + m : m;
+    s = s < 10 ? '0' + s : s;
+    return h + ':' + m + ':' + s;
+}

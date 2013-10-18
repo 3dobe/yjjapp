@@ -72,7 +72,7 @@
                         $([
                             '<tr>',
                             '<td>' + audience.name + '</td>',
-                            '<td>' + audience.timeOnline + '</td>',
+                            '<td>' + strTimeDiff(audience.jointime) + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });
@@ -92,7 +92,7 @@
             success: function(resObj) {
                 if (resObj['ok']) {
                     var msgList = resObj['msgList'];
-                    _.each(msg, function(msg) {
+                    _.each(msgList, function(msg) {
                         $([
                             '<tr>',
                                 '<td>' + audience.name + '</td>',
