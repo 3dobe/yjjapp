@@ -3,18 +3,17 @@
 
 
 <div id="main-wrapper">
-    <div>
-        <h1>查看讲座</h1>
-        <p>
-            讲座序列号：<span id="key"></span>
-        </p>
-        <p>
-            二维码：<span id="qrcode"></span>
-        </p>
-        <p>
-            我的昵称：<span id="name"></span>
-        </p>
-    </div>
+    <h1>查看讲座</h1>
+    <p>
+        讲座名称：<span id="lectname"></span>
+    </p>
+    <p>
+        讲座序列号：<span id="lectkey"></span>
+    </p>
+    <p>
+        我的昵称：<span id="audiname"></span>
+    </p>
+</div>
     <div>
         <button href="#/reaction" class="btn btn-primary btn-lg btn-block">听众动态</button>
         <button href="#/share" class="btn btn-primary btn-lg btn-block">共享文件</button>
@@ -30,15 +29,11 @@
 
     $.get('/do/a/view', function(resObj) {
         var lectkey = resObj['lectkey'],
-                lectname = resObj['lectname'],
-                audiname = resObj['audiname'];
+            lectname = resObj['lectname'],
+            audiname = resObj['audiname'];
         $('#lectkey').text(lectkey);
         $('#lectname').text(lectname);
         $('#audiname').text(audiname);
-        $('#qrcode').qrcode({
-            width: 128, height: 128,
-            text: hostUrl + '/a/join?key=' + lectkey
-        });
     });
 
     $('#btn-exit').on('click', function() {

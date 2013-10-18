@@ -27,11 +27,14 @@
                 <tbody></tbody>
             </table>
             <form  id="form-msg" action="/do/a/sendmsg" method="post">
-                请输入你想说的话
-                <input type="text" name="msg" />
-                <button type="submit" class="btn btn-default">发送信息</button>
+                <div class="input-group">
+                    <input type="text" name="msg" class="form-control" placeholder="请输入你想说的话">
+                      <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit" >发送消息</button>
+                      </span>
+                </div><!-- /input-group -->
             </form>
-        </div>
+     </div>
         <div class="tab-pane" id="tab-audience">
             <table id="table-audience" class="table table-hover">
                 <thead>
@@ -48,7 +51,8 @@
 </div>
 
 <script>
-    var $table_audience = $('#table-audience');
+    var $table_audience = $('#table-audience'),
+        $table_msg = $('#table-msg');
 
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
@@ -56,14 +60,7 @@
     }).first().tab('show');
 
     getAudienceList();
-    var $table_msg = $('#table-msg');
-
-    $('.nav-tabs a').click(function (a) {
-        a.preventDefault();
-        $(this).tab('show')
-    });
     getMsgList();
-
 
     $('#form-msg').ajaxForm({
         success: function(resObj) {
@@ -88,10 +85,11 @@
                     _.each(audienceList, function(audience) {
                         $([
                             '<tr>',
-                            '<td>' + audience.name + '</td>',
-                            '<td>' + strTimeDiff(audience.jointime) + '</td>',
+                                '<td>' + audience.name + '</td>',
+                                '<td>' + strTime(Date.now() - audience.jointime, true) + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
+
                     });
                 } else {
                     alert('听众列表获取失败');
@@ -114,7 +112,7 @@
                             '<tr>',
                                 '<td>' + msg.audienceName + '</td>',
                                 '<td>' + msg.text + '</td>',
-                                '<td>' + strTimeDiff(msg.sendtime) + '</td>',
+                                '<td>' + strTime(msg.sendtime) + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });

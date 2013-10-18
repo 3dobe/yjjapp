@@ -42,10 +42,10 @@ function reloadFrame(success) {
 	loadFrame(location.hash, success);
 }
 
-// 计算时间间隔
-function strTimeDiff(oldtime) { // 单位 s
-    var sTotal = Math.round((Date.now() - oldtime) / 1000),
-        h = Math.floor(sTotal/3600),
+// 时分秒的显示
+function strTime(time, isDiff) {
+    var sTotal = Math.round((time) / 1000),
+        h = Math.floor(sTotal/3600%24 + (isDiff ? 0 : 8)),
         m = Math.floor((sTotal%3600) / 60),
         s = Math.floor(sTotal%3600%60);
     h = h < 10 ? '0' + h : h;

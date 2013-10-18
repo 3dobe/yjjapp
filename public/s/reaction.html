@@ -72,7 +72,7 @@
                         $([
                             '<tr>',
                             '<td>' + audience.name + '</td>',
-                            '<td>' + strTimeDiff(audience.jointime) + '</td>',
+                            '<td>' + strTime(Date.now() - audience.jointime, true) + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });
@@ -95,9 +95,9 @@
                     _.each(msgList, function(msg) {
                         $([
                             '<tr>',
-                                '<td>' + audience.name + '</td>',
-                                '<td>' + msg.speechContent + '</td>',
-                                '<td>' + msg.time + '</td>',
+                                '<td>' + msg.audienceName + '</td>',
+                                '<td>' + msg.text + '</td>',
+                                '<td>' + strTime(msg.sendtime) + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
                     });
