@@ -3,16 +3,16 @@ var http = require('http'),
 	fs = require('fs'),
 	_ = require('underscore'),
 	express = require('express'),
-	mode = process.argv[2] || 'bae', // 运行模式
+	mode = (process.arvs && process.arvs[2]) || 'bae', // 运行模式
 	config = require('./config/')(mode),
 	run = require('./lib/run'),
-    removeDir = require('./lib/remove-dir'),
+	removeDir = require('./lib/remove-dir'),
 	app = express();
 
 // 确保目录存在
 var contentDir = config.contentDir,
-    tmpDir = config.tmpDir,
-    shareDir = config.shareDir;
+	tmpDir = config.tmpDir,
+	shareDir = config.shareDir;
 fs.existsSync(contentDir) || fs.mkdirSync(contentDir);
 fs.existsSync(tmpDir) || fs.mkdirSync(tmpDir);
 removeDir(shareDir);
