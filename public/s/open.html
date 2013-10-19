@@ -2,7 +2,7 @@
 <!-- css -->
 <style>
 	#canvas {
-		width: 140px;
+		width: 120px;
 		height: 36px;
 	}
 	#form-open * {
@@ -14,6 +14,9 @@
 	#form-open .form-control {
 		padding: 12px;
 		height: auto;
+	}
+	#form-open input-group-addon {
+		padding: 3px 6px;
 	}
     #form-open button {
         padding: 12px;
@@ -29,11 +32,11 @@
 			<input type="text" class="form-control" name="lname" placeholder="讲座名称">
 		</div>
         <div class="form-group">
-            <input type="text" class="form-control" name="lpwd" placeholder="讲座密码">
+            <input type="text" class="form-control" name="lpwd" placeholder="管理密码">
         </div>
 		<div class="form-group">
 			<div class="input-group">
-				<input type="text" class="form-control" name="vcode" placeholder="图中的运算答案">
+				<input type="text" class="form-control" name="vcode" placeholder="验证码">
                 <span class="input-group-addon">
 					<canvas id="canvas" width="70" height="18"></canvas>
 				</span>
@@ -99,15 +102,24 @@
 				'action': 'open'
 			},
 			success: function(resObj) {
-                if (! resObj['ok']) {
-                    alert('获取验证码失败');
-                    return;
-                }
-				var vcodeInfo = resObj['vcodeInfo'],
-                    num1 = vcodeInfo['num1'],
-					num2 = vcodeInfo['num2'],
-					oper = vcodeInfo['oper'];
-				drawVerificationCode(num1, num2, oper);
+				$.ajax({
+					type: 'get',
+					url: '/do/vcode',
+					data: {
+						'action': 'open'
+					},
+					success: function(resObj) {
+						if (! resObj['ok']) {
+							alert('获取验证码失败');
+							return;
+						}
+						var vcodeInfo = resObj['vcodeInfo'],
+							num1 = vcodeInfo['num1'],
+							num2 = vcodeInfo['num2'],
+							oper = vcodeInfo['oper'];
+						drawVerificationCode(num1, num2, oper);
+					}
+				});
 			}
 		});
 	}
