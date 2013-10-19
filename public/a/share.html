@@ -2,9 +2,7 @@
 
 
 <div id="main-wrapper">
-       <p>
-            <a href="#/view">返回主页</a>
-       </p>
+    <h1>文件共享</h1>
 
     <table id="table-filelist" class="table table-hover">
         <thead>
@@ -23,8 +21,8 @@
 <script>
     var $table = $('#table-filelist'),
             $tbody = $table.find('tbody');
-
-    getFileList();
+	
+	getFileList();
 
     function getFileList() {
         $tbody.empty();

@@ -2,9 +2,7 @@
 
 
 <div id="main-wrapper">
-       <p>
-            <a href="#/view">返回主页</a>
-       </p>
+    <h1>文件共享</h1>
 
     <table id="table-filelist" class="table table-hover">
         <thead>
@@ -73,7 +71,18 @@
             }
         }
     });
-
+	
+	$tbody.delegate('a.delfile', 'click', function(ev) {
+		var $a = $(this),
+			fid = parseInt($a.attr('data-fid'));
+		$.get('/do/s/delfile?fid=' + fid, function(resObj) {
+			alert(resObj['msg']);
+			if (resObj['ok']) {
+				reloadFrame();
+			}
+		});
+	});
+	
     function getFileList() {
         $tbody.empty();
         $.ajax({
@@ -86,14 +95,14 @@
                         $([
                             '<tr>',
                                 '<td>',
-                                    '<a target="_blank" href="/do/downfile?fid='+ file['id'] +'" class="ex-link">',
+                                    '<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
                                         file['name'],
                                     '</a>',
                                 '</td>',
                                 '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
                                 '<td>' + file['timesDown'] + '</td>',
                                 '<td>',
-                                    '<a data-fid="'+ file['id'] +'" class="delfile button glow button-rounded button-flat">删除</a>',
+                                    '<a data-fid="'+ file['id'] +'" class="ex-link delfile">删除</a>',
                                 '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);

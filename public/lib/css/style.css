@@ -3,8 +3,11 @@
 @import url("../bootstrap/css/bootstrap-theme.min.css");
 
 body {
-    background-color: #fafafa;
-    font-family: "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	background-color: #fafafa;
+	font-family: "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+h1 {
+	margin-bottom: 20px;
 }
 a, label, input[type="checkbox"], input[type="radio"] {
 	cursor: pointer;
@@ -12,14 +15,32 @@ a, label, input[type="checkbox"], input[type="radio"] {
 a:hover {
 	text-decoration: none;
 }
+.btn-group-vertical {
+	display: block;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+	cursor: pointer;
+}
 
 #frame {
 	padding: 10px;
     margin: auto;
-	margin-top: 20px;
+	width: 100%;
     max-width: 500px;
 }
 #body-wrapper>footer {
 	margin-top: 20px;
+}
+.li-label {
+	font-weight: bold;
+	display: inline-block;
+	width: 30%;
+	vertical-align: top;
+}
+th {
+	min-width: 80px;
+}
+th.long, td.long {
+	word-break: break-all;
 }
 

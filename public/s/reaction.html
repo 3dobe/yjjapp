@@ -1,10 +1,7 @@
 
 
 <div id="main-wrapper">
-    <p>
-        <a href="#/view">返回主页</a>
-    </p>
-
+    <h1>听众反应</h1>
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
@@ -19,7 +16,7 @@
                 <thead>
                 <tr>
                     <th>昵称</th>
-                    <th>发言</th>
+                    <th class="long">发言</th>
                     <th>发言时间</th>
                 </tr>
                 </thead>
@@ -32,7 +29,7 @@
                 <thead>
                 <tr>
                     <th>昵称</th>
-                    <th>在线时间</th>
+                    <th>在线时长</th>
                 </tr>
                 </thead>
 
@@ -43,23 +40,22 @@
 </div>
 
 <script>
-    var $table_audience = $('#table-audience');
+    var $table_audience = $('#table-audience'),
+		$table_msg = $('#table-msg');
 
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
-        $(this).tab('show')
+		updateAll();
+        $(this).tab('show');
     }).first().tab('show');
-
-    getAudienceList();
-    var $table_msg = $('#table-msg');
-
-    $('.nav-tabs a').click(function (a) {
-        a.preventDefault();
-        $(this).tab('show')
-    });
-    getMsgList();
-
-    function getAudienceList() {
+	
+	updateAll();
+	
+	function updateAll() {
+		updateAudienceList();
+		updateMsgList();
+	}
+    function updateAudienceList() {
         var $tbody = $table_audience.find('tbody');
         $tbody.empty();
         $.ajax({
@@ -82,8 +78,7 @@
             }
         });
     }
-
-    function getMsgList() {
+    function updateMsgList() {
         var $tbody = $table_msg.find('tbody');
         $tbody.empty();
         $.ajax({
@@ -96,7 +91,7 @@
                         $([
                             '<tr>',
                                 '<td>' + msg.audienceName + '</td>',
-                                '<td>' + msg.text + '</td>',
+                                '<td class="long">' + msg.text + '</td>',
                                 '<td>' + strTime(msg.sendtime) + '</td>',
                             '</tr>'
                         ].join('')).appendTo($tbody);
