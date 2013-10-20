@@ -9,9 +9,5 @@
 		"express": "3.4.0",
 		"taffydb": "2.7.2",
 		"chance": "0.4.3"
-	},
-	"devDependencies": {
-		"bufferhelper": "0.2.0",
-		"iconv-lite": "0.2.11"
 	}
 }
