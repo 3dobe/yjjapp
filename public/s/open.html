@@ -35,7 +35,7 @@
             <input type="text" class="form-control" name="lpwd" placeholder="管理密码">
         </div>
         <div class="form-group">
-            <input type="text" class="form-control" name="nick" placeholder="讲者名称">
+            <input type="text" class="form-control" name="nick" placeholder="讲者昵称">
         </div>
 		<div class="form-group">
 			<div class="input-group">
@@ -92,8 +92,8 @@
 			} else {
 				alert(resObj['msg']);
 				showValicode();
+                $formOpen.find('[name="vcode"]').val('');
 			}
-			$formOpen[0].reset();
 		}
 	});
 

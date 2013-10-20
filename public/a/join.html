@@ -41,14 +41,16 @@
 
 <!-- js -->
 <script>
-$('#main-wrapper').find('form').ajaxForm({
-	success: function(resObj) {
-        var ok = resObj['ok'],
+    var $formJoin = $('#form-join');
+
+    $formJoin.ajaxForm({
+        success: function(resObj) {
+            var ok = resObj['ok'],
                 msg = resObj['msg'];
-        alert(msg);
-        if (ok) {
-            loadFrame('#/view');
+            alert(msg);
+            if (ok) {
+                loadFrame('#/view');
+            }
         }
-	}
-});
+    });
 </script>
