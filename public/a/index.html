@@ -21,5 +21,11 @@
 		<script src="/lib/js/ajax-form.js"></script>
 		<script src="/lib/js/u.js"></script>
 		<script src="/lib/js/a.js"></script>
+        <script>
+            setInterval(heartbeat, 4 * 1000);  // 50 s
+            function heartbeat() {
+                $.get('/do/a/heartbeat');
+            }
+        </script>
 	</body>
 </html>
