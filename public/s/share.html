@@ -90,8 +90,8 @@
             url: '/do/s/filelist',
             success: function(resObj) {
                 if (resObj['ok']) {
-                    var files = resObj['files'];
-                    _.each(files, function(file) {
+                    var fileList = resObj['fileList'];
+                    _.each(fileList, function(file) {
                         $([
                             '<tr>',
                                 '<td>',
