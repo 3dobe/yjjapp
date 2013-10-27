@@ -1,0 +1,101 @@
+<!-- css -->
+<style>
+    #canvas {
+        width: 120px;
+        height: 36px;
+    }
+    #form-enter * {
+        font-size: 20px;
+    }
+    #form-enter .form-group {
+        margin-bottom: 5px;
+    }
+    #form-enter .form-control {
+        padding: 12px;
+        height: auto;
+    }
+    #form-enter input-group-addon {
+        padding: 3px 6px;
+    }
+    #form-enter button {
+        padding: 12px;
+        height: auto;
+    }
+</style>
+
+<div id="main-wrapper">
+    <h1>进入讲座</h1>
+
+    <form id="form-enter">
+        <div class="form-group">
+            <input type="text" class="form-control" name="lkey" placeholder="讲座序列号">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="lpwd" placeholder="输入密码">
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" name="vcode" placeholder="验证码">
+                <span class="input-group-addon">
+					<canvas id="canvas" width="70" height="18"></canvas>
+				</span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">
+            进入讲座
+        </button>
+    </form>
+</div>
+
+
+
+<!-- js -->
+<script src="/lib/js/drawVerificationCode.js"></script>
+<script>
+    showValicode();
+
+    var $formEnter = $('#form-enter');
+    $formEnter.ajaxForm({
+        type: 'post',
+        url: '/do/s/enter',
+        success: function(resObj) {
+            if (resObj['ok']) {
+                loadFrame('#/view');
+            } else {
+                alert(resObj['msg']);
+                showValicode();
+                $formOpen.find('[name="vcode"]').val('');
+            }
+        }
+    });
+
+    function showValicode() {
+        $.ajax({
+            type: 'get',
+            url: '/do/vcode',
+            data: {
+                'action': 'enter'
+            },
+            success: function(resObj) {
+                $.ajax({
+                    type: 'get',
+                    url: '/do/vcode',
+                    data: {
+                        'action': 'enter'
+                    },
+                    success: function(resObj) {
+                        if (! resObj['ok']) {
+                            alert('获取验证码失败');
+                            return;
+                        }
+                        var vcodeInfo = resObj['vcodeInfo'],
+                                num1 = vcodeInfo['num1'],
+                                num2 = vcodeInfo['num2'],
+                                oper = vcodeInfo['oper'];
+                        drawVerificationCode(num1, num2, oper);
+                    }
+                });
+            }
+        });
+    }
+</script>
