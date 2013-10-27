@@ -1,0 +1,82 @@
+
+
+<div id="main-wrapper">
+    <h1>投票管理</h1>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li>
+            <a class="ex-link" href="#tab-list" data-toggle="tab">投票列表</a>
+        </li>
+        <li>
+            <a class="ex-link" href="#tab-add" data-toggle="tab">添加投票</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab-list">
+            <table id="table-list" class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="long">问题</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="tab-pane" id="tab-add">
+            <form id="form-add">
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var $table_list = $('#table-list'),
+            $form_add = $('#form-add');
+
+    $('.nav-tabs a').click(function (e) {
+        e.preventDefault();
+        updateVoteList();
+        $(this).tab('show');
+    }).first().tab('show');
+
+    updateVoteList();
+
+    function updateVoteList() {
+        $.ajax({
+            type: 'get',
+            url: '/do/s/votelist',
+            success: function(resObj) {
+                var ok = resObj['ok'],
+                        msg = resObj['msg'];
+                if (! resObj['ok']) {
+                    msg && alert(msg);
+                    return;
+                }
+                var voteList = resObj['voteList'],
+                        tbodyHtml = _.reduce(voteList, function(memo, vote) {
+                            return memo + ['<tr>',
+                                '<td>' + vote.content + '</td>',
+                                '<td>' +  + '</td>',
+                                '<td>',
+                                vote.state === 'active' ?
+                                        '<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
+                                        '<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
+                                '&nbsp;&nbsp;',
+                                '<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
+                                '</td>',
+                                '</tr>'
+                            ].join('');
+                        }, '');
+                $table_list.find('tbody').html(tbodyHtml);
+            }
+        });
+    }
+</script>
+
+
