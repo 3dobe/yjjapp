@@ -37,6 +37,7 @@
 
 <script>
     var $table_list = $('#table-list'),
+            $tbody = $table_list.find('tbody'),
             $form_add = $('#form-add');
 
     $('.nav-tabs a').click(function (e) {
@@ -44,6 +45,35 @@
         updateVoteList();
         $(this).tab('show');
     }).first().tab('show');
+
+    $tbody.delegate('a.delvote', 'click', function(ev) {
+        var $a = $(this),
+                vid = parseInt($a.attr('data-vid'));
+        $.get('/do/s/delvote?vid=' + vid, function(resObj) {
+            alert(resObj['msg']);
+            if (resObj['ok']) {
+                reloadFrame();
+            }
+        });
+    }).delegate('a.onvote', 'click', function(ev) {
+        var $a = $(this),
+                vid = parseInt($a.attr('data-vid'));
+        $.get('/do/s/setvote?state=active&vid=' + vid, function(resObj) {
+            alert(resObj['msg']);
+            if (resObj['ok']) {
+                reloadFrame();
+            }
+        });
+    }).delegate('a.offvote', 'click', function(ev) {
+        var $a = $(this),
+                vid = parseInt($a.attr('data-vid'));
+        $.get('/do/s/setvote?state=cool&vid=' + vid, function(resObj) {
+            alert(resObj['msg']);
+            if (resObj['ok']) {
+                reloadFrame();
+            }
+        });
+    });
 
     updateVoteList();
 
@@ -61,19 +91,21 @@
                 var voteList = resObj['voteList'],
                         tbodyHtml = _.reduce(voteList, function(memo, vote) {
                             return memo + ['<tr>',
-                                '<td>' + vote.content + '</td>',
-                                '<td>' +  + '</td>',
+                                '<td>' + vote['content'] + '</td>',
+                                '<td>' + (vote['state'] === 'active' ? '开启' : '关闭') + '</td>',
                                 '<td>',
-                                vote.state === 'active' ?
-                                        '<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
-                                        '<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
+                                    '<a href="#/viewvote?vid='+ vote['id'] +'">详情</a>',
                                 '&nbsp;&nbsp;',
-                                '<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
+                                    vote['state'] === 'active' ?
+                                            '<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
+                                            '<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
+                                    '&nbsp;&nbsp;',
+                                    '<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
                                 '</td>',
                                 '</tr>'
                             ].join('');
                         }, '');
-                $table_list.find('tbody').html(tbodyHtml);
+                $tbody.html(tbodyHtml);
             }
         });
     }
