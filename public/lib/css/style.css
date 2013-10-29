@@ -44,3 +44,23 @@ th.long, td.long {
 	word-break: break-all;
 }
 
+form * {
+    font-size: 20px;
+}
+form .form-group {
+    margin-bottom: 5px;
+}
+form .form-control {
+    padding: 12px;
+    height: auto;
+}
+form input-group-addon {
+    padding: 3px 6px;
+}
+form button {
+    padding: 12px;
+    height: auto;
+}
+textarea {
+    resize: none;
+}

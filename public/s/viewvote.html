@@ -1,0 +1,50 @@
+<style>
+    ul, ol {
+        list-style-type: none;
+    }
+</style>
+
+<div id="main-wrapper">
+    <h1>投票详情</h1>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <span class="li-label">题目</span>
+            <span id="content"></span>
+        </li>
+        <li class="list-group-item">
+            <span class="li-label">选项相关</span>
+            <ul id="words"></ul>
+        </li>
+        <li class="list-group-item">
+            <span class="li-label">图表结果</span>
+            <span id="result"></span>
+        </li>
+        <li class="list-group-item">
+            <span class="li-label">投票人数情况</span>
+            <span id="count"></span>
+        </li>
+    </ul>
+</div>
+
+<script>
+    var vid = 1;
+
+    $.get('/do/s/viewvote?vid=' + vid, function(resObj) {
+        var vote = resObj['vote'],
+                content = vote['content'],
+                options = vote['options'];
+        $('#content').text(content);
+
+        var i = 0,
+            wordsHtml = _.reduce(options, function(memo, val, word){
+                return memo + [
+                    '<li>',
+                        '<span>'+ String.fromCharCode(65 + i++)  +'.</span>',
+                        '&nbsp;&nbsp;',
+                        '<span>'+ word +'</span>',
+                    '</li>'
+                ].join('');
+            }, '');
+        $('#words').html(wordsHtml);
+    });
+</script>

@@ -29,7 +29,25 @@
         </div>
         <div class="tab-pane" id="tab-add">
             <form id="form-add">
+                <div class="form-group">
+                    <textarea class="form-control" rows="3" name="content" placeholder="投票内容"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="words[]" placeholder="选项1">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="words[]" placeholder="选项2">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="words[]" placeholder="选项3">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="words[]" placeholder="选项4">
+                </div>
 
+                <button type="submit" class="btn btn-primary btn-lg btn-block">
+                    开启投票
+                </button>
             </form>
         </div>
     </div>
@@ -38,13 +56,24 @@
 <script>
     var $table_list = $('#table-list'),
             $tbody = $table_list.find('tbody'),
-            $form_add = $('#form-add');
+            $formAdd = $('#form-add');
 
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
         updateVoteList();
         $(this).tab('show');
     }).first().tab('show');
+
+    $formAdd.ajaxForm({
+        type: 'post',
+        url: '/do/s/addvote',
+        success: function(resObj) {
+            alert(resObj['msg']);
+            if (resObj['ok']) {
+                reloadFrame();
+            }
+        }
+    });
 
     $tbody.delegate('a.delvote', 'click', function(ev) {
         var $a = $(this),
