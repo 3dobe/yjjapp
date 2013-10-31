@@ -7,29 +7,30 @@ var $body = $('body'),
 $.ajaxSetup({
     cache: false
 });
-	
-// 绑定链接
-$body.delegate('[href]:not(.ex-link)', 'click', function(event) {
-	event.preventDefault();
-	loadFrame($(this).attr('href'));
-}).delegate('form a[type="submit"]', 'click', function() {  // enable a[type="submit"]
-    $(this).closest('form').submit();
-});
 
 // hash改变时自动加载子页面
 $(window).on('hashchange', function(event) {
 	event.preventDefault();
-	var hash = location.hash;
-	if (hash && hash !== '#' && hash !== hashPage) {
-		loadFrame(hash);
-	}
+    if (window.location.hash === hashPage) return;
+    loadFrame(window.location.hash);
+});
+
+// 绑定链接
+$body.delegate('[href]:not(.ex-link)', 'click', function(event) {
+    event.preventDefault();
+    var href = $(this).attr('href');
+    if (href && href !== '#') loadFrame(href);
+}).delegate('form a[type="submit"]', 'click', function() {  // enable a[type="submit"]
+    $(this).closest('form').submit();
 });
 
 // 加载子页面
 function loadFrame(hash, success) {
+    var mat = hash.substr(1).match(/^([^\?]*)(\?[^\?]*)?$/) || [],
+        href = '/' + clientType + (mat[1] || '') + '.html' + (mat[2] || '');
     $.ajax({
         type: 'get',
-        url: '/' + clientType + hash.substr(1) + '.html',
+        url:  href,
         success: function(resTxt) {
             location.hash = hashPage = hash;	// 顺序: hashPage > location.hash
             $frame.html(resTxt);
@@ -40,6 +41,21 @@ function loadFrame(hash, success) {
 // 刷新子页面
 function reloadFrame(success) {
 	loadFrame(location.hash, success);
+}
+
+// 获取hash参数
+function getHashParams(hash) {
+    var pat = /([^?=&#]*)=([^?=&#]+)/g, params = {};
+    decodeURIComponent(hash || window.location.hash)
+        .replace(pat, function(a, b, c){
+            if (b in params) {  // 已有该键
+                if (! _.isArray(params[b])) params[b] = [params[b]];    // 数组化
+                params[b].push(c);
+            } else {
+                params[b] = c;
+            }
+        });
+    return params;
 }
 
 // 时分秒的显示
