@@ -1,7 +1,6 @@
-var ctx;
-
-function drawVerificationCode(firstArg,secondArg,operator){
-    ctx = document.getElementById('canvas').getContext('2d');
+$.fn.drawVerificationCode = function(firstArg, secondArg, operator){
+    var ctx;
+    ctx = this[0].getContext('2d');
     ctx.font = "15px Arial";
 
     ctx.background = "rgb(0.255.255)";
