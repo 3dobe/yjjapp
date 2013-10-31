@@ -1,32 +1,28 @@
-(function() {
+
+$.fn.drawPieChart = function(options, colors){
     var ctx,
         myNewChart,
         values=[],
         data = [];
 
-
-    window.drawPieChart = function(options, colors){
-        if (_.every(options, function(num, word) {
-            return num === 0;
-        })) {
-            values = _.map(options, function(){
-                return 1;
-            });
-        } else {
-            values = _.map(options, function(num, word){
-                return num;
-            });
-        }
-        _.each(values, function(val, i) {
-            data.push({
-                value: values[i],
-                color: colors[i]
-            });
+    if (_.every(options, function(num, word) {
+        return num === 0;
+    })) {
+        values = _.map(options, function(){
+            return 1;
         });
-
-
-        console.log(data)
-        ctx = document.getElementById("myChart").getContext("2d");
-        myNewChart = new Chart(ctx).Pie(data);
+    } else {
+        values = _.map(options, function(num, word){
+            return num;
+        });
     }
-})();
+    _.each(values, function(val, i) {
+        data.push({
+            value: values[i],
+            color: colors[i]
+        });
+    });
+
+    ctx = this[0].getContext("2d");
+    myNewChart = new Chart(ctx).Pie(data);
+}
