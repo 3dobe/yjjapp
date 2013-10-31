@@ -1,7 +1,7 @@
 ﻿
 <!-- css -->
 <style>
-	#canvas {
+	#vcode-canvas {
 		width: 120px;
 		height: 36px;
 	}
@@ -41,7 +41,7 @@
 			<div class="input-group">
 				<input type="text" class="form-control" name="vcode" placeholder="验证码">
                 <span class="input-group-addon">
-					<canvas id="canvas" width="70" height="18"></canvas>
+					<canvas id="vcode-canvas" width="70" height="18"></canvas>
 				</span>
 			</div>
 		</div>
@@ -96,7 +96,7 @@
 							num1 = vcodeInfo['num1'],
 							num2 = vcodeInfo['num2'],
 							oper = vcodeInfo['oper'];
-						drawVerificationCode(num1, num2, oper);
+						$('#vcode-canvas').drawVerificationCode(num1, num2, oper);
 					}
 				});
 			}
