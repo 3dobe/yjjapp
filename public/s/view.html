@@ -31,7 +31,8 @@
 
 <!-- js -->
 <script>
-    var hostUrl = 'http://yjjapp.duapp.com';
+    var hostUrl = 'http://yjjapp.duapp.com',
+            $btnClose = $('#btn-close');
 
     $.get('/do/s/view', function(resObj) {
         var lectkey = resObj['lectkey'],
@@ -46,10 +47,12 @@
         });
     });
 
-    $('#btn-close').on('click', function() {
+    $btnClose.on('click', function() {
         $.get('/do/s/close', function(resObj) {
-            alert(resObj['msg'])
-            if (resObj['ok']) {
+            var ok = resObj['ok'],
+                    msg = resObj['msg'];
+            msg && alert(msg);
+            if (ok) {
                 loadFrame('#/open');
             }
         });
