@@ -1,7 +1,7 @@
 ﻿
 <!-- css -->
 <style>
-	#vcode-canvas {
+	#canvas-vcode {
 		width: 120px;
 		height: 36px;
 	}
@@ -41,7 +41,7 @@
 			<div class="input-group">
 				<input type="text" class="form-control" name="vcode" placeholder="验证码">
                 <span class="input-group-addon">
-					<canvas id="vcode-canvas" width="70" height="18"></canvas>
+					<canvas id="canvas-vcode" width="70" height="18"></canvas>
 				</span>
 			</div>
 		</div>
@@ -56,23 +56,27 @@
 
 <!-- js -->
 <script>
-	showValicode();
-
-	var $formOpen = $('#form-open');
+    var $formOpen = $('#form-open'),
+            $canvasVcode = $('#canvas-vcode');
+    
 	$formOpen.ajaxForm({
 		type: 'post',
 		url: '/do/s/open',
 		success: function(resObj) {
-			if (resObj['ok']) {
+            var ok = resObj['ok'],
+                    msg = resObj['msg'];
+            msg && alert(msg);
+			if (ok) {
 				loadFrame('#/view');
 			} else {
-				alert(resObj['msg']);
 				showValicode();
                 $formOpen.find('[name="vcode"]').val('');
 			}
 		}
 	});
 
+    showValicode();
+    
 	function showValicode() {
 		$.ajax({
 			type: 'get',
@@ -88,7 +92,8 @@
 						'action': 'open'
 					},
 					success: function(resObj) {
-						if (! resObj['ok']) {
+                        var ok = resObj['ok'];
+						if (! ok) {
 							alert('获取验证码失败');
 							return;
 						}
@@ -96,7 +101,7 @@
 							num1 = vcodeInfo['num1'],
 							num2 = vcodeInfo['num2'],
 							oper = vcodeInfo['oper'];
-						$('#vcode-canvas').drawVerificationCode(num1, num2, oper);
+						$canvasVcode.drawVerificationCode(num1, num2, oper);
 					}
 				});
 			}
