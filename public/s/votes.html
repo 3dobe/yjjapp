@@ -1,4 +1,15 @@
 
+<style>
+    #table-votelist th:nth-child(1) {
+        min-width: 80px;
+    }
+    #table-votelist th:nth-child(2) {
+        min-width: 60px;
+    }
+    #table-votelist th:nth-child(3) {
+        min-width: 120px;
+    }
+</style>
 
 <div id="main-wrapper">
     <h1>投票管理</h1>
@@ -16,7 +27,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div class="tab-pane active" id="tab-list">
-            <table id="table-list" class="table table-hover">
+            <table id="table-votelist" class="table table-striped">
                 <thead>
                 <tr>
                     <th class="long">问题</th>
@@ -54,8 +65,8 @@
 </div>
 
 <script>
-    var $table_list = $('#table-list'),
-            $tbody = $table_list.find('tbody'),
+    var $tableList = $('#table-votelist'),
+            $tbody = $tableList.find('tbody'),
             $formAdd = $('#form-add');
 
     $('.nav-tabs a').click(function (e) {
@@ -118,22 +129,27 @@
                     return;
                 }
                 var voteList = resObj['voteList'],
-                        tbodyHtml = _.reduce(voteList, function(memo, vote) {
-                            return memo + ['<tr>',
-                                '<td>' + vote['content'] + '</td>',
-                                '<td>' + (vote['state'] === 'active' ? '开启' : '关闭') + '</td>',
-                                '<td>',
-                                    '<a href="#/viewvote?vid='+ vote['id'] +'">详情</a>',
-                                '&nbsp;&nbsp;',
-                                    vote['state'] === 'active' ?
-                                            '<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
-                                            '<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
+                        tbodyHtml = voteList.length ? _.reduce(voteList, function(memo, vote) {
+                            return memo + [
+                                '<tr>',
+                                    '<td>' + vote['content'] + '</td>',
+                                    '<td>' + (vote['state'] === 'active' ? '开启' : '关闭') + '</td>',
+                                    '<td>',
+                                        '<a href="#/viewvote?vid='+ vote['id'] +'">详情</a>',
                                     '&nbsp;&nbsp;',
-                                    '<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
-                                '</td>',
+                                        vote['state'] === 'active' ?
+                                                '<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
+                                                '<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
+                                        '&nbsp;&nbsp;',
+                                        '<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
+                                    '</td>',
                                 '</tr>'
                             ].join('');
-                        }, '');
+                        }, '') : [
+                            '<tr>',
+                                '<td colspan="3">没有记录</td>',
+                            '</tr>'
+                        ].join('');
                 $tbody.html(tbodyHtml);
             }
         });

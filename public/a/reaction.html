@@ -12,18 +12,18 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div class="tab-pane active" id="tab-msg">
-            <table id="table-msg" class="table table-hover">
+            <table id="table-msg" class="table table-striped">
                 <thead>
                 <tr>
                     <th>昵称</th>
-                    <th class="long">发言</th>
+                    <th>发言</th>
                     <th>发言时间</th>
                 </tr>
                 </thead>
 
                 <tbody></tbody>
             </table>
-            <form  id="form-msg" action="/do/a/sendmsg" method="post">
+            <form  id="form-send" action="/do/a/sendmsg" method="post">
                 <div class="input-group">
                     <input type="text" name="msg" class="form-control" placeholder="请输入你想说的话">
                       <span class="input-group-btn">
@@ -33,7 +33,7 @@
             </form>
      </div>
         <div class="tab-pane" id="tab-audience">
-            <table id="table-audience" class="table table-hover">
+            <table id="table-audience" class="table table-striped">
                 <thead>
                 <tr>
                     <th>昵称</th>
@@ -48,8 +48,9 @@
 </div>
 
 <script>
-    var $table_audience = $('#table-audience'),
-        $table_msg = $('#table-msg');
+    var $tableAudience = $('#table-audience'),
+            $tableMsg = $('#table-msg'),
+            $formSend = $('#form-send');
 
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
@@ -57,7 +58,7 @@
         $(this).tab('show')
     }).first().tab('show');
 
-    $('#form-msg').ajaxForm({
+    $formSend.ajaxForm({
         success: function(resObj) {
             var ok = resObj['ok'],
 				msg = resObj['msg'];
@@ -75,55 +76,58 @@
 		updateMsgList();
 	}
     function updateAudienceList() {
-        var $tbody = $table_audience.find('tbody');
-        $tbody.empty();
+        var $tbody = $tableAudience.find('tbody');
         $.ajax({
             type: 'get',
             url: '/do/a/audiencelist',
             success: function(resObj) {
-                if (resObj['ok']) {
-                    var audienceList = resObj['audienceList'];
-                    _.each(audienceList, function(audience) {
-                        $([
-                            '<tr>',
-                                '<td>' + audience.name + '</td>',
-                                '<td>' + strTime(Date.now() - audience.jointime, true) + '</td>',
-                            '</tr>'
-                        ].join('')).appendTo($tbody);
-
-                    });
-                } else {
-                    alert('听众列表获取失败');
+                if (! resObj['ok']) {
+                    return alert('听众列表获取失败');
                 }
+                var audienceList = resObj['audienceList'],
+                        tbodyHtml = audienceList.length ? _.reduce(audienceList, function(memo, audience) {
+                            return memo + [
+                                '<tr>',
+                                    '<td>' + audience.name + '</td>',
+                                    '<td>' + strTime(Date.now() - audience.jointime, true) + '</td>',
+                                '</tr>'
+                            ].join('');
+                        }, '') : [
+                            '<tr>',
+                            '<td colspan="2">没有记录</td>',
+                            '</tr>'
+                        ].join('');
+                $tbody.html(tbodyHtml);
             }
         });
     }
     function updateMsgList() {
-        var $tbody = $table_msg.find('tbody');
-        $tbody.empty();
+        var $tbody = $tableMsg.find('tbody');
         $.ajax({
             type: 'get',
             url: '/do/a/msglist',
             success: function(resObj) {
-                if (resObj['ok']) {
-                    var msgList = resObj['msgList'];
-                    _.each(msgList, function(msg) {
-                        $([
-                            '<tr>',
-                                '<td>' + msg.audienceName + '</td>',
-                                '<td class="long">' + msg.text + '</td>',
-                                '<td>' + strTime(msg.sendtime) + '</td>',
-                            '</tr>'
-                        ].join('')).appendTo($tbody);
-                    });
-                } else {
-                    alert('发言列表获取失败');
+                if (! resObj['ok']) {
+                    return alert('发言列表获取失败');
                 }
+                var msgList = resObj['msgList'],
+                        tbodyHtml = msgList.length ? _.reduce(msgList, function(memo, msg) {
+                            return memo + [
+                                '<tr>',
+                                    '<td>' + msg.audienceName + '</td>',
+                                    '<td>' + msg.text + '</td>',
+                                    '<td>' + strTime(msg.sendtime) + '</td>',
+                                '</tr>'
+                            ].join('');
+                        }, '') : [
+                            '<tr>',
+                                '<td colspan="3">没有记录</td>',
+                            '</tr>'
+                        ].join('');
+                $tbody.html(tbodyHtml);
             }
         });
     }
-
-
 </script>
 
 

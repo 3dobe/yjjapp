@@ -1,14 +1,23 @@
 
-
+<style>
+    #table-filelist th:nth-child(1),
+    #table-filelist th:nth-child(3) {
+        min-width: 80px;
+    }
+    #table-filelist th:nth-child(2),
+    #table-filelist th:nth-child(4) {
+        min-width: 60px;
+    }
+</style>
 
 <div id="main-wrapper">
     <h1>文件共享</h1>
 
-    <table id="table-filelist" class="table table-hover">
+    <table id="table-filelist" class="table table-striped">
         <thead>
         <tr>
             <th>文件名</th>
-            <th>文件大小</th>
+            <th>大小</th>
             <th>下载次数</th>
             <th>操作</th>
         </tr>
@@ -17,14 +26,13 @@
         <tbody></tbody>
     </table>
 
-
     <form id="form-upload">
         <div class="form-group">
             <div class="input-group">
                 <input type="file" class="form-control" name="file" />
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary">上传</button>
-            </span>
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-primary">上传</button>
+                </span>
             </div>
         </div>
     </form>
@@ -84,32 +92,35 @@
 	});
 	
     function getFileList() {
-        $tbody.empty();
         $.ajax({
             type: 'get',
             url: '/do/s/filelist',
             success: function(resObj) {
-                if (resObj['ok']) {
-                    var fileList = resObj['fileList'];
-                    _.each(fileList, function(file) {
-                        $([
-                            '<tr>',
-                                '<td>',
-                                    '<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
-                                        file['name'],
-                                    '</a>',
-                                '</td>',
-                                '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
-                                '<td>' + file['timesDown'] + '</td>',
-                                '<td>',
-                                    '<a data-fid="'+ file['id'] +'" class="ex-link delfile">删除</a>',
-                                '</td>',
-                            '</tr>'
-                        ].join('')).appendTo($tbody);
-                    });
-                } else {
-                    alert('文件列表获取失败');
+                if (! resObj['ok']) {
+                    return alert('文件列表获取失败');
                 }
+                var fileList = resObj['fileList'],
+                        tbodyHtml = fileList.length ? _.reduce(fileList, function(memo, file) {
+                            return memo + [
+                                '<tr>',
+                                    '<td>',
+                                        '<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
+                                            file['name'],
+                                        '</a>',
+                                    '</td>',
+                                    '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
+                                    '<td>' + file['timesDown'] + '</td>',
+                                    '<td>',
+                                        '<a data-fid="'+ file['id'] +'" class="ex-link delfile">删除</a>',
+                                    '</td>',
+                                '</tr>'
+                            ].join('');
+                        }, '') : [
+                            '<tr>',
+                                '<td colspan="4">没有记录</td>',
+                            '</tr>'
+                        ].join('');
+                $tbody.html(tbodyHtml);
             }
         });
     }

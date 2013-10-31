@@ -1,27 +1,3 @@
-<!-- css -->
-<style>
-    #canvas {
-        width: 120px;
-        height: 36px;
-    }
-    #form-enter * {
-        font-size: 20px;
-    }
-    #form-enter .form-group {
-        margin-bottom: 5px;
-    }
-    #form-enter .form-control {
-        padding: 12px;
-        height: auto;
-    }
-    #form-enter input-group-addon {
-        padding: 3px 6px;
-    }
-    #form-enter button {
-        padding: 12px;
-        height: auto;
-    }
-</style>
 
 <div id="main-wrapper">
     <h1>进入讲座</h1>
@@ -37,7 +13,7 @@
             <div class="input-group">
                 <input type="text" class="form-control" name="vcode" placeholder="验证码">
                 <span class="input-group-addon">
-					<canvas id="canvas" width="70" height="18"></canvas>
+					<canvas id="canvas-vcode" width="70" height="18"></canvas>
 				</span>
             </div>
         </div>
@@ -52,9 +28,9 @@
 <!-- js -->
 <script src="/lib/js/drawVerificationCode.js"></script>
 <script>
-    showValicode();
+    var $formEnter = $('#form-enter'),
+            $canvasVcode = $('#canvas-vcode');
 
-    var $formEnter = $('#form-enter');
     $formEnter.ajaxForm({
         type: 'post',
         url: '/do/s/enter',
@@ -68,6 +44,8 @@
             }
         }
     });
+
+    showValicode();
 
     function showValicode() {
         $.ajax({
@@ -92,7 +70,7 @@
                                 num1 = vcodeInfo['num1'],
                                 num2 = vcodeInfo['num2'],
                                 oper = vcodeInfo['oper'];
-                        drawVerificationCode(num1, num2, oper);
+                        $canvasVcode.drawVerificationCode(num1, num2, oper);
                     }
                 });
             }

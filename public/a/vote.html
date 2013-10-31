@@ -1,7 +1,10 @@
+<style>
+
+</style>
 
 <div id="main-wrapper">
-    <h1>投票详情</h1>
-    <ul id="list-viewvote" class="list-group">
+    <h1>参与投票</h1>
+    <ul class="list-group">
         <li class="list-group-item">
             <span class="li-label">题目</span>
             <span id="content"></span>
@@ -21,7 +24,7 @@
     var vid = getHashParams()['vid'],
         colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"];
 
-    $.get('/do/s/viewvote?vid=' + vid, function(resObj) {
+    $.get('/do/a/viewvote?vid=' + vid, function(resObj) {
         var ok = resObj['ok'],
                 msg = resObj['msg'];
         msg && alert(msg);

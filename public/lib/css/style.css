@@ -9,6 +9,9 @@ body {
 h1 {
 	margin-bottom: 20px;
 }
+ul, ol {
+    list-style-type: none;
+}
 a, label, input[type="checkbox"], input[type="radio"] {
 	cursor: pointer;
 }
@@ -41,30 +44,74 @@ a:hover {
 	width: 30%;
 	vertical-align: top;
 }
-th {
-	min-width: 80px;
+
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #f5f5f5;
 }
-th.long, td.long {
+th, td {
 	word-break: break-all;
+}
+th[colspan], td[colspan] {
+    text-align: center;
 }
 
 form * {
     font-size: 20px;
+}
+form button {
+    padding: 12px;
+    height: auto;
 }
 form .form-group {
     margin-bottom: 5px;
 }
 form .form-control {
     padding: 12px;
-    height: auto;
+    height: 48px;
 }
-form input-group-addon {
+form .input-group-addon {
     padding: 3px 6px;
+    height: 48px;
 }
-form button {
-    padding: 12px;
-    height: auto;
+form .input-group-btn .btn {
+    height: 48px;
 }
 textarea {
     resize: none;
+}
+
+/* 验证码 */
+#canvas-vcode {
+    width: 120px;
+    height: 36px;
+}
+/* 投票详情 */
+#list-viewvote #chart {
+    margin: auto;
+    display: block;
+    width: 75% !important;
+    height: auto !important;
+}
+#list-viewvote #words {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+#list-viewvote #words > li {
+    padding: 4px;
+}
+#list-viewvote .square {
+    width: 24px;
+    height: 24px;
+    margin-right: 14px;
+    display: inline-block;
+}
+#list-viewvote .word {
+    vertical-align: top;
+}
+/* 听众反应 */
+#table-msg th {
+    min-width: 80px;
+}
+#table-audience th {
+    min-width: 80px;
 }

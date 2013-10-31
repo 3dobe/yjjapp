@@ -1,35 +1,15 @@
 ﻿
-<!-- css -->
-<style>
-	#canvas-vcode {
-		width: 120px;
-		height: 36px;
-	}
-    #form-open * {
-        font-size: 20px;
-    }
-    #form-open .form-group {
-        margin-bottom: 5px;
-    }
-    #form-open .form-control {
-        padding: 12px;
-        height: auto;
-    }
-    #form-open input-group-addon {
-        padding: 3px 6px;
-    }
-    #form-open button {
-        padding: 12px;
-        height: auto;
-    }
-</style>
-
 <div id="main-wrapper">
 	<h1>申请讲座</h1>
 
 	<form id="form-open">
 		<div class="form-group">
-			<input type="text" class="form-control" name="lname" placeholder="讲座名称">
+            <div class="input-group">
+                <input type="text" class="form-control" name="lname" placeholder="讲座名称">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" href="#/enter">重回讲座</button>
+                </span>
+            </div>
 		</div>
         <div class="form-group">
             <input type="text" class="form-control" name="lpwd" placeholder="管理密码">
@@ -92,11 +72,10 @@
 						'action': 'open'
 					},
 					success: function(resObj) {
-                        var ok = resObj['ok'];
-						if (! ok) {
-							alert('获取验证码失败');
-							return;
-						}
+                        if (! resObj['ok']) {
+                            alert('获取验证码失败');
+                            return;
+                        }
 						var vcodeInfo = resObj['vcodeInfo'],
 							num1 = vcodeInfo['num1'],
 							num2 = vcodeInfo['num2'],
