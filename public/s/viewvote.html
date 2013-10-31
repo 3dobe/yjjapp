@@ -2,7 +2,7 @@
     ul, ol {
         list-style-type: none;
     }
-    #myChart {
+    #chart {
         margin: auto;
         display: block;
     }
@@ -37,27 +37,26 @@
         </li>
         <li class="list-group-item">
             <span class="li-label">图表结果</span>
-            <div id="result">
-                <canvas id="myChart" width="350" height="350"></canvas>
-            </div>
-        </li>
-        <li class="list-group-item">
-            <span class="li-label">投票人数情况</span>
-            <span id="count"></span>
+            <canvas id="chart" width="350" height="350"></canvas>
         </li>
     </ul>
 </div>
 
 <script>
-    var vid = 1,
-        colors = ["#F38630","#E0E4CC","#69D2E7","#5E344C"];
+    var vid = getHashParams()['vid'],
+        colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"];
 
     $.get('/do/s/viewvote?vid=' + vid, function(resObj) {
+        var ok = resObj['ok'],
+                msg = resObj['msg'];
+        msg && alert(msg);
+        if (! ok) return window.history.back();
+
         var vote = resObj['vote'],
                 content = vote['content'],
                 options = vote['options'];
-        $('#content').text(content);
 
+        $('#content').text(content);
         var pairs = _.pairs(options),
             wordsHtml = _.reduce(pairs, function(memo, pair, i){
                 return memo + [
@@ -71,7 +70,8 @@
         $('.square').each(function(i, el) {
             $(el).css('background-color', colors[i]);
         });
-        drawPieChart(options, colors);
+
+        $('#chart').drawPieChart(options, colors);
     });
 
 </script>
