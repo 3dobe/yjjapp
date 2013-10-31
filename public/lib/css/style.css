@@ -18,8 +18,12 @@ a:hover {
 .btn-group-vertical {
 	display: block;
 }
+
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
 	cursor: pointer;
+}
+.tab-content {
+    margin-top: 8px;
 }
 
 #frame {
