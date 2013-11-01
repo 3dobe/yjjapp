@@ -11,3 +11,8 @@ $.get('/do/a/me', function(resObj) {
     // 加载子页面
     loadFrame(hashPage);
 });
+
+setInterval(heartbeat, 4 * 1000);  // 4 s
+function heartbeat() {
+    $.get('/do/a/heartbeat');
+}
