@@ -12,7 +12,8 @@ $.get('/do/a/me', function(resObj) {
     loadFrame(hashPage);
 });
 
-setInterval(heartbeat, 4 * 1000);  // 4 s
+heartbeat();
+setInterval(heartbeat, 1 * 60 * 1000);  // 1 min
 function heartbeat() {
     $.get('/do/a/heartbeat');
 }
