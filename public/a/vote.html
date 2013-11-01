@@ -1,28 +1,45 @@
+
 <style>
 
 </style>
 
 <div id="main-wrapper">
     <h1>参与投票</h1>
-    <ul class="list-group">
+    <ul id="list-viewvote" class="list-group">
         <li class="list-group-item">
             <span class="li-label">题目</span>
             <span id="content"></span>
         </li>
         <li class="list-group-item">
             <span class="li-label">选项相关</span>
-            <ul id="words"></ul>
-        </li>
-        <li class="list-group-item">
-            <span class="li-label">图表结果</span>
-            <canvas id="chart" width="350" height="350"></canvas>
+                <form id="form-vote">
+                    <div id="words" class="btn-group-vertical" data-toggle="buttons"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            提交投票
+                        </button>
+                    </div>
+                </form>
         </li>
     </ul>
 </div>
 
 <script>
-    var vid = getHashParams()['vid'],
-        colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"];
+    var vid = parseInt(getHashParams()['vid']),
+            $listWords = $('#words'),
+            $formVote = $('#form-vote');
+
+    $formVote.on('submit', function(ev) {
+        ev.preventDefault();
+        $listWords.find('.active input[type="radio"]').attr('checked', true);
+    });
+    $formVote.ajaxForm({
+        url: '/do/a/vote?vid=' + vid,
+        success: function(resObj) {
+            if (! resObj['ok']) return alert(resObj['msg']);
+            loadFrame('#/viewvote?vid=' + vid);
+        }
+    });
 
     $.get('/do/a/viewvote?vid=' + vid, function(resObj) {
         var ok = resObj['ok'],
@@ -36,20 +53,13 @@
 
         $('#content').text(content);
         var pairs = _.pairs(options),
-            wordsHtml = _.reduce(pairs, function(memo, pair, i){
+                listHtml = _.reduce(pairs, function(memo, pair, i){
                 return memo + [
-                    '<li>',
-                        '<div class="square"></div>',
-                        '<span class="word">'+ pair[0] +'</span>',
-                    '</li>'
+                    '<label class="btn btn-default btn-lg btn-block">',
+                        '<input type="radio" name="word" value="'+ pair[0] +'">', pair[0],
+                    '</label>'
                 ].join('');
             }, '');
-        $('#words').html(wordsHtml);
-        $('.square').each(function(i, el) {
-            $(el).css('background-color', colors[i]);
-        });
-
-        $('#chart').drawPieChart(options, colors);
+        $listWords.html(listHtml);
     });
-
 </script>
