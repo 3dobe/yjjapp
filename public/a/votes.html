@@ -25,7 +25,7 @@
 </div>
 
 <script>
-    var $tableList = $('#table-list'),
+    var $tableList = $('#table-votelist'),
             $tbody = $tableList.find('tbody');
 
     updateVoteList();
@@ -60,7 +60,7 @@
                             ].join('');
                         }, '') : [
                             '<tr>',
-                            '<td colspan="3">没有记录</td>',
+                                '<td colspan="3">没有记录</td>',
                             '</tr>'
                         ].join('');
                 $tbody.html(tbodyHtml);
