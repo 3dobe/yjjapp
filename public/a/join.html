@@ -1,19 +1,17 @@
 ﻿
 <div id="main-wrapper">
     <h1>欢迎使用演讲家</h1>
-    <form id="form-join" action="/do/a/join">
+    <form id="form-join">
         <div class="form-group">
-            <div class="form-group">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="key" placeholder="讲座序列号">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="nick" placeholder="听众昵称">
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">加入讲座</button>
-                </div>
-            </div>
+            <input type="text" class="form-control" name="key" placeholder="讲座序列号">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="nick" placeholder="听众昵称">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                加入讲座
+            </button>
         </div>
     </form>
 </div>
@@ -22,6 +20,7 @@
     var $formJoin = $('#form-join');
 
     $formJoin.ajaxForm({
+        url: '/do/a/join',
         success: function(resObj) {
             var ok = resObj['ok'],
                 msg = resObj['msg'];

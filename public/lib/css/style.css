@@ -65,16 +65,15 @@ th[colspan], td[colspan] {
 .form-group * {
     font-size: 20px !important;
 }
-.form-group .btn {
-    padding: 12px;
-    height: auto;
-}
 .form-control {
     padding: 12px;
     height: 48px;
 }
 textarea.form-control {
     height: auto;
+}
+input[type="file"].form-control {
+    font-size: 14px !important; /* mobile style comp */
 }
 .input-group-addon {
     padding: 3px 6px;
