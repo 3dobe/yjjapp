@@ -6,7 +6,7 @@ $.get('/do/s/me', function(resObj) {
     if (lectid) { // 已有讲座
         hashPage = location.hash || '#/view';
     } else {
-        hashPage = location.hash || '#/open';
+        hashPage = location.hash || '#/enter';
     }
     // 加载子页面
     loadFrame(hashPage);
