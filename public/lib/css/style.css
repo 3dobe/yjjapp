@@ -48,6 +48,9 @@ a:hover {
 .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
     background-color: #f5f5f5;
 }
+th {
+    min-width: 80px;
+}
 th, td {
 	word-break: break-all;
 }
@@ -55,25 +58,29 @@ th[colspan], td[colspan] {
     text-align: center;
 }
 
-form * {
-    font-size: 20px;
+/* 表单 */
+.form-group {
+    margin-bottom: 5px;
 }
-form button {
+.form-group * {
+    font-size: 20px !important;
+}
+.form-group .btn {
     padding: 12px;
     height: auto;
 }
-form .form-group {
-    margin-bottom: 5px;
-}
-form .form-control {
+.form-control {
     padding: 12px;
     height: 48px;
 }
-form .input-group-addon {
+textarea.form-control {
+    height: auto;
+}
+.input-group-addon {
     padding: 3px 6px;
     height: 48px;
 }
-form .input-group-btn .btn {
+.input-group-btn .btn {
     height: 48px;
 }
 textarea {
