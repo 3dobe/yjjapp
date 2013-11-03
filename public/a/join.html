@@ -17,7 +17,12 @@
 </div>
 
 <script>
-    var $formJoin = $('#form-join');
+    var key = getHashParams()['key'],
+            $formJoin = $('#form-join');
+
+    if (key) {
+        $formJoin.find('[name="key"]').attr('readonly', true).val(key);
+    }
 
     $formJoin.ajaxForm({
         url: '/do/a/join',
