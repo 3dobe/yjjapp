@@ -1,0 +1,49 @@
+
+
+<div id="main-wrapper">
+    <h1>听众列表</h1>
+    <table id="table-audience" class="table table-striped">
+        <thead>
+        <tr>
+            <th>昵称</th>
+            <th>在线时长</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    var $tableAudience = $('#table-audience');
+
+    updateAudienceList();
+
+    function updateAudienceList() {
+        var $tbody = $tableAudience.find('tbody');
+        $.ajax({
+            type: 'get',
+            url: '/do/a/audiencelist',
+            success: function(resObj) {
+                if (! resObj['ok']) {
+                    return alert('听众列表获取失败');
+                }
+                var audienceList = resObj['audienceList'],
+                        tbodyHtml = audienceList.length ? _.reduce(audienceList, function(memo, audience) {
+                            return memo + [
+                                '<tr>',
+                                    '<td>' + audience.name + '</td>',
+                                    '<td>' + strTime(Date.now() - audience.jointime, true) + '</td>',
+                                '</tr>'
+                            ].join('');
+                        }, '') : [
+                            '<tr>',
+                            '<td colspan="2">没有记录</td>',
+                            '</tr>'
+                        ].join('');
+                $tbody.html(tbodyHtml);
+            }
+        });
+    }
+</script>
+
+
