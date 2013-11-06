@@ -1,0 +1,50 @@
+
+
+<div id="main-wrapper">
+    <h1>问题相关</h1>
+
+    <table id="table-msglist" class="table table-striped">
+        <thead>
+        <tr>
+            <th>听众昵称</th>
+            <th>提问内容</th>
+        </tr>
+        </thead>
+
+        <tbody></tbody>
+    </table>
+ </div>
+
+
+<script>
+    var $table = $('#table-msglist'),
+            $tbody = $table.find('tbody');
+
+    getMessageList();
+
+    function getMessageList() {
+        $.ajax({
+            type: 'get',
+            url: '/do/s/msglist',
+            success: function(resObj) {
+                if (! resObj['ok']) {
+                    return alert('问题列表获取失败');
+                }
+                var msgList = resObj['msgList'],
+                        tbodyHtml = msgList.length ? _.reduce(msgList, function(memo, msg) {
+                            return memo + [
+                                '<tr>',
+                                    '<td>' + msg.audienceName + '</td>',
+                                    '<td>' + msg.text + '</td>',
+                                '</tr>'
+                            ].join('');
+                        }, '') : [
+                            '<tr>',
+                            '<td colspan="2">没有记录</td>',
+                            '</tr>'
+                        ].join('');
+                $tbody.html(tbodyHtml);
+            }
+        });
+    }
+</script>
