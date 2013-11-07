@@ -3,7 +3,8 @@ var http = require('http'),
 	fs = require('fs'),
 	_ = require('underscore'),
 	express = require('express'),
-	mode = (process.argv && process.argv[2]) || 'bae', // 运行模式
+	mode = (process.argv && process.argv[2])
+		|| (_.isNumber(process.env.APP_PORT) ? 'bae' : 'local'), // 运行模式
 	config = require('./config/')(mode),
 	run = require('./lib/run'),
 	removeDir = require('./lib/removedir'),
