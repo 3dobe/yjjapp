@@ -1,7 +1,7 @@
-**/.project
-**/.idea
-**/*.zip
-**/*.txt
 **/*.log
 /node_modules
 /content
+
+**/.project
+**/.idea
+**/*.sublime-workspace
