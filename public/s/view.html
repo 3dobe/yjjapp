@@ -19,42 +19,44 @@
 			<span id="spkname"></span>
 		</li>
 	</ul>
-    <div class="btn-group-vertical">
-         <button href="#/audience" class="btn btn-default btn-lg btn-block">听众列表</button>
-         <button href="#/share" class="btn btn-default btn-lg btn-block">共享文件</button>
-         <button href="#/votes" class="btn btn-default btn-lg btn-block">投票管理</button>
-         <button href="#/qna" class="btn btn-default btn-lg btn-block">提问管理</button>
-         <button href="#/lotterys" class="btn btn-default btn-lg btn-block">抽奖管理</button>
-         <button id="btn-close" class="btn btn-danger btn-lg btn-block">退出空间</button>
-    </div>
+	<div class="btn-group-vertical">
+		 <button href="#/audience" class="btn btn-default btn-lg btn-block">听众列表</button>
+		 <button href="#/share" class="btn btn-default btn-lg btn-block">共享文件</button>
+		 <button href="#/votes" class="btn btn-default btn-lg btn-block">投票管理</button>
+		 <button href="#/qna" class="btn btn-default btn-lg btn-block">提问管理</button>
+		 <button href="#/lotterys" class="btn btn-default btn-lg btn-block">抽奖管理</button>
+		 <button id="btn-close" class="btn btn-danger btn-lg btn-block">关闭讲座</button>
+	</div>
 </div>
 
 <!-- js -->
 <script>
-    var hostUrl = 'http://yjjapp.duapp.com',
-            $btnClose = $('#btn-close');
+	var hostUrl = 'http://yjjapp.duapp.com',
+			$btnClose = $('#btn-close');
 
-    $.get('/do/s/view', function(resObj) {
-        var lectkey = resObj['lectkey'],
-            lectname = resObj['lectname'],
-            spkname = resObj['spkname'];
-        $('#lectkey').text(lectkey);
-        $('#lectname').text(lectname);
-        $('#spkname').text(spkname);
-        $('#qrcode').qrcode({
-            width: 128, height: 128,
-            text: hostUrl + '/a/#/join?key=' + lectkey
-        });
-    });
+	$.get('/do/s/view', function(resObj) {
+		var lectkey = resObj['lectkey'],
+			lectname = resObj['lectname'],
+			spkname = resObj['spkname'];
+		$('#lectkey').text(lectkey);
+		$('#lectname').text(lectname);
+		$('#spkname').text(spkname);
+		$('#qrcode').qrcode({
+			width: 128, height: 128,
+			text: hostUrl + '/a/#/join?key=' + lectkey
+		});
+	});
 
-    $btnClose.on('click', function() {
-        $.get('/do/s/close', function(resObj) {
-            var ok = resObj['ok'],
-                    msg = resObj['msg'];
-            msg && alert(msg);
-            if (ok) {
-                loadFrame('#/enter');
-            }
-        });
-    });
+	$btnClose.on('click', function() {
+		$.get('/do/s/close', function(resObj) {
+			var ok = resObj['ok'],
+					msg = resObj['msg'];
+			msg && alert(msg);
+			if (ok) {
+				loadFrame('#/enter');
+                $navbar.find('.sec').addClass('hidden')
+                    .filter('#sec-out').removeClass('hidden');
+			}
+		});
+	});
 </script>
