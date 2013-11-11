@@ -40,4 +40,10 @@ friends.insert({"id":5,"gender":"F","first":"Jennifer","last":"Gill","city":"Sea
 
 console.log(friends({}).get());
 
-console.log(friends({}).get().length)
+console.log(friends({}).get().length);
+
+var arr = friends({}).get();
+console.log(arr.length);
+friends.insert({a:1, b:2, c:3});
+console.log(arr.length);
+
