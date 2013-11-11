@@ -44,18 +44,8 @@
                     <textarea class="form-control" rows="3" name="content" placeholder="奖项详情"></textarea>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" name="words[]" onkeypress="return IsNum(event)" placeholder="奖项1人数(请输入数字)">
+                    <input type="text" class="form-control" name="num" placeholder="人数(请输入数字)">
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="words[]" onkeypress="return IsNum(event)" placeholder="奖项1人数(请输入数字)">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="words[]" onkeypress="return IsNum(event)" placeholder="奖项3人数(请输入数字)">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="words[]" onkeypress="return IsNum(event)" placeholder="奖项4人数(请输入数字)">
-                </div>
-
                 <button type="submit" class="btn btn-primary btn-lg btn-block">
                     添加抽奖
                 </button>
@@ -67,7 +57,8 @@
 <script>
     var $tableList = $('#table-lotterylist'),
             $tbody = $tableList.find('tbody'),
-            $formAdd = $('#form-add');
+            $formAdd = $('#form-add'),
+            $inputNum = $('[name="num"]');
 
     $('.nav-tabs a').click(function (e) {
         e.preventDefault();
@@ -132,22 +123,18 @@
                         tbodyHtml = lotteryList.length ? _.reduce(lotteryList, function(memo, lottery) {
                             return memo + [
                                 '<tr>',
-                                '<td>' + lottery['content'] + '</td>',
-                                '<td>' + (lottery['state'] === 'active' ? '开启' : '关闭') + '</td>',
-                                '<td>',
-                                '<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
-                                '&nbsp;&nbsp;',
-                                lottery['state'] === 'active' ?
-                                        '<a data-lyid="'+ lottery['id'] +'" class="ex-link offlottery">关闭</a>':
-                                        '<a data-lyid="'+ lottery['id'] +'" class="ex-link onlottery">开启</a>',
-                                '&nbsp;&nbsp;',
-                                '<a data-lyid="'+ lottery['id'] +'" class="ex-link dellottery">删除</a>',
-                                '</td>',
+                                    '<td>' + lottery['content'] + '</td>',
+                                    '<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
+                                    '<td>',
+                                    '<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
+                                    '&nbsp;&nbsp;',
+                                    '<a data-lyid="'+ lottery['id'] +'" class="ex-link dellottery">删除</a>',
+                                    '</td>',
                                 '</tr>'
                             ].join('');
                         }, '') : [
                             '<tr>',
-                            '<td colspan="3">没有记录</td>',
+                                '<td colspan="3">没有记录</td>',
                             '</tr>'
                         ].join('');
                 $tbody.html(tbodyHtml);
@@ -155,18 +142,13 @@
         });
     }
     //限制输入为数字
-    function IsNum(e) {
-        var k = window.event ? e.keyCode : e.which;
-        if (((k >= 48) && (k <= 57)) || k == 8 || k == 0) {
+    $inputNum.on('input', function(){
+        if (! /^\d*$/.test($inputNum.val())) {
+            $inputNum.val($inputNum.data('text'));
         } else {
-            if (window.event) {
-                window.event.returnValue = false;
-            }
-            else {
-                e.preventDefault(); //for firefox
-            }
+            $inputNum.data('text', $inputNum.val());
         }
-    }
+    }).data('text', $inputNum.val());
 </script>
 
 

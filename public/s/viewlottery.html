@@ -1,52 +1,69 @@
 
+<style>
+    #content {
+        padding-left: 40px;
+    }
+    #content:before {
+        content: '　　';
+    }
+</style>
+
 <div id="main-wrapper">
     <h1>抽奖详情</h1>
     <ul id="list-viewlottery" class="list-group">
         <li class="list-group-item">
             <span class="li-label">奖项简述</span>
-            <span id="content"></span>
+            <p id="content"></p>
         </li>
         <li class="list-group-item">
             <span class="li-label">奖项相关</span>
-            <ul id="words"></ul>
+            <ul id="num"></ul>
         </li>
         <li class="list-group-item">
             <span class="li-label">抽奖结果</span>
             <canvas id="rsult" width="350" height="350"></canvas>
         </li>
+        <li class="list-group-item">
+            <button id="btn-start" class="btn btn-primary btn-lg btn-block">
+                开启抽奖
+            </button>
+        </li>
     </ul>
 </div>
 
 <script>
-    var lyid = getHashParams()['lyid'],
-            colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"];
+    var lyid = parseInt(getHashParams()['lyid']),
+            play = !! getHashParams()['play'],
+            $btnStart = $('#btn-start');
 
     $.get('/do/s/viewlottery?lyid=' + lyid, function(resObj) {
         var ok = resObj['ok'],
                 msg = resObj['msg'];
         msg && alert(msg);
+
         if (! ok) return window.history.back();
 
         var lottery = resObj['lottery'],
                 content = lottery['content'],
-                options = lottery['options'];
-
+                num = lottery['num'],
+                state = lottery['state'],
+                awlist = lottery['awlist']
+        if (state === 'active') {
+            $btnStart.attr('disabled', true);
+            console.log(awlist);
+        } else {
+            $btnStart.on('click', function(){
+                $.get('/do/s/startlottery?lyid=' + lyid, function(resObj){
+                    $btnStart.attr('disabled', true);
+                    var msg = resObj['msg'];
+                    if (msg)
+                        alert(msg);
+                    loadFrame('#/viewlottery?play=1&lyid=' + lyid);
+                });
+            });
+        }
         $('#content').text(content);
-        var pairs = _.pairs(options),
-                wordsHtml = _.reduce(pairs, function(memo, pair, i){
-                    return memo + [
-                        '<li>',
-                        '<div class="square"></div>',
-                        '<span class="word">'+ pair[0] +'</span>',
-                        '</li>'
-                    ].join('');
-                }, '');
-        $('#words').html(wordsHtml);
-        $('.square').each(function(i, el) {
-            $(el).css('background-color', colors[i]);
-        });
-
-        $('#rsult').drawPieLotteryResult(options, colors);
+        $('#num').text('得奖人数　：　'+ num);
     });
-
+    
 </script>
