@@ -43,6 +43,8 @@
             msg && alert(msg);
 			if (ok) {
 				loadFrame('#/view');
+				$navbar.find('.sec').addClass('hidden')
+					.filter('#sec-in').removeClass('hidden');
 			} else {
 				showValicode();
                 $formOpen.find('[name="vcode"]').val('');

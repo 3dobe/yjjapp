@@ -44,6 +44,8 @@
         success: function(resObj) {
             if (resObj['ok']) {
                 loadFrame('#/view');
+                $navbar.find('.sec').addClass('hidden')
+                    .filter('#sec-in').removeClass('hidden');
             } else {
                 alert(resObj['msg']);
                 showValicode();

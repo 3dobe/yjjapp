@@ -12,7 +12,7 @@ h1 {
 ul, ol {
     list-style-type: none;
 }
-a, label, input[type="checkbox"], input[type="radio"] {
+a[href], label, input[type="checkbox"], input[type="radio"] {
 	cursor: pointer;
 }
 a:hover {
@@ -29,6 +29,9 @@ a:hover {
     margin-top: 8px;
 }
 
+#navbar {
+    margin-bottom: 0;
+}
 #frame {
 	padding: 10px;
     margin: auto;
