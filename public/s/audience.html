@@ -25,7 +25,7 @@
             url: '/do/s/audiencelist',
             success: function(resObj) {
                 if (! resObj['ok']) {
-                    return alert('听众列表获取失败');
+                    return notify('听众列表获取失败', 0);
                 }
                 var audienceList = resObj['audienceList'],
                         tbodyHtml = audienceList.length ? _.reduce(audienceList, function(memo, audience) {

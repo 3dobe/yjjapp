@@ -1,154 +1,148 @@
 
 <style>
-    #table-lotterylist th:nth-child(1) {
-        min-width: 80px;
-    }
-    #table-lotterylist th:nth-child(2) {
-        min-width: 60px;
-    }
-    #table-lotterylist th:nth-child(3) {
-        min-width: 120px;
-    }
+	#table-lotterylist th:nth-child(1) {
+		min-width: 80px;
+	}
+	#table-lotterylist th:nth-child(2) {
+		min-width: 60px;
+	}
+	#table-lotterylist th:nth-child(3) {
+		min-width: 120px;
+	}
 </style>
 
 <div id="main-wrapper">
-    <h1>抽奖管理</h1>
+	<h1>抽奖管理</h1>
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-        <li>
-            <a class="ex-link" href="#tab-list" data-toggle="tab">抽奖列表</a>
-        </li>
-        <li>
-            <a class="ex-link" href="#tab-add" data-toggle="tab">添加抽奖</a>
-        </li>
-    </ul>
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs">
+		<li>
+			<a class="ex-link" href="#tab-list" data-toggle="tab">抽奖列表</a>
+		</li>
+		<li>
+			<a class="ex-link" href="#tab-add" data-toggle="tab">添加抽奖</a>
+		</li>
+	</ul>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab-list">
-            <table id="table-lotterylist" class="table table-striped">
-                <thead>
-                <tr>
-                    <th class="long">抽奖</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div class="tab-pane" id="tab-add">
-            <form id="form-add">
-                <div class="form-group">
-                    <textarea class="form-control" rows="3" name="content" placeholder="奖项详情"></textarea>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="num" placeholder="人数(请输入数字)">
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block">
-                    添加抽奖
-                </button>
-            </form>
-        </div>
-    </div>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab-list">
+			<table id="table-lotterylist" class="table table-striped">
+				<thead>
+				<tr>
+					<th class="long">抽奖</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<div class="tab-pane" id="tab-add">
+			<form id="form-add">
+				<div class="form-group">
+					<textarea class="form-control" rows="3" name="content" placeholder="奖项详情"></textarea>
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" name="num" placeholder="人数(请输入数字)">
+				</div>
+				<button type="submit" class="btn btn-primary btn-lg btn-block">
+					添加抽奖
+				</button>
+			</form>
+		</div>
+	</div>
 </div>
 
 <script>
-    var $tableList = $('#table-lotterylist'),
-            $tbody = $tableList.find('tbody'),
-            $formAdd = $('#form-add'),
-            $inputNum = $('[name="num"]');
+	var $tableList = $('#table-lotterylist'),
+			$tbody = $tableList.find('tbody'),
+			$formAdd = $('#form-add'),
+			$inputNum = $('[name="num"]');
 
-    $('.nav-tabs a').click(function (e) {
-        e.preventDefault();
-        updateVoteList();
-        $(this).tab('show');
-    }).first().tab('show');
+	$('.nav-tabs a').click(function (e) {
+		e.preventDefault();
+		updateVoteList();
+		$(this).tab('show');
+	}).first().tab('show');
 
-    $formAdd.ajaxForm({
-        type: 'post',
-        url: '/do/s/addlottery',
-        success: function(resObj) {
-            alert(resObj['msg']);
-            if (resObj['ok']) {
-                reloadFrame();
-            }
-        }
-    });
+	$formAdd.ajaxForm({
+		type: 'post',
+		url: '/do/s/addlottery',
+		success: function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		}
+	});
 
-    $tbody.delegate('a.dellottery', 'click', function(ev) {
-        var $a = $(this),
-                lyid = parseInt($a.attr('data-lyid'));
-        $.get('/do/s/dellottery?lyid=' + lyid, function(resObj) {
-            alert(resObj['msg']);
-            if (resObj['ok']) {
-                reloadFrame();
-            }
-        });
-    }).delegate('a.onlottery', 'click', function(ev) {
-                var $a = $(this),
-                        lyid = parseInt($a.attr('data-lyid'));
-                $.get('/do/s/setlottery?state=active&lyid=' + lyid, function(resObj) {
-                    alert(resObj['msg']);
-                    if (resObj['ok']) {
-                        reloadFrame();
-                    }
-                });
-            }).delegate('a.offlottery', 'click', function(ev) {
-                var $a = $(this),
-                        lyid = parseInt($a.attr('data-lyid'));
-                $.get('/do/s/setlottery?state=cool&lyid=' + lyid, function(resObj) {
-                    alert(resObj['msg']);
-                    if (resObj['ok']) {
-                        reloadFrame();
-                    }
-                });
-            });
+	$tbody.delegate('a.dellottery', 'click', function(ev) {
+		var $a = $(this),
+			lyid = parseInt($a.attr('data-lyid'));
+		$.get('/do/s/dellottery?lyid=' + lyid, function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		});
+	}).delegate('a.onlottery', 'click', function(ev) {
+				var $a = $(this),
+					lyid = parseInt($a.attr('data-lyid'));
+				$.get('/do/s/setlottery?state=active&lyid=' + lyid, function(resObj) {
+					var ok = resObj['ok'], msg = resObj['msg'];
+					msg && notify(msg, ok);
+					ok && reloadFrame();
+				});
+			}).delegate('a.offlottery', 'click', function(ev) {
+				var $a = $(this),
+					lyid = parseInt($a.attr('data-lyid'));
+				$.get('/do/s/setlottery?state=cool&lyid=' + lyid, function(resObj) {
+					var ok = resObj['ok'], msg = resObj['msg'];
+					msg && notify(msg, ok);
+					ok && reloadFrame();
+				});
+			});
 
-    updateVoteList();
+	updateVoteList();
 
-    function updateVoteList() {
-        $.ajax({
-            type: 'get',
-            url: '/do/s/lotterylist',
-            success: function(resObj) {
-                var ok = resObj['ok'],
-                        msg = resObj['msg'];
-                if (! resObj['ok']) {
-                    msg && alert(msg);
-                    return;
-                }
-                var lotteryList = resObj['lotteryList'],
-                        tbodyHtml = lotteryList.length ? _.reduce(lotteryList, function(memo, lottery) {
-                            return memo + [
-                                '<tr>',
-                                    '<td>' + lottery['content'] + '</td>',
-                                    '<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
-                                    '<td>',
-                                    '<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
-                                    '&nbsp;&nbsp;',
-                                    '<a data-lyid="'+ lottery['id'] +'" class="ex-link dellottery">删除</a>',
-                                    '</td>',
-                                '</tr>'
-                            ].join('');
-                        }, '') : [
-                            '<tr>',
-                                '<td colspan="3">没有记录</td>',
-                            '</tr>'
-                        ].join('');
-                $tbody.html(tbodyHtml);
-            }
-        });
-    }
-    //限制输入为数字
-    $inputNum.on('input', function(){
-        if (! /^\d*$/.test($inputNum.val())) {
-            $inputNum.val($inputNum.data('text'));
-        } else {
-            $inputNum.data('text', $inputNum.val());
-        }
-    }).data('text', $inputNum.val());
+	function updateVoteList() {
+		$.ajax({
+			type: 'get',
+			url: '/do/s/lotterylist',
+			success: function(resObj) {
+				var ok = resObj['ok'],
+					msg = resObj['msg'];
+                msg && notify(msg, ok);
+				if (! ok) return;
+				var lotteryList = resObj['lotteryList'],
+						tbodyHtml = lotteryList.length ? _.reduce(lotteryList, function(memo, lottery) {
+							return memo + [
+								'<tr>',
+									'<td>' + lottery['content'] + '</td>',
+									'<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
+									'<td>',
+									'<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
+									'&nbsp;&nbsp;',
+									'<a data-lyid="'+ lottery['id'] +'" class="ex-link dellottery">删除</a>',
+									'</td>',
+								'</tr>'
+							].join('');
+						}, '') : [
+							'<tr>',
+								'<td colspan="3">没有记录</td>',
+							'</tr>'
+						].join('');
+				$tbody.html(tbodyHtml);
+			}
+		});
+	}
+	//限制输入为数字
+	$inputNum.on('input', function(){
+		if (! /^\d*$/.test($inputNum.val())) {
+			$inputNum.val($inputNum.data('text'));
+		} else {
+			$inputNum.data('text', $inputNum.val());
+		}
+	}).data('text', $inputNum.val());
 </script>
 
 

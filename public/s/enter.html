@@ -1,33 +1,33 @@
 
 <div id="main-wrapper">
-    <h1>管理讲座</h1>
+	<h1>管理讲座</h1>
 
-    <form id="form-enter">
-        <div class="form-group">
-            <div class="input-group">
-                <input type="text" class="form-control" name="lkey" placeholder="讲座序列号">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" href="#/open">申请讲座</button>
-                </span>
-            </div>
-        </div>
-        <div class="form-group">
-            <input type="text" class="form-control" name="lpwd" placeholder="输入密码">
-        </div>
-        <div class="form-group">
-            <div class="input-group">
-                <input type="text" class="form-control" name="vcode" placeholder="验证码">
-                <span class="input-group-addon">
+	<form id="form-enter">
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" class="form-control" name="lkey" placeholder="讲座序列号">
+				<span class="input-group-btn">
+					<button class="btn btn-primary" href="#/open">申请讲座</button>
+				</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<input type="text" class="form-control" name="lpwd" placeholder="输入密码">
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" class="form-control" name="vcode" placeholder="验证码">
+				<span class="input-group-addon">
 					<canvas id="canvas-vcode" width="70" height="18"></canvas>
 				</span>
-            </div>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">
-                管理讲座
-            </button>
-        </div>
-    </form>
+			</div>
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary btn-lg btn-block">
+				管理讲座
+			</button>
+		</div>
+	</form>
 </div>
 
 
@@ -35,54 +35,54 @@
 <!-- js -->
 <script src="/lib/js/drawVerificationCode.js"></script>
 <script>
-    var $formEnter = $('#form-enter'),
-            $canvasVcode = $('#canvas-vcode');
+	var $formEnter = $('#form-enter'),
+			$canvasVcode = $('#canvas-vcode');
 
-    $formEnter.ajaxForm({
-        type: 'post',
-        url: '/do/s/enter',
-        success: function(resObj) {
-            if (resObj['ok']) {
-                loadFrame('#/view');
-                $navbar.find('.sec').addClass('hidden')
-                    .filter('#sec-in').removeClass('hidden');
-            } else {
-                alert(resObj['msg']);
-                showValicode();
-                $formOpen.find('[name="vcode"]').val('');
-            }
-        }
-    });
+	$formEnter.ajaxForm({
+		type: 'post',
+		url: '/do/s/enter',
+		success: function(resObj) {
+            var ok = resObj['ok'], msg = resObj['msg'];
+            msg && notify(msg, ok);
+			if (ok) {
+				loadFrame('#/view');
+				$navbar.find('.sec').addClass('hidden')
+					.filter('#sec-in').removeClass('hidden');
+			} else {
+				showValicode();
+				$formOpen.find('[name="vcode"]').val('');
+			}
+		}
+	});
 
-    showValicode();
+	showValicode();
 
-    function showValicode() {
-        $.ajax({
-            type: 'get',
-            url: '/do/vcode',
-            data: {
-                'action': 'enter'
-            },
-            success: function(resObj) {
-                $.ajax({
-                    type: 'get',
-                    url: '/do/vcode',
-                    data: {
-                        'action': 'enter'
-                    },
-                    success: function(resObj) {
-                        if (! resObj['ok']) {
-                            alert('获取验证码失败');
-                            return;
-                        }
-                        var vcodeInfo = resObj['vcodeInfo'],
-                                num1 = vcodeInfo['num1'],
-                                num2 = vcodeInfo['num2'],
-                                oper = vcodeInfo['oper'];
-                        $canvasVcode.drawVerificationCode(num1, num2, oper);
-                    }
-                });
-            }
-        });
-    }
+	function showValicode() {
+		$.ajax({
+			type: 'get',
+			url: '/do/vcode',
+			data: {
+				'action': 'enter'
+			},
+			success: function(resObj) {
+				$.ajax({
+					type: 'get',
+					url: '/do/vcode',
+					data: {
+						'action': 'enter'
+					},
+					success: function(resObj) {
+						if (! resObj['ok']) {
+							return notify('获取验证码失败', 0);
+						}
+						var vcodeInfo = resObj['vcodeInfo'],
+								num1 = vcodeInfo['num1'],
+								num2 = vcodeInfo['num2'],
+								oper = vcodeInfo['oper'];
+						$canvasVcode.drawVerificationCode(num1, num2, oper);
+					}
+				});
+			}
+		});
+	}
 </script>

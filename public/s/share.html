@@ -1,122 +1,122 @@
 
 <style>
-    #table-filelist th:nth-child(4) {
-        min-width: 50px;
-    }
+	#table-filelist th:nth-child(4) {
+		min-width: 50px;
+	}
 </style>
 
 <div id="main-wrapper">
-    <h1>文件共享</h1>
+	<h1>文件共享</h1>
 
-    <table id="table-filelist" class="table table-striped">
-        <thead>
-        <tr>
-            <th>文件名</th>
-            <th>文件大小</th>
-            <th>下载次数</th>
-            <th>操作</th>
-        </tr>
-        </thead>
+	<table id="table-filelist" class="table table-striped">
+		<thead>
+		<tr>
+			<th>文件名</th>
+			<th>文件大小</th>
+			<th>下载次数</th>
+			<th>操作</th>
+		</tr>
+		</thead>
 
-        <tbody></tbody>
-    </table>
+		<tbody></tbody>
+	</table>
 
-    <form id="form-upload">
-        <div class="form-group">
-            <div class="input-group">
-                <input type="file" class="form-control" name="file" />
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-primary">上传</button>
-                </span>
-            </div>
-        </div>
-    </form>
+	<form id="form-upload">
+		<div class="form-group">
+			<div class="input-group">
+				<input type="file" class="form-control" name="file" />
+				<span class="input-group-btn">
+					<button type="submit" class="btn btn-primary">上传</button>
+				</span>
+			</div>
+		</div>
+	</form>
 </div>
 
 <script src="/lib/js/drawVerificationCode.js"></script>
 <script>
-    var $table = $('#table-filelist'),
-            $tbody = $table.find('tbody'),
-            $form = $('#form-upload');
+	var $table = $('#table-filelist'),
+			$tbody = $table.find('tbody'),
+			$form = $('#form-upload');
 
-    getFileList();
+	getFileList();
 
-    var validExts = [
-        'doc', 'docx', 'ppt', 'pptx' , 'xls', 'xlsx', 'pdf',
-        'txt', 'jpg', 'jpeg', 'png', 'bmp', 'gif'
-    ], $form = $('#form-upload');
-    $form.on('submit', function(event) {
-       event.preventDefault();  // 禁止默认转页行为
-    }).find('[name="file"]').ajaxfileupload({
-        submit_button: $form.find('[type="submit"]'),
-        'action': '/do/s/savefile',
-        valid_extensions: validExts,
-        onCancel: function() {
-            alert('请选择文件');
-        },
-        onComplete: function(resObj) {
-            if (_.isObject(resObj) && 'status' in resObj && ! resObj['status']) {
-                alert('仅支持格式 ' + validExts.join(', '));
-                $form[0].reset();
-                return;
-            }
-            if (_.isString(resObj)) {
-                var resTxt = resObj;
-                resTxt.match(/^[^\{]*(\{[\s\S]*\})[^\}]*$/);
-                json = RegExp.$1;
-                resObj = JSON.parse(json);
-            }
-            alert(resObj['msg']);
-            if (! resObj['ok']) {
-                $form[0].reset();
-            } else {
-                reloadFrame();
-            }
-        }
-    });
+	var validExts = [
+		'doc', 'docx', 'ppt', 'pptx' , 'xls', 'xlsx', 'pdf',
+		'txt', 'jpg', 'jpeg', 'png', 'bmp', 'gif'
+	], $form = $('#form-upload');
+	$form.on('submit', function(event) {
+	   event.preventDefault();  // 禁止默认转页行为
+	}).find('[name="file"]').ajaxfileupload({
+		submit_button: $form.find('[type="submit"]'),
+		'action': '/do/s/savefile',
+		valid_extensions: validExts,
+		onCancel: function() {
+			notify('请选择文件', 0);
+		},
+		onComplete: function(resObj) {
+			if (_.isObject(resObj) && 'status' in resObj && ! resObj['status']) {
+				notify('仅支持格式 ' + validExts.join(', '), 0);
+				$form[0].reset();
+				return;
+			}
+			if (_.isString(resObj)) {
+				var resTxt = resObj;
+				resTxt.match(/^[^\{]*(\{[\s\S]*\})[^\}]*$/);
+				json = RegExp.$1;
+				resObj = JSON.parse(json);
+			}
+            var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			if (! ok) {
+				$form[0].reset();
+			} else {
+				reloadFrame();
+			}
+		}
+	});
 	
 	$tbody.delegate('a.delfile', 'click', function(ev) {
 		var $a = $(this),
 			fid = parseInt($a.attr('data-fid'));
 		$.get('/do/s/delfile?fid=' + fid, function(resObj) {
-			alert(resObj['msg']);
-			if (resObj['ok']) {
-				reloadFrame();
-			}
+			var ok = resObj['ok'], msg = resObj['msg'];
+            msg && notify(msg, ok);
+            ok && reloadFrame();
 		});
 	});
 	
-    function getFileList() {
-        $.ajax({
-            type: 'get',
-            url: '/do/s/filelist',
-            success: function(resObj) {
-                if (! resObj['ok']) {
-                    return alert('文件列表获取失败');
-                }
-                var fileList = resObj['fileList'],
-                        tbodyHtml = fileList.length ? _.reduce(fileList, function(memo, file) {
-                            return memo + [
-                                '<tr>',
-                                    '<td>',
-                                        '<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
-                                            file['name'],
-                                        '</a>',
-                                    '</td>',
-                                    '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
-                                    '<td>' + file['timesDown'] + '</td>',
-                                    '<td>',
-                                        '<a data-fid="'+ file['id'] +'" class="ex-link delfile">删除</a>',
-                                    '</td>',
-                                '</tr>'
-                            ].join('');
-                        }, '') : [
-                            '<tr>',
-                                '<td colspan="4">没有记录</td>',
-                            '</tr>'
-                        ].join('');
-                $tbody.html(tbodyHtml);
-            }
-        });
-    }
+	function getFileList() {
+		$.ajax({
+			type: 'get',
+			url: '/do/s/filelist',
+			success: function(resObj) {
+				if (! resObj['ok']) {
+					return notify('文件列表获取失败', 0);
+				}
+				var fileList = resObj['fileList'],
+						tbodyHtml = fileList.length ? _.reduce(fileList, function(memo, file) {
+							return memo + [
+								'<tr>',
+									'<td>',
+										'<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
+											file['name'],
+										'</a>',
+									'</td>',
+									'<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
+									'<td>' + file['timesDown'] + '</td>',
+									'<td>',
+										'<a data-fid="'+ file['id'] +'" class="ex-link delfile">删除</a>',
+									'</td>',
+								'</tr>'
+							].join('');
+						}, '') : [
+							'<tr>',
+								'<td colspan="4">没有记录</td>',
+							'</tr>'
+						].join('');
+				$tbody.html(tbodyHtml);
+			}
+		});
+	}
 </script>

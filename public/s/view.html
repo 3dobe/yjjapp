@@ -49,9 +49,8 @@
 
 	$btnClose.on('click', function() {
 		$.get('/do/s/close', function(resObj) {
-			var ok = resObj['ok'],
-					msg = resObj['msg'];
-			msg && alert(msg);
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
 			if (ok) {
 				loadFrame('#/enter');
 				$navbar.find('.sec').addClass('hidden')

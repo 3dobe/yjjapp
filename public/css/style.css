@@ -1,6 +1,7 @@
 
 @import url("../bower_components/bootstrap/dist/css/bootstrap.min.css");
 @import url("../bower_components/bootstrap/dist/css/bootstrap-theme.min.css");
+@import url("../bower_components/sco.js/css/scojs.css");
 
 body {
 	background-color: #fafafa;
@@ -12,7 +13,7 @@ h1 {
 ul, ol {
     list-style-type: none;
 }
-a[href], label, input[type="checkbox"], input[type="radio"] {
+a, label, input[type="checkbox"], input[type="radio"] {
 	cursor: pointer;
 }
 a:hover {
@@ -123,4 +124,8 @@ textarea {
 }
 #table-audience th {
     min-width: 80px;
+}
+
+#page_message {
+    opacity: 0.94;
 }

@@ -8,6 +8,7 @@
 	"dependencies": {
 		"underscore": "1.5.2",
 		"jquery": "2.0.0",
-		"bootstrap": "3.0.0"
+		"bootstrap": "3.0.0",
+		"sco.js": "1.0.2"
 	}
 }

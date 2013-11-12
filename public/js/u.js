@@ -21,7 +21,7 @@ $body.delegate('[href]:not(.ex-link)', 'click', function(event) {
 	event.preventDefault();
 	var href = $(this).attr('href');
 	if (href && href !== '#') loadFrame(href);
-}).delegate('form a[type="submit"]', 'click', function() {  // enable a[type="submit"]
+}).delegate('form a[type="submit"]', 'click', function() {	// enable a[type="submit"]
 	$(this).closest('form').submit();
 });
 
@@ -31,7 +31,7 @@ function loadFrame(hash, success) {
 		href = '/' + clientType + (mat[1] || '') + '.html' + (mat[2] || '');
 	$.ajax({
 		type: 'get',
-		url:  href,
+		url:	href,
 		success: function(resTxt) {
 			location.hash = hashPage = hash;	// 顺序: hashPage > location.hash
 			$frame.html(resTxt);
@@ -47,13 +47,21 @@ function loadFrame(hash, success) {
 function reloadFrame(success) {
 	loadFrame(location.hash, success);
 }
+function notify(msg, type) {
+	// type 0 => danger, 1 => success
+	$.scojs_message(
+		msg, $.scojs_message[[
+			'TYPE_ERROR', 'TYPE_OK'
+		][parseInt(type) || 0]]
+	);
+}
 
 // 获取hash参数
 function getHashParams(hash) {
 	var pat = /([^?=&#]*)=([^?=&#]+)/g, params = {};
 	decodeURIComponent(hash || window.location.hash)
 		.replace(pat, function(a, b, c){
-			if (b in params) {  // 已有该键
+			if (b in params) {	// 已有该键
 				if (! _.isArray(params[b])) params[b] = [params[b]];	// 数组化
 				params[b].push(c);
 			} else {

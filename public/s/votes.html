@@ -1,159 +1,152 @@
 
 <style>
-    #table-votelist th:nth-child(1) {
-        min-width: 80px;
-    }
-    #table-votelist th:nth-child(2) {
-        min-width: 60px;
-    }
-    #table-votelist th:nth-child(3) {
-        min-width: 120px;
-    }
+	#table-votelist th:nth-child(1) {
+		min-width: 80px;
+	}
+	#table-votelist th:nth-child(2) {
+		min-width: 60px;
+	}
+	#table-votelist th:nth-child(3) {
+		min-width: 120px;
+	}
 </style>
 
 <div id="main-wrapper">
-    <h1>投票管理</h1>
+	<h1>投票管理</h1>
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-        <li>
-            <a class="ex-link" href="#tab-list" data-toggle="tab">投票列表</a>
-        </li>
-        <li>
-            <a class="ex-link" href="#tab-add" data-toggle="tab">添加投票</a>
-        </li>
-    </ul>
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs">
+		<li>
+			<a class="ex-link" href="#tab-list" data-toggle="tab">投票列表</a>
+		</li>
+		<li>
+			<a class="ex-link" href="#tab-add" data-toggle="tab">添加投票</a>
+		</li>
+	</ul>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab-list">
-            <table id="table-votelist" class="table table-striped">
-                <thead>
-                <tr>
-                    <th class="long">问题</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        <div class="tab-pane" id="tab-add">
-            <form id="form-add">
-                <div class="form-group">
-                    <textarea class="form-control" rows="3" name="content" placeholder="投票内容"></textarea>
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="words[]" placeholder="选项1">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="words[]" placeholder="选项2">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="words[]" placeholder="选项3">
-                </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="words[]" placeholder="选项4">
-                </div>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab-list">
+			<table id="table-votelist" class="table table-striped">
+				<thead>
+				<tr>
+					<th class="long">问题</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<div class="tab-pane" id="tab-add">
+			<form id="form-add">
+				<div class="form-group">
+					<textarea class="form-control" rows="3" name="content" placeholder="投票内容"></textarea>
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" name="words[]" placeholder="选项1">
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" name="words[]" placeholder="选项2">
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" name="words[]" placeholder="选项3">
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" name="words[]" placeholder="选项4">
+				</div>
 
-                <button type="submit" class="btn btn-primary btn-lg btn-block">
-                    添加投票
-                </button>
-            </form>
-        </div>
-    </div>
+				<button type="submit" class="btn btn-primary btn-lg btn-block">
+					添加投票
+				</button>
+			</form>
+		</div>
+	</div>
 </div>
 
 <script>
-    var $tableList = $('#table-votelist'),
-            $tbody = $tableList.find('tbody'),
-            $formAdd = $('#form-add');
+	var $tableList = $('#table-votelist'),
+			$tbody = $tableList.find('tbody'),
+			$formAdd = $('#form-add');
 
-    $('.nav-tabs a').click(function (e) {
-        e.preventDefault();
-        updateVoteList();
-        $(this).tab('show');
-    }).first().tab('show');
+	$('.nav-tabs a').click(function (e) {
+		e.preventDefault();
+		updateVoteList();
+		$(this).tab('show');
+	}).first().tab('show');
 
-    $formAdd.ajaxForm({
-        type: 'post',
-        url: '/do/s/addvote',
-        success: function(resObj) {
-            alert(resObj['msg']);
-            if (resObj['ok']) {
-                reloadFrame();
-            }
-        }
-    });
+	$formAdd.ajaxForm({
+		type: 'post',
+		url: '/do/s/addvote',
+		success: function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		}
+	});
 
-    $tbody.delegate('a.delvote', 'click', function(ev) {
-        var $a = $(this),
-                vid = parseInt($a.attr('data-vid'));
-        $.get('/do/s/delvote?vid=' + vid, function(resObj) {
-            alert(resObj['msg']);
-            if (resObj['ok']) {
-                reloadFrame();
-            }
-        });
-    }).delegate('a.onvote', 'click', function(ev) {
-        var $a = $(this),
-                vid = parseInt($a.attr('data-vid'));
-        $.get('/do/s/setvote?state=active&vid=' + vid, function(resObj) {
-            alert(resObj['msg']);
-            if (resObj['ok']) {
-                reloadFrame();
-            }
-        });
-    }).delegate('a.offvote', 'click', function(ev) {
-        var $a = $(this),
-                vid = parseInt($a.attr('data-vid'));
-        $.get('/do/s/setvote?state=cool&vid=' + vid, function(resObj) {
-            alert(resObj['msg']);
-            if (resObj['ok']) {
-                reloadFrame();
-            }
-        });
-    });
+	$tbody.delegate('a.delvote', 'click', function(ev) {
+		var $a = $(this),
+			vid = parseInt($a.attr('data-vid'));
+		$.get('/do/s/delvote?vid=' + vid, function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		});
+	}).delegate('a.onvote', 'click', function(ev) {
+		var $a = $(this),
+			vid = parseInt($a.attr('data-vid'));
+		$.get('/do/s/setvote?state=active&vid=' + vid, function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		});
+	}).delegate('a.offvote', 'click', function(ev) {
+		var $a = $(this),
+			vid = parseInt($a.attr('data-vid'));
+		$.get('/do/s/setvote?state=cool&vid=' + vid, function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		});
+	});
 
-    updateVoteList();
+	updateVoteList();
 
-    function updateVoteList() {
-        $.ajax({
-            type: 'get',
-            url: '/do/s/votelist',
-            success: function(resObj) {
-                var ok = resObj['ok'],
-                        msg = resObj['msg'];
-                if (! resObj['ok']) {
-                    msg && alert(msg);
-                    return;
-                }
-                var voteList = resObj['voteList'],
-                        tbodyHtml = voteList.length ? _.reduce(voteList, function(memo, vote) {
-                            return memo + [
-                                '<tr>',
-                                    '<td>' + vote['content'] + '</td>',
-                                    '<td>' + (vote['state'] === 'active' ? '开启' : '关闭') + '</td>',
-                                    '<td>',
-                                        '<a href="#/viewvote?vid='+ vote['id'] +'">详情</a>',
-                                    '&nbsp;&nbsp;',
-                                        vote['state'] === 'active' ?
-                                                '<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
-                                                '<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
-                                        '&nbsp;&nbsp;',
-                                        '<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
-                                    '</td>',
-                                '</tr>'
-                            ].join('');
-                        }, '') : [
-                            '<tr>',
-                                '<td colspan="3">没有记录</td>',
-                            '</tr>'
-                        ].join('');
-                $tbody.html(tbodyHtml);
-            }
-        });
-    }
+	function updateVoteList() {
+		$.ajax({
+			type: 'get',
+			url: '/do/s/votelist',
+			success: function(resObj) {
+				var ok = resObj['ok'], msg = resObj['msg'];
+                msg && notify(msg, ok);
+				if (! ok) return;
+				var voteList = resObj['voteList'],
+						tbodyHtml = voteList.length ? _.reduce(voteList, function(memo, vote) {
+							return memo + [
+								'<tr>',
+									'<td>' + vote['content'] + '</td>',
+									'<td>' + (vote['state'] === 'active' ? '开启' : '关闭') + '</td>',
+									'<td>',
+										'<a href="#/viewvote?vid='+ vote['id'] +'">详情</a>',
+									'&nbsp;&nbsp;',
+										vote['state'] === 'active' ?
+												'<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
+												'<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
+										'&nbsp;&nbsp;',
+										'<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
+									'</td>',
+								'</tr>'
+							].join('');
+						}, '') : [
+							'<tr>',
+								'<td colspan="3">没有记录</td>',
+							'</tr>'
+						].join('');
+				$tbody.html(tbodyHtml);
+			}
+		});
+	}
 </script>
 
 

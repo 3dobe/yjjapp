@@ -40,7 +40,7 @@
 		success: function(resObj) {
             var ok = resObj['ok'],
                     msg = resObj['msg'];
-            msg && alert(msg);
+            msg && notify(msg, ok);
 			if (ok) {
 				loadFrame('#/view');
 				$navbar.find('.sec').addClass('hidden')
@@ -70,8 +70,7 @@
 					},
 					success: function(resObj) {
                         if (! resObj['ok']) {
-                            alert('获取验证码失败');
-                            return;
+                            return notify('获取验证码失败', 0);
                         }
 						var vcodeInfo = resObj['vcodeInfo'],
 							num1 = vcodeInfo['num1'],
