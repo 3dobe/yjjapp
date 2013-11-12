@@ -1,9 +1,9 @@
 ﻿{
 	"name": "yjjapp",
-	"version": "0.0.8",
+	"version": "0.0.9",
 	"description": "一个连接讲端和听端，催化各类互动环节的演讲应用",
-	"main": "app.js",
 	"author": "3dobe",
+	"main": "app.js",
 	"dependencies": {
 		"underscore": "1.5.2",
 		"express": "3.4.0",

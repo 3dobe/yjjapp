@@ -1,0 +1,13 @@
+{
+	"name": "yjjapp-public",
+	"version": "0.0.1",
+	"authors": "3dobe",
+	"main": [
+		"s/index.html", "a/index.html"
+	],
+	"dependencies": {
+		"underscore": "1.5.2",
+		"jquery": "2.0.0",
+		"bootstrap": "3.0.0"
+	}
+}
