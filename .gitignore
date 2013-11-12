@@ -1,9 +1,10 @@
 **/*.log
-/node_modules
-/content
+**/node_modules
+**/bower_components
 
 **/.project
 **/.idea
+
 /_.sublime-workspace
 /_.sublime-project
-/public/bower_components
+/content
