@@ -56,9 +56,9 @@
 
 <script>
 	var $tableList = $('#table-lotterylist'),
-			$tbody = $tableList.find('tbody'),
-			$formAdd = $('#form-add'),
-			$inputNum = $('[name="num"]');
+		$tbody = $tableList.find('tbody'),
+		$formAdd = $('#form-add'),
+		$inputNum = $('[name="num"]');
 
 	$('.nav-tabs a').click(function (e) {
 		e.preventDefault();
@@ -76,7 +76,7 @@
 		}
 	});
 
-	$tbody.delegate('a.dellottery', 'click', function(ev) {
+	$tbody.delegate('a.dellottery', 'click', function(ev){
 		var $a = $(this),
 			lyid = parseInt($a.attr('data-lyid'));
 		$.get('/do/s/dellottery?lyid=' + lyid, function(resObj) {
@@ -84,58 +84,54 @@
 			msg && notify(msg, ok);
 			ok && reloadFrame();
 		});
-	}).delegate('a.onlottery', 'click', function(ev) {
-				var $a = $(this),
-					lyid = parseInt($a.attr('data-lyid'));
-				$.get('/do/s/setlottery?state=active&lyid=' + lyid, function(resObj) {
-					var ok = resObj['ok'], msg = resObj['msg'];
-					msg && notify(msg, ok);
-					ok && reloadFrame();
-				});
-			}).delegate('a.offlottery', 'click', function(ev) {
-				var $a = $(this),
-					lyid = parseInt($a.attr('data-lyid'));
-				$.get('/do/s/setlottery?state=cool&lyid=' + lyid, function(resObj) {
-					var ok = resObj['ok'], msg = resObj['msg'];
-					msg && notify(msg, ok);
-					ok && reloadFrame();
-				});
-			});
+	}).delegate('a.onlottery', 'click', function(ev){
+		var $a = $(this),
+			lyid = parseInt($a.attr('data-lyid'));
+		$.get('/do/s/setlottery?state=active&lyid=' + lyid, function(resObj){
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		});
+	}).delegate('a.offlottery', 'click', function(ev){
+		var $a = $(this),
+			lyid = parseInt($a.attr('data-lyid'));
+		$.get('/do/s/setlottery?state=cool&lyid=' + lyid, function(resObj){
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		});
+	});
 
 	updateVoteList();
 
 	function updateVoteList() {
-		$.ajax({
-			type: 'get',
-			url: '/do/s/lotterylist',
-			success: function(resObj) {
-				var ok = resObj['ok'],
-					msg = resObj['msg'];
-                msg && notify(msg, ok);
-				if (! ok) return;
-				var lotteryList = resObj['lotteryList'],
-						tbodyHtml = lotteryList.length ? _.reduce(lotteryList, function(memo, lottery) {
-							return memo + [
-								'<tr>',
-									'<td>' + lottery['content'] + '</td>',
-									'<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
-									'<td>',
-									'<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
-									'&nbsp;&nbsp;',
-									'<a data-lyid="'+ lottery['id'] +'" class="ex-link dellottery">删除</a>',
-									'</td>',
-								'</tr>'
-							].join('');
-						}, '') : [
-							'<tr>',
-								'<td colspan="3">没有记录</td>',
-							'</tr>'
-						].join('');
-				$tbody.html(tbodyHtml);
+		$.get('/do/s/lotterylist', function(resObj){
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			if (! ok) return;
+			if (! lotteryList.length) {
+				return $tbody.html([
+					'<tr>',
+						'<td colspan="3">没有记录</td>',
+					'</tr>'
+				].join(''));
 			}
+			$tbody.html(_.reduce(lotteryList, function(memo, lottery){
+				return memo + [
+					'<tr>',
+						'<td>' + lottery['content'] + '</td>',
+						'<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
+						'<td>',
+						'<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
+						'&nbsp;&nbsp;',
+						'<a data-lyid="'+ lottery['id'] +'" class="ex-link dellottery">删除</a>',
+						'</td>',
+					'</tr>'
+				].join('');
+			}, ''));
 		});
 	}
-	//限制输入为数字
+	// 限制输入为数字
 	$inputNum.on('input', function(){
 		if (! /^\d*$/.test($inputNum.val())) {
 			$inputNum.val($inputNum.data('text'));

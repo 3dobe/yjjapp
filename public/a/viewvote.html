@@ -1,52 +1,50 @@
 
 <div id="main-wrapper">
-    <h1>投票详情</h1>
-    <ul id="list-viewvote" class="list-group">
-        <li class="list-group-item">
-            <span class="li-label">题目</span>
-            <span id="content"></span>
-        </li>
-        <li class="list-group-item">
-            <span class="li-label">选项相关</span>
-            <ul id="words"></ul>
-        </li>
-        <li class="list-group-item">
-            <span class="li-label">图表结果</span>
-            <canvas id="chart" width="350" height="350"></canvas>
-        </li>
-    </ul>
+	<h1>投票详情</h1>
+	<ul id="list-viewvote" class="list-group">
+		<li class="list-group-item">
+			<span class="li-label">题目</span>
+			<p id="content"></p>
+		</li>
+		<li class="list-group-item">
+			<span class="li-label">选项相关</span>
+			<ul id="words"></ul>
+		</li>
+		<li class="list-group-item">
+			<span class="li-label">图表结果</span>
+			<canvas id="chart" width="350" height="350"></canvas>
+		</li>
+	</ul>
 </div>
 
 <script>
-    var vid = getHashParams()['vid'],
-        colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"];
+	var vid = getHashParams()['vid'],
+		colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"];
 
-    $.get('/do/a/viewvote?vid=' + vid, function(resObj) {
-        var ok = resObj['ok'],
-                msg = resObj['msg'];
-        msg && alert(msg);
-        if (! ok) return window.history.back();
+	$.get('/do/a/viewvote?vid=' + vid, function(resObj) {
+		var ok = resObj['ok'], msg = resObj['msg'];
+		msg && notify(msg, ok);
+		if (! ok) return window.history.back();
 
-        var vote = resObj['vote'],
-                content = vote['content'],
-                options = vote['options'];
+		var vote = resObj['vote'],
+			content = vote['content'],
+			options = vote['options'];
 
-        $('#content').text(content);
-        var pairs = _.pairs(options),
-            wordsHtml = _.reduce(pairs, function(memo, pair, i){
-                return memo + [
-                    '<li>',
-                        '<div class="square"></div>',
-                        '<span class="word">'+ pair[0] +'</span>',
-                    '</li>'
-                ].join('');
-            }, '');
-        $('#words').html(wordsHtml);
-        $('.square').each(function(i, el) {
-            $(el).css('background-color', colors[i]);
-        });
+		$('#content').text(content);
+		var pairs = _.pairs(options),
+			wordsHtml = _.reduce(pairs, function(memo, pair, i){
+				return memo + [
+					'<li>',
+						'<div class="square"></div>',
+						'<span class="word">'+ pair[0] +'</span>',
+					'</li>'
+				].join('');
+			}, '');
+		$('#words').html(wordsHtml);
+		$('.square').each(function(i, el){
+			$(el).css('background-color', colors[i]);
+		});
 
-        $('#chart').drawPieChart(options, colors);
-    });
-
+		$('#chart').drawPieChart(options, colors);
+	});
 </script>

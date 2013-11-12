@@ -36,8 +36,8 @@
 <script src="/lib/js/drawVerificationCode.js"></script>
 <script>
 	var $table = $('#table-filelist'),
-			$tbody = $table.find('tbody'),
-			$form = $('#form-upload');
+		$tbody = $table.find('tbody'),
+		$form = $('#form-upload');
 
 	getFileList();
 
@@ -57,8 +57,7 @@
 		onComplete: function(resObj) {
 			if (_.isObject(resObj) && 'status' in resObj && ! resObj['status']) {
 				notify('仅支持格式 ' + validExts.join(', '), 0);
-				$form[0].reset();
-				return;
+				return $form[0].reset();
 			}
 			if (_.isString(resObj)) {
 				var resTxt = resObj;
@@ -87,36 +86,34 @@
 	});
 	
 	function getFileList() {
-		$.ajax({
-			type: 'get',
-			url: '/do/s/filelist',
-			success: function(resObj) {
-				if (! resObj['ok']) {
-					return notify('文件列表获取失败', 0);
-				}
-				var fileList = resObj['fileList'],
-						tbodyHtml = fileList.length ? _.reduce(fileList, function(memo, file) {
-							return memo + [
-								'<tr>',
-									'<td>',
-										'<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
-											file['name'],
-										'</a>',
-									'</td>',
-									'<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
-									'<td>' + file['timesDown'] + '</td>',
-									'<td>',
-										'<a data-fid="'+ file['id'] +'" class="ex-link delfile">删除</a>',
-									'</td>',
-								'</tr>'
-							].join('');
-						}, '') : [
-							'<tr>',
-								'<td colspan="4">没有记录</td>',
-							'</tr>'
-						].join('');
-				$tbody.html(tbodyHtml);
+		$.get('/do/s/filelist', function(resObj){
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			if (! ok) return;
+			var fileList = resObj['fileList'];
+			if (! fileList.length) {
+				return $tbody.html([
+					'<tr>',
+						'<td colspan="4">没有记录</td>',
+					'</tr>'
+				].join(''));
 			}
+			$tbody.html(_.reduce(fileList, function(memo, file){
+				return memo + [
+					'<tr>',
+						'<td>',
+							'<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
+								file['name'],
+							'</a>',
+						'</td>',
+						'<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
+						'<td>' + file['timesDown'] + '</td>',
+						'<td>',
+							'<a data-fid="'+ file['id'] +'" class="ex-link delfile">删除</a>',
+						'</td>',
+					'</tr>'
+				].join('');
+			}, ''));
 		});
 	}
 </script>

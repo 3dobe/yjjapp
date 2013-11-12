@@ -1,72 +1,69 @@
 
 <style>
-    #table-votelist th:nth-child(1) {
-        min-width: 80px;
-    }
-    #table-votelist th:nth-child(2),
-    #table-votelist th:nth-child(3) {
-        min-width: 60px;
-    }
+	#table-votelist th:nth-child(1) {
+		min-width: 80px;
+	}
+	#table-votelist th:nth-child(2),
+	#table-votelist th:nth-child(3) {
+		min-width: 60px;
+	}
 </style>
 
 <div id="main-wrapper">
-    <h1>投票列表</h1>
+	<h1>投票列表</h1>
 
-    <table id="table-votelist" class="table table-striped">
-        <thead>
-        <tr>
-            <th>问题</th>
-            <th>状态</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+	<table id="table-votelist" class="table table-striped">
+		<thead>
+		<tr>
+			<th>问题</th>
+			<th>状态</th>
+			<th>是否参与</th>
+			<th>操作</th>
+		</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
 </div>
 
 <script>
-    var $tableList = $('#table-votelist'),
-            $tbody = $tableList.find('tbody');
+	var $tableList = $('#table-votelist'),
+			$tbody = $tableList.find('tbody');
 
-    updateVoteList();
+	updateVoteList();
 
-    function updateVoteList() {
-        $.ajax({
-            type: 'get',
-            url: '/do/a/votelist',
-            success: function(resObj) {
-                var ok = resObj['ok'],
-                        msg = resObj['msg'];
-                if (! resObj['ok']) {
-                    msg && alert(msg);
-                    return;
-                }
-                var voteList = resObj['voteList'],
-                        votedList = resObj['votedList'],
-                        tbodyHtml = voteList.length ? _.reduce(voteList, function(memo, vote) {
-                            var vid = vote['id'],
-                                    active = vote['state'] === 'active';
-                            return memo + [
-                                '<tr>',
-                                    '<td>' + vote['content'] + '</td>',
-                                    '<td>' + (active ? '开启' : '关闭') + '</td>',
-                                    '<td>',
-                                    (_.contains(votedList, vid) ?
-                                            '<a href="#/viewvote?vid='+ vid +'">详情</a>':
-                                            active ? '<a href="#/vote?vid='+ vid +'">参与</a>':
-                                                    '<span>等待</span>'),
-                                    '</td>',
-                                '</tr>'
-                            ].join('');
-                        }, '') : [
-                            '<tr>',
-                                '<td colspan="3">没有记录</td>',
-                            '</tr>'
-                        ].join('');
-                $tbody.html(tbodyHtml);
-            }
-        });
-    }
+	function updateVoteList() {
+		$.get('/do/a/votelist', function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			if (! ok) return;
+			var voteList = resObj['voteList'];
+			if (! voteList.length) {
+				return $tbody.html([
+					'<tr>',
+						'<td colspan="4">没有记录</td>',
+					'</tr>'
+				].join(''));
+			}
+			var votedList = resObj['votedList'];
+			$tbody.html(_.reduce(voteList, function(memo, vote){
+				var vid = vote['id'],
+					active = vote['state'] === 'active',
+					voted = _.contains(votedList, vid);
+				return memo + [
+					'<tr>',
+						'<td>' + vote['content'] + '</td>',
+						'<td>' + (active ? '开启' : '关闭') + '</td>',
+						'<td>' + (voted ? '已参与' : '未参与') + '</td>',
+						'<td>',
+							(voted ? '<a href="#/viewvote?vid='+ vid +'">详情</a>':
+								active ? '<a href="#/vote?vid='+ vid +'">参与</a>':
+										'<span>等待</span>'),
+						'</td>',
+					'</tr>'
+				].join('');
+			}, ''));
+		});
+	}
 </script>
 
 

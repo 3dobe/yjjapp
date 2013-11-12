@@ -1,90 +1,101 @@
+
 <div id="main-wrapper">
-    <h1>你想提问的</h1>
+	<h1>讲座提问</h1>
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-        <li>
-            <a class="ex-link" href="#tab-list" data-toggle="tab">问题列表</a>
-        </li>
-        <li>
-            <a class="ex-link" href="#tab-add" data-toggle="tab">提出问题</a>
-        </li>
-    </ul>
+	<form id="form-qna-toggle">
+		<div class="btn-group btn-group-lg">
+			<button class="btn btn-default" name="state" value="open" disabled>开启</button>
+			<button class="btn btn-default" name="state" value="close" disabled>关闭</button>
+		</div>
+	</form>
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab-list">
-            <table id="table-msglist" class="table table-striped">
-            <thead>
-            <tr>
-                <th>听众昵称</th>
-                <th>提问内容</th>
-            </tr>
-            </thead>
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs">
+		<li>
+			<a class="ex-link" href="#tab-list" data-toggle="tab">问题列表</a>
+		</li>
+		<li>
+			<a class="ex-link" href="#tab-add" data-toggle="tab">提出问题</a>
+		</li>
+	</ul>
 
-            <tbody></tbody>
-            </table>
-        </div>
-        <div class="tab-pane" id="tab-add">
-            <form id="form-add">
-                <div class="form-group">
-                    <textarea class="form-control" rows="3" name="msg" placeholder="提问内容"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block">
-                    添加问题
-                </button>
-            </form>
-        </div>
-    </div>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane active" id="tab-list">
+			<table id="table-msglist" class="table table-striped">
+			<thead>
+			<tr>
+				<th>听众昵称</th>
+				<th>提问内容</th>
+			</tr>
+			</thead>
+
+			<tbody></tbody>
+			</table>
+		</div>
+		<div class="tab-pane" id="tab-add">
+			<form id="form-add">
+				<div class="form-group">
+					<textarea class="form-control" rows="3" name="text" placeholder="提问内容"></textarea>
+				</div>
+				<button type="submit" class="btn btn-primary btn-lg btn-block">
+					提出问题
+				</button>
+			</form>
+		</div>
+	</div>
 </div>
 
 
 <script>
-    var $table = $('#table-msglist'),
-            $tbody = $table.find('tbody'),
-    $formAdd = $('#form-add');
+	var $table = $('#table-msglist'),
+		$tbody = $table.find('tbody'),
+		$formToggle = $('#form-qna-toggle'),
+		$formAdd = $('#form-add');
 
-    $('.nav-tabs a').click(function (e) {
-        e.preventDefault();
-        getMessageList();
-        $(this).tab('show');
-    }).first().tab('show');
+	$.get("/do/a/getqna", function(resObj){
+		var state = resObj['state'];
+		$formToggle.find('[value="'+ state +'"]').addClass('active');
+	});
 
-    $formAdd.ajaxForm({
-        type: 'post',
-        url: '/do/a/sendmsg',
-        success: function(resObj) {
-            alert(resObj['msg']);
-            if (resObj['ok']) {
-                reloadFrame();
-            }
-        }
-    });
-    getMessageList();
+	$('.nav-tabs a').click(function (e) {
+		e.preventDefault();
+		getMessageList();
+		$(this).tab('show');
+	}).first().tab('show');
 
-    function getMessageList() {
-        $.ajax({
-            type: 'get',
-            url: '/do/a/msglist',
-            success: function(resObj) {
-                if (! resObj['ok']) {
-                    return alert('问题列表获取失败');
-                }
-                var msgList = resObj['msgList'],
-                        tbodyHtml = msgList.length ? _.reduce(msgList, function(memo, msg) {
-                            return memo + [
-                                '<tr>',
-                                '<td>' + msg.audienceName + '</td>',
-                                '<td>' + msg.text + '</td>',
-                                '</tr>'
-                            ].join('');
-                        }, '') : [
-                            '<tr>',
-                                '<td colspan="2">没有记录</td>',
-                            '</tr>'
-                        ].join('');
-                $tbody.html(tbodyHtml);
-            }
-        });
-    }
+	$formAdd.ajaxForm({
+		type: 'post',
+		url: '/do/a/sendmsg',
+		success: function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		}
+	});
+	getMessageList();
+
+	function getMessageList() {
+		$.get('/do/a/msglist', function(resObj){
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			if (! ok) return;
+			var msgList = resObj['msgList'];
+			if (! msgList.length) {
+				return $tbody.html([
+					'<tr>',
+						'<td colspan="2">没有记录</td>',
+					'</tr>'
+				].join(''));
+			}
+			$tbody.html(_.reduce(msgList, function(memo, msg){
+				return memo + [
+					'<tr>',
+						'<td>' + msg.audienceName + '</td>',
+						'<td>' + msg.text + '</td>',
+					'</tr>'
+				].join('');
+			}, ''));
+		});
+	}
 </script>

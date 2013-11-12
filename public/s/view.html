@@ -32,9 +32,9 @@
 <!-- js -->
 <script>
 	var hostUrl = 'http://yjjapp.duapp.com',
-			$btnClose = $('#btn-close');
+		$btnClose = $('#btn-close');
 
-	$.get('/do/s/view', function(resObj) {
+	$.get('/do/s/view', function(resObj){
 		var lectkey = resObj['lectkey'],
 			lectname = resObj['lectname'],
 			spkname = resObj['spkname'];
@@ -45,10 +45,11 @@
 			width: 128, height: 128,
 			text: hostUrl + '/a/#/join?key=' + lectkey
 		});
+		$navbar.find('#username').text(spkname);
 	});
 
-	$btnClose.on('click', function() {
-		$.get('/do/s/close', function(resObj) {
+	$btnClose.on('click', function(){
+		$.get('/do/s/close', function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (ok) {

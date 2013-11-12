@@ -11,7 +11,7 @@ h1 {
 	margin-bottom: 20px;
 }
 ul, ol {
-    list-style-type: none;
+	list-style-type: none;
 }
 a, label, input[type="checkbox"], input[type="radio"] {
 	cursor: pointer;
@@ -27,17 +27,20 @@ a:hover {
 	cursor: pointer;
 }
 .tab-content {
-    margin-top: 8px;
+	margin-top: 8px;
 }
 
 #navbar {
-    margin-bottom: 0;
+	margin-bottom: 0;
+}
+#navbar #username {
+	margin-left: 10px;
 }
 #frame {
 	padding: 10px;
-    margin: auto;
+	margin: auto;
 	width: 100%;
-    max-width: 500px;
+	max-width: 500px;
 }
 #body-wrapper>footer {
 	margin-top: 20px;
@@ -50,82 +53,91 @@ a:hover {
 }
 
 .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
-    background-color: #f5f5f5;
+	background-color: #f5f5f5;
 }
 th {
-    min-width: 80px;
+	min-width: 80px;
 }
 th, td {
 	word-break: break-all;
 }
 th[colspan], td[colspan] {
-    text-align: center;
+	text-align: center;
 }
 
 /* 表单 */
 .form-group {
-    margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 .form-group * {
-    font-size: 20px !important;
+	font-size: 20px !important;
 }
 .form-control {
-    padding: 12px;
-    height: 48px;
+	padding: 12px;
+	height: 48px;
 }
 textarea.form-control {
-    height: auto;
+	height: auto;
 }
 input[type="file"].form-control {
-    font-size: 14px !important; /* mobile style comp */
+	font-size: 14px !important; /* mobile style comp */
 }
 .input-group-addon {
-    padding: 3px 6px;
-    height: 48px;
+	padding: 3px 6px;
+	height: 48px;
 }
 .input-group-btn .btn {
-    height: 48px;
+	height: 48px;
 }
 textarea {
-    resize: none;
+	resize: none;
 }
 
 /* 验证码 */
 #canvas-vcode {
-    width: 120px;
-    height: 36px;
+	width: 120px;
+	height: 36px;
 }
 /* 投票详情 */
+#list-viewvote #content {
+	padding-left: 40px;
+}
+#list-viewvote #content:before {
+	content: '　　';
+}
 #list-viewvote #chart {
-    margin: auto;
-    display: block;
-    width: 75% !important;
-    height: auto !important;
+	margin: auto;
+	display: block;
+	width: 75% !important;
+	height: auto !important;
 }
 #list-viewvote #words {
-    padding-top: 6px;
-    padding-bottom: 6px;
+	padding-top: 6px;
+	padding-bottom: 6px;
 }
 #list-viewvote #words > li {
-    padding: 4px;
+	padding: 4px;
 }
 #list-viewvote .square {
-    width: 24px;
-    height: 24px;
-    margin-right: 14px;
-    display: inline-block;
+	width: 24px;
+	height: 24px;
+	margin-right: 14px;
+	display: inline-block;
 }
 #list-viewvote .word {
-    vertical-align: top;
+	vertical-align: top;
 }
 /* 听众反应 */
 #table-msg th {
-    min-width: 80px;
+	min-width: 80px;
 }
 #table-audience th {
-    min-width: 80px;
+	min-width: 80px;
 }
 
 #page_message {
-    opacity: 0.94;
+	opacity: 0.94;
 }
+#form-qna-toggle {
+	margin-bottom: 20px;;
+ }

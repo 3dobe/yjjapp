@@ -1,19 +1,13 @@
-<style>
-		 #form-toggle{
-			margin-bottom: 20px;;
-		 }
-</style>
 
 <div id="main-wrapper">
 	<h1>提问管理</h1>
 
-	<form id="form-toggle">
+	<form id="form-qna-toggle">
 		<div class="btn-group btn-group-lg">
 			<button type="submit" class="btn btn-default" name="state" value="open">开启</button>
 			<button type="submit" class="btn btn-default" name="state" value="close">关闭</button>
 		</div>
 	</form>
-
 
 	<table id="table-msglist" class="table table-striped">
 		<thead>
@@ -30,8 +24,8 @@
 
 <script>
 	var $table = $('#table-msglist'),
-			$tbody = $table.find('tbody'),
-			$formToggle=$('#form-toggle');
+		$tbody = $table.find('tbody'),
+		$formToggle=$('#form-qna-toggle');
 
 	$.get("/do/s/getqna", function(resObj){
 		var state = resObj['state'];
@@ -41,47 +35,39 @@
 	$formToggle.find('[name="state"]').on('click', function(){
 		$(this).addClass('active').siblings().removeClass('active');
 	});
-	$formToggle.on('submit', function(event){
-		event.preventDefault();
-		$.ajax({
-			type: 'get',
-			data: {
-				state: $formToggle.find('[name="state"].active').val()
-			},
-			url: '/do/s/setqna',
-			success: function(resObj) {
-				var ok = resObj['ok'], msg = resObj['msg'];
-				msg && notify(msg, ok);
-				ok && reloadFrame();
-			}
+	$formToggle.on('submit', function(ev){
+		ev.preventDefault();
+		$.get('/do/s/setqna', {
+			state: $formToggle.find('[name="state"].active').val()
+		}, function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
 		});
 	});
 
 	getMessageList();
 
 	function getMessageList() {
-		$.ajax({
-			type: 'get',
-			url: '/do/s/msglist',
-			success: function(resObj) {
-				if (! resObj['ok']) {
-					return notify('问题列表获取失败', 0);
-				}
-				var msgList = resObj['msgList'],
-						tbodyHtml = msgList.length ? _.reduce(msgList, function(memo, msg) {
-							return memo + [
-								'<tr>',
-									'<td>' + msg.audienceName + '</td>',
-									'<td>' + msg.text + '</td>',
-								'</tr>'
-							].join('');
-						}, '') : [
-							'<tr>',
-							'<td colspan="2">没有记录</td>',
-							'</tr>'
-						].join('');
-				$tbody.html(tbodyHtml);
+		$.get('/do/s/msglist', function(resObj){
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			if (! ok) return;
+			var msgList = resObj['msgList'];
+			if (! msgList.length) {
+				return $tbody.html([
+					'<tr>',
+						'<td colspan="2">没有记录</td>',
+					'</tr>'
+				].join(''));
 			}
+			$tbody.html(_.reduce(msgList, function(memo, msg){
+				return memo + [
+					'<tr>',
+						'<td>' + msg.audienceName + '</td>',
+						'<td>' + msg.text + '</td>',
+					'</tr>'
+				].join('');
+			}, ''));
 		});
 	}
 </script>

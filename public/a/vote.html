@@ -1,65 +1,61 @@
 
-<style>
-
-</style>
-
 <div id="main-wrapper">
-    <h1>参与投票</h1>
-    <ul id="list-viewvote" class="list-group">
-        <li class="list-group-item">
-            <span class="li-label">题目</span>
-            <span id="content"></span>
-        </li>
-        <li class="list-group-item">
-            <span class="li-label">选项相关</span>
-                <form id="form-vote">
-                    <div id="words" class="btn-group-vertical" data-toggle="buttons"></div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-lg btn-block">
-                            提交投票
-                        </button>
-                    </div>
-                </form>
-        </li>
-    </ul>
+	<h1>参与投票</h1>
+	<ul id="list-viewvote" class="list-group">
+		<li class="list-group-item">
+			<span class="li-label">题目</span>
+			<p id="content"></p>
+		</li>
+		<li class="list-group-item">
+			<span class="li-label">选项相关</span>
+			<form id="form-vote">
+				<div id="words" class="btn-group-vertical" data-toggle="buttons"></div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-lg btn-block">
+						提交投票
+					</button>
+				</div>
+			</form>
+		</li>
+	</ul>
 </div>
 
 <script>
-    var vid = parseInt(getHashParams()['vid']),
-            $listWords = $('#words'),
-            $formVote = $('#form-vote');
+	var vid = parseInt(getHashParams()['vid']),
+		$listWords = $('#words'),
+		$formVote = $('#form-vote');
 
-    $formVote.on('submit', function(ev) {
-        ev.preventDefault();
-        $listWords.find('.active input[type="radio"]').attr('checked', true);
-    });
-    $formVote.ajaxForm({
-        url: '/do/a/vote?vid=' + vid,
-        success: function(resObj) {
-            if (! resObj['ok']) return alert(resObj['msg']);
-            loadFrame('#/viewvote?vid=' + vid);
-        }
-    });
+	$formVote.on('submit', function(ev) {
+		ev.preventDefault();
+		$listWords.find('.active input[type="radio"]').attr('checked', true);
+	});
+	$formVote.ajaxForm({
+		url: '/do/a/vote?vid=' + vid,
+		success: function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && loadFrame('#/viewvote?vid=' + vid);
+		}
+	});
 
-    $.get('/do/a/viewvote?vid=' + vid, function(resObj) {
-        var ok = resObj['ok'],
-                msg = resObj['msg'];
-        msg && alert(msg);
-        if (! ok) return window.history.back();
+	$.get('/do/a/viewvote?vid=' + vid, function(resObj) {
+		var ok = resObj['ok'], msg = resObj['msg'];
+		msg && notify(msg, ok);
+		if (! ok) return window.history.back();
 
-        var vote = resObj['vote'],
-                content = vote['content'],
-                options = vote['options'];
+		var vote = resObj['vote'],
+			content = vote['content'],
+			options = vote['options'];
 
-        $('#content').text(content);
-        var pairs = _.pairs(options),
-                listHtml = _.reduce(pairs, function(memo, pair, i){
-                return memo + [
-                    '<label class="btn btn-default btn-lg btn-block">',
-                        '<input type="radio" name="word" value="'+ pair[0] +'">', pair[0],
-                    '</label>'
-                ].join('');
-            }, '');
-        $listWords.html(listHtml);
-    });
+		$('#content').text(content);
+		var pairs = _.pairs(options),
+			listHtml = _.reduce(pairs, function(memo, pair, i){
+				return memo + [
+					'<label class="btn btn-default btn-lg btn-block">',
+						'<input type="radio" name="word" value="'+ pair[0] +'">', pair[0],
+					'</label>'
+				].join('');
+			}, '');
+		$listWords.html(listHtml);
+	});
 </script>

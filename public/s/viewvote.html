@@ -1,13 +1,4 @@
 
-<style>
-	#content {
-		padding-left: 40px;
-	}
-	#content:before {
-		content: '　　';
-	}
-</style>
-
 <div id="main-wrapper">
 	<h1>投票详情</h1>
 	<ul id="list-viewvote" class="list-group">
@@ -30,14 +21,14 @@
 	var vid = getHashParams()['vid'],
 		colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"];
 
-	$.get('/do/s/viewvote?vid=' + vid, function(resObj) {
+	$.get('/do/s/viewvote?vid=' + vid, function(resObj){
 		var ok = resObj['ok'], msg = resObj['msg'];
 		msg && notify(msg, ok);
 		if (! ok) return window.history.back();
 
 		var vote = resObj['vote'],
-				content = vote['content'],
-				options = vote['options'];
+			content = vote['content'],
+			options = vote['options'];
 
 		$('#content').text(content);
 		var pairs = _.pairs(options),
@@ -56,5 +47,4 @@
 
 		$('#chart').drawPieChart(options, colors);
 	});
-
 </script>

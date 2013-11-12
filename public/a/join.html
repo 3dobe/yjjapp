@@ -18,7 +18,7 @@
 
 <script>
 	var key = getHashParams()['key'],
-			$formJoin = $('#form-join');
+		$formJoin = $('#form-join');
 
 	if (key) {
 		$formJoin.find('[name="key"]').attr('readonly', true).val(key);
@@ -26,10 +26,9 @@
 
 	$formJoin.ajaxForm({
 		url: '/do/a/join',
-		success: function(resObj) {
-			var ok = resObj['ok'],
-				msg = resObj['msg'];
-			alert(msg);
+		success: function(resObj){
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
 			if (ok) {
 				loadFrame('#/view');
 				$navbar.find('.sec').addClass('hidden')

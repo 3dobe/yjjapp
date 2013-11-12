@@ -66,11 +66,11 @@
 
 <script>
 	var $tableList = $('#table-votelist'),
-			$tbody = $tableList.find('tbody'),
-			$formAdd = $('#form-add');
+		$tbody = $tableList.find('tbody'),
+		$formAdd = $('#form-add');
 
-	$('.nav-tabs a').click(function (e) {
-		e.preventDefault();
+	$('.nav-tabs a').click(function(ev){
+		ev.preventDefault();
 		updateVoteList();
 		$(this).tab('show');
 	}).first().tab('show');
@@ -85,26 +85,26 @@
 		}
 	});
 
-	$tbody.delegate('a.delvote', 'click', function(ev) {
+	$tbody.delegate('a.delvote', 'click', function(ev){
 		var $a = $(this),
 			vid = parseInt($a.attr('data-vid'));
-		$.get('/do/s/delvote?vid=' + vid, function(resObj) {
+		$.get('/do/s/delvote?vid=' + vid, function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			ok && reloadFrame();
 		});
-	}).delegate('a.onvote', 'click', function(ev) {
+	}).delegate('a.onvote', 'click', function(ev){
 		var $a = $(this),
 			vid = parseInt($a.attr('data-vid'));
-		$.get('/do/s/setvote?state=active&vid=' + vid, function(resObj) {
+		$.get('/do/s/setvote?state=active&vid=' + vid, function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			ok && reloadFrame();
 		});
-	}).delegate('a.offvote', 'click', function(ev) {
+	}).delegate('a.offvote', 'click', function(ev){
 		var $a = $(this),
 			vid = parseInt($a.attr('data-vid'));
-		$.get('/do/s/setvote?state=cool&vid=' + vid, function(resObj) {
+		$.get('/do/s/setvote?state=cool&vid=' + vid, function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			ok && reloadFrame();
@@ -114,37 +114,35 @@
 	updateVoteList();
 
 	function updateVoteList() {
-		$.ajax({
-			type: 'get',
-			url: '/do/s/votelist',
-			success: function(resObj) {
-				var ok = resObj['ok'], msg = resObj['msg'];
-                msg && notify(msg, ok);
-				if (! ok) return;
-				var voteList = resObj['voteList'],
-						tbodyHtml = voteList.length ? _.reduce(voteList, function(memo, vote) {
-							return memo + [
-								'<tr>',
-									'<td>' + vote['content'] + '</td>',
-									'<td>' + (vote['state'] === 'active' ? '开启' : '关闭') + '</td>',
-									'<td>',
-										'<a href="#/viewvote?vid='+ vote['id'] +'">详情</a>',
-									'&nbsp;&nbsp;',
-										vote['state'] === 'active' ?
-												'<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
-												'<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
-										'&nbsp;&nbsp;',
-										'<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
-									'</td>',
-								'</tr>'
-							].join('');
-						}, '') : [
-							'<tr>',
-								'<td colspan="3">没有记录</td>',
-							'</tr>'
-						].join('');
-				$tbody.html(tbodyHtml);
+		$.get('/do/s/votelist', function(resObj){
+			var ok = resObj['ok'], msg = resObj['msg'];
+            msg && notify(msg, ok);
+			if (! ok) return;
+			var voteList = resObj['voteList'];
+			if (! voteList.length) {
+				return $tbody.html([
+					'<tr>',
+						'<td colspan="3">没有记录</td>',
+					'</tr>'
+				].join(''));
 			}
+			$tbody.html(_.reduce(voteList, function(memo, vote){
+				return memo + [
+					'<tr>',
+						'<td>' + vote['content'] + '</td>',
+						'<td>' + (vote['state'] === 'active' ? '开启' : '关闭') + '</td>',
+						'<td>',
+							'<a href="#/viewvote?vid='+ vote['id'] +'">详情</a>',
+						'&nbsp;&nbsp;',
+							vote['state'] === 'active' ?
+									'<a data-vid="'+ vote['id'] +'" class="ex-link offvote">关闭</a>':
+									'<a data-vid="'+ vote['id'] +'" class="ex-link onvote">开启</a>',
+							'&nbsp;&nbsp;',
+							'<a data-vid="'+ vote['id'] +'" class="ex-link delvote">删除</a>',
+						'</td>',
+					'</tr>'
+				].join('');
+			}, ''));
 		});
 	}
 </script>

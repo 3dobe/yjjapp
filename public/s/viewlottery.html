@@ -36,7 +36,7 @@
 		play = !! getHashParams()['play'],
 		$btnStart = $('#btn-start');
 
-	$.get('/do/s/viewlottery?lyid=' + lyid, function(resObj) {
+	$.get('/do/s/viewlottery?lyid=' + lyid, function(resObj){
 		var ok = resObj['ok'], msg = resObj['msg'];
 		msg && notify(msg, ok);
 		if (! ok) return window.history.back();
@@ -62,5 +62,4 @@
 		$('#content').text(content);
 		$('#num').text('得奖人数　：　'+ num);
 	});
-	
 </script>

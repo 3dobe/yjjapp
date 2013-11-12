@@ -32,14 +32,13 @@
 
 <script>
     var $formOpen = $('#form-open'),
-            $canvasVcode = $('#canvas-vcode');
+        $canvasVcode = $('#canvas-vcode');
     
 	$formOpen.ajaxForm({
 		type: 'post',
 		url: '/do/s/open',
-		success: function(resObj) {
-            var ok = resObj['ok'],
-                    msg = resObj['msg'];
+		success: function(resObj){
+            var ok = resObj['ok'], msg = resObj['msg'];
             msg && notify(msg, ok);
 			if (ok) {
 				loadFrame('#/view');
@@ -55,31 +54,17 @@
     showValicode();
     
 	function showValicode() {
-		$.ajax({
-			type: 'get',
-			url: '/do/vcode',
-			data: {
-				'action': 'open'
-			},
-			success: function(resObj) {
-				$.ajax({
-					type: 'get',
-					url: '/do/vcode',
-					data: {
-						'action': 'open'
-					},
-					success: function(resObj) {
-                        if (! resObj['ok']) {
-                            return notify('获取验证码失败', 0);
-                        }
-						var vcodeInfo = resObj['vcodeInfo'],
-							num1 = vcodeInfo['num1'],
-							num2 = vcodeInfo['num2'],
-							oper = vcodeInfo['oper'];
-						$canvasVcode.drawVerificationCode(num1, num2, oper);
-					}
-				});
-			}
+		$.get('/do/vcode?action=open', function(resObj){
+			$.get('/do/vcode?action=open', function(resObj){
+                if (! resObj['ok']) {
+                    return notify('获取验证码失败', 0);
+                }
+				var vcodeInfo = resObj['vcodeInfo'],
+					num1 = vcodeInfo['num1'],
+					num2 = vcodeInfo['num2'],
+					oper = vcodeInfo['oper'];
+				$canvasVcode.drawVerificationCode(num1, num2, oper);
+			});
 		});
 	}
 </script>

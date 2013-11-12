@@ -1,62 +1,60 @@
 ﻿
 <style>
-    #table-filelist th:nth-child(2),
-    #table-filelist th {
-        min-width: 80px;
-    }
+	#table-filelist th:nth-child(2),
+	#table-filelist th {
+		min-width: 80px;
+	}
 </style>
 
 <div id="main-wrapper">
-    <h1>文件共享</h1>
+	<h1>文件共享</h1>
 
-    <table id="table-filelist" class="table table-striped">
-        <thead>
-        <tr>
-            <th>文件名</th>
-            <th>文件大小</th>
-            <th>下载次数</th>
-        </tr>
-        </thead>
+	<table id="table-filelist" class="table table-striped">
+		<thead>
+		<tr>
+			<th>文件名</th>
+			<th>文件大小</th>
+			<th>下载次数</th>
+		</tr>
+		</thead>
 
-        <tbody></tbody>
-    </table>
+		<tbody></tbody>
+	</table>
 </div>
 
 <script src="/lib/js/drawVerificationCode.js"></script>
 <script>
-    var $table = $('#table-filelist'),
-            $tbody = $table.find('tbody');
+	var $table = $('#table-filelist'),
+			$tbody = $table.find('tbody');
 	
 	getFileList();
 
-    function getFileList() {
-        $.ajax({
-            type: 'get',
-            url: '/do/a/filelist',
-            success: function(resObj) {
-                if (! resObj['ok']) {
-                    return alert('文件列表获取失败');
-                }
-                var fileList = resObj['fileList'],
-                        tbodyHtml = fileList.length ? _.reduce(fileList, function(memo, file) {
-                            return memo + [
-                                '<tr>',
-                                    '<td>',
-                                        '<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
-                                            file['name'],
-                                        '</a>',
-                                    '</td>',
-                                    '<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
-                                    '<td>' + file['timesDown'] + '</td>',
-                                '</tr>'
-                            ].join('');
-                        }, '') : [
-                            '<tr>',
-                                '<td colspan="3">没有记录</td>',
-                            '</tr>'
-                        ].join('');
-                $tbody.html(tbodyHtml);
-            }
-        });
-    }
+	function getFileList() {
+		$.get('/do/a/filelist', function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			if (! ok) return;
+			var fileList = resObj['fileList'];
+			if (! fileList.length) {
+				return $tbody.html([
+					'<tr>',
+						'<td colspan="3">没有记录</td>',
+					'</tr>'
+				].join(''));
+			}
+			$tbody.html(_.reduce(fileList, function(memo, file){
+				return memo + [
+					'<tr>',
+						'<td>',
+							'<a class="ex-link" href="/do/downfile?fid='+ file['id'] +'">',
+								file['name'],
+							'</a>',
+						'</td>',
+						'<td>' + Math.ceil(file['size'] / 1024) + ' KB </td>',
+						'<td>' + file['timesDown'] + '</td>',
+					'</tr>'
+				].join('');
+			}, ''));
+		});
+	}
 </script>
