@@ -18,36 +18,38 @@
 			<span id="audiname"></span>
 		</li>
 	</ul>
-    <div class="btn-group-vertical">
-        <button href="#/audience" class="btn btn-default btn-lg btn-block">听众列表</button>
-        <button href="#/share" class="btn btn-default btn-lg btn-block">共享文件</button>
-        <button href="#/votes" class="btn btn-default btn-lg btn-block">投票列表</button>
-        <button href="#/qna" class="btn btn-default btn-lg btn-block">讲座提问</button>
-        <button id="btn-exit" class="btn btn-danger btn-lg btn-block">退出空间</button>
-    </div>
+	<div class="btn-group-vertical">
+		<button href="#/audience" class="btn btn-default btn-lg btn-block">听众列表</button>
+		<button href="#/share" class="btn btn-default btn-lg btn-block">共享文件</button>
+		<button href="#/votes" class="btn btn-default btn-lg btn-block">投票列表</button>
+		<button href="#/qna" class="btn btn-default btn-lg btn-block">讲座提问</button>
+		<button id="btn-exit" class="btn btn-danger btn-lg btn-block">退出空间</button>
+	</div>
 </div>
 
 
 
 <!-- js -->
 <script>
-    var hostUrl = 'http://baidu.com';
+	var hostUrl = 'http://baidu.com';
 
-    $.get('/do/a/view', function(resObj) {
-        var lectkey = resObj['lectkey'],
-            lectname = resObj['lectname'],
-            audiname = resObj['audiname'];
-        $('#lectkey').text(lectkey);
-        $('#lectname').text(lectname);
-        $('#audiname').text(audiname);
-    });
+	$.get('/do/a/view', function(resObj) {
+		var lectkey = resObj['lectkey'],
+			lectname = resObj['lectname'],
+			audiname = resObj['audiname'];
+		$('#lectkey').text(lectkey);
+		$('#lectname').text(lectname);
+		$('#audiname').text(audiname);
+	});
 
-    $('#btn-exit').on('click', function() {
-        $.get('/do/a/exit', function(resObj) {
-            alert(resObj['msg'])
-            if (resObj['ok']) {
-                loadFrame('#/join');
-            }
-        });
-    });
+	$('#btn-exit').on('click', function() {
+		$.get('/do/a/exit', function(resObj) {
+			alert(resObj['msg'])
+			if (resObj['ok']) {
+				loadFrame('#/join');
+				$navbar.find('.sec').addClass('hidden')
+					.filter('#sec-out').removeClass('hidden');
+			}
+		});
+	});
 </script>
