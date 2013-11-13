@@ -38,7 +38,7 @@
 		$('#lectkey').text(lectkey);
 		$('#lectname').text(lectname);
 		$('#audiname').text(audiname);
-		$navbar.find('#username').text(audiname);
+		$navbar.find('#username').text(audiname || ' ');
 	});
 
 	$('#btn-exit').on('click', function(){
