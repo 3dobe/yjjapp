@@ -21,7 +21,10 @@
 		</li>
 		<li class="list-group-item">
 			<span class="li-label">抽奖结果</span>
-			<canvas id="rsult" width="350" height="350"></canvas>
+            <p>得奖名单</p>
+            <ul class="list-group">
+
+            </ul>
 		</li>
 		<li class="list-group-item">
 			<button id="btn-start" class="btn btn-primary btn-lg btn-block">
@@ -32,16 +35,18 @@
 </div>
 
 <script>
-	var lyid = parseInt(getHashParams()['lyid']),
-		play = !! getHashParams()['play'],
-		$btnStart = $('#btn-start');
+	var params = getHashParams(),
+        lyid = parseInt(params['lyid']),
+        play = !! params['play'],
+		$btnStart = $('#btn-start'),
+        $canvasResult =  $('#result');
 
 	$.get('/do/s/viewlottery?lyid=' + lyid, function(resObj){
 		var ok = resObj['ok'], msg = resObj['msg'];
 		msg && notify(msg, ok);
 		if (! ok) return window.history.back();
-
-		var lottery = resObj['lottery'],
+        var audienceList = resObj['audienceList'],
+            lottery = resObj['lottery'],
 			content = lottery['content'],
 			num = lottery['num'],
 			state = lottery['state'],
@@ -55,11 +60,21 @@
 					$btnStart.attr('disabled', true);
 					var ok = resObj['ok'], msg = resObj['msg'];
 					msg && notify(msg, ok);
-					loadFrame('#/viewlottery?play=1&lyid=' + lyid);
+                    loadFrame('#/viewlottery?play=1&lyid=' + lyid);
 				});
 			});
 		}
 		$('#content').text(content);
 		$('#num').text('得奖人数　：　'+ num);
+
+        if (awlist) {
+            if (play) {
+                $canvasResult.takeoutAwardsList(audienceList, awlist, function(){
+                    loadFrame('#/viewlottery?lyid=' + lyid);
+                });
+            } else {
+                $canvasResult.drawAwardsList(awlist);
+            }
+        }
 	});
 </script>

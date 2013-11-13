@@ -62,7 +62,7 @@
 
 	$('.nav-tabs a').click(function (e) {
 		e.preventDefault();
-		updateVoteList();
+		updateLotteryList();
 		$(this).tab('show');
 	}).first().tab('show');
 
@@ -102,13 +102,14 @@
 		});
 	});
 
-	updateVoteList();
+	updateLotteryList();
 
-	function updateVoteList() {
+	function updateLotteryList() {
 		$.get('/do/s/lotterylist', function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (! ok) return;
+            var lotteryList = resObj['lotteryList'];
 			if (! lotteryList.length) {
 				return $tbody.html([
 					'<tr>',

@@ -45,7 +45,7 @@
 			width: 128, height: 128,
 			text: hostUrl + '/a/#/join?key=' + lectkey
 		});
-		$navbar.find('#username').text(spkname);
+		$navbar.find('#username').text(spkname || ' ');
 	});
 
 	$btnClose.on('click', function(){
