@@ -1,55 +1,46 @@
 
-<style>
-    #list-viewlottery .list-group-item > p,
-    #list-viewlottery .list-group-item > ul {
-        padding-left:40px;
-    }
-    #list-viewlottery .list-group-item > ul {
-        padding-right:40px;
-        text-align: center;
-    }
-</style>
-
 <div id="main-wrapper">
-    <h1>抽奖详情</h1>
-    <ul id="list-viewlottery" class="list-group">
-        <li class="list-group-item">
-            <span class="li-label">奖项简述</span>
-            <p id="content"></p>
-        </li>
-        <li class="list-group-item">
-            <span class="li-label">奖项相关</span>
-            <p id="num"></p>
-        </li>
-        <li class="list-group-item">
-            <span class="li-label">抽奖结果</span>
-            <p>得奖名单</p>
-            <ul id="list-awardslist" class="list-group">
-            </ul>
-        </li>
-    </ul>
+	<h1>抽奖详情</h1>
+	<ul id="list-viewlottery" class="list-group">
+		<li class="list-group-item">
+			<span class="li-label">奖项简述</span>
+			<p id="content"></p>
+		</li>
+		<li class="list-group-item">
+			<span class="li-label">奖项相关</span>
+			<p>
+				获奖名额: 
+				<span id="num" class="badge"></span>
+			</p>
+		</li>
+		<li class="list-group-item">
+			<span class="li-label">抽奖结果</span>
+			<p>得奖名单</p>
+			<ul id="list-awardslist" class="list-group"></ul>
+		</li>
+	</ul>
 </div>
 
 <script>
-    var lyid = getHashParams()['lyid'],
-            $ul = $('#list-awardslist');
+	var lyid = getHashParams()['lyid'],
+			$ul = $('#list-awardslist');
 
-    $.get('/do/a/viewlottery?lyid=' + lyid, function(resObj){
-        var ok = resObj['ok'], msg = resObj['msg'];
-        msg && notify(msg, ok);
-        if (! ok) return window.history.back();
-        var audienceList = resObj['audienceList'],
-                lottery = resObj['lottery'],
-                content = lottery['content'],
-                num = lottery['num'],
-                state = lottery['state'],
-                awlist = lottery['awlist'];
-        if (state === 'active') {
-            if (awlist){
-                $ul.setAwardsList(awlist);
-            }
-        }
-        $('#content').text(content);
-        $('#num').text('得奖人数: '+ num);
-    });
+	$.get('/do/a/viewlottery?lyid=' + lyid, function(resObj){
+		var ok = resObj['ok'], msg = resObj['msg'];
+		msg && notify(msg, ok);
+		if (! ok) return window.history.back();
+		var audienceList = resObj['audienceList'],
+				lottery = resObj['lottery'],
+				content = lottery['content'],
+				num = lottery['num'],
+				state = lottery['state'],
+				awlist = lottery['awlist'];
+		if (state === 'active') {
+			if (awlist){
+				$ul.setAwardsList(awlist);
+			}
+		}
+		$('#content').text(content);
+		$('#num').text(num);
+	});
 </script>

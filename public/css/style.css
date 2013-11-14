@@ -100,10 +100,7 @@ textarea {
 }
 /* 投票详情 */
 #list-viewvote #content {
-	padding-left: 40px;
-}
-#list-viewvote #content:before {
-	content: '　　';
+	margin-left: 40px;
 }
 #list-viewvote #chart {
 	margin: auto;
@@ -140,4 +137,14 @@ textarea {
 }
 #form-qna-toggle {
 	margin-bottom: 20px;
- }
+}
+
+/* 抽奖 */
+#list-viewlottery > .list-group-item > p {
+	margin-left: 40px;
+}
+#list-viewlottery #list-awardslist {
+	margin-left: 40px;
+	margin-right: 40px;
+	text-align: center;
+}

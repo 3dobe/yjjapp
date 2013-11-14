@@ -1,15 +1,4 @@
 
-<style>
-    #list-viewlottery .list-group-item > p,
-    #list-viewlottery .list-group-item > ul {
-        padding-left:40px;
-    }
-    #list-viewlottery .list-group-item > ul {
-        padding-right:40px;
-        text-align: center;
-    }
-</style>
-
 <div id="main-wrapper">
 	<h1>抽奖详情</h1>
 	<ul id="list-viewlottery" class="list-group">
@@ -19,14 +8,15 @@
 		</li>
 		<li class="list-group-item">
 			<span class="li-label">奖项相关</span>
-			<p id="num"></p>
+			<p>
+				获奖名额: 
+				<span id="num" class="badge"></span>
+			</p>
 		</li>
 		<li class="list-group-item">
 			<span class="li-label">抽奖结果</span>
-            <p>得奖名单</p>
-            <ul id="list-awardslist" class="list-group">
-
-            </ul>
+			<p>得奖名单</p>
+			<ul id="list-awardslist" class="list-group"></ul>
 		</li>
 		<li class="list-group-item">
 			<button id="btn-start" class="btn btn-primary btn-lg btn-block">
@@ -38,17 +28,17 @@
 
 <script>
 	var params = getHashParams(),
-        lyid = parseInt(params['lyid']),
-        play = !! params['play'],
+		lyid = parseInt(params['lyid']),
+		play = !! params['play'],
 		$btnStart = $('#btn-start'),
-        $ul = $('#list-awardslist');
+		$ul = $('#list-awardslist');
 
 	$.get('/do/s/viewlottery?lyid=' + lyid, function(resObj){
 		var ok = resObj['ok'], msg = resObj['msg'];
 		msg && notify(msg, ok);
 		if (! ok) return window.history.back();
-        var audienceList = resObj['audienceList'],
-            lottery = resObj['lottery'],
+		var audienceList = resObj['audienceList'],
+			lottery = resObj['lottery'],
 			content = lottery['content'],
 			num = lottery['num'],
 			state = lottery['state'],
@@ -62,23 +52,23 @@
 					$btnStart.attr('disabled', true);
 					var ok = resObj['ok'], msg = resObj['msg'];
 					msg && notify(msg, ok);
-                    loadFrame('#/viewlottery?play=1&lyid=' + lyid);
+					loadFrame('#/viewlottery?play=1&lyid=' + lyid);
 				});
 			});
 		}
 		$('#content').text(content);
-		$('#num').text('得奖人数: '+ num);
+		$('#num').text(num);
 
-        if (awlist) {
-            if (play) {
-                console.log(1);
-                $ul.takeoutAwardsList(audienceList, awlist, function(){
-                    loadFrame('#/viewlottery?lyid=' + lyid);
-                });
-            } else {
-                console.log(2);
-                $ul.setAwardsList(awlist);
-            }
-        }
+		if (awlist) {
+			if (play) {
+				console.log(1);
+				$ul.takeoutAwardsList(audienceList, awlist, function(){
+					loadFrame('#/viewlottery?lyid=' + lyid);
+				});
+			} else {
+				console.log(2);
+				$ul.setAwardsList(awlist);
+			}
+		}
 	});
 </script>
