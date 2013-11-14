@@ -9,7 +9,7 @@
 		<li class="list-group-item">
 			<span class="li-label">奖项相关</span>
 			<p>
-				获奖名额: 
+				获奖名额 : 
 				<span id="num" class="badge"></span>
 			</p>
 		</li>
@@ -61,12 +61,10 @@
 
 		if (awlist) {
 			if (play) {
-				console.log(1);
 				$ul.takeoutAwardsList(audienceList, awlist, function(){
 					loadFrame('#/viewlottery?lyid=' + lyid);
 				});
 			} else {
-				console.log(2);
 				$ul.setAwardsList(awlist);
 			}
 		}

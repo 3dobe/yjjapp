@@ -49,6 +49,7 @@ function reloadFrame(success) {
 }
 function notify(msg, type) {
 	// type 0 => danger, 1 => success
+	$('#' + $.scojs_message.options.id).hide();
 	$.scojs_message(
 		msg, $.scojs_message[[
 			'TYPE_ERROR', 'TYPE_OK'

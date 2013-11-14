@@ -1,4 +1,10 @@
 ﻿
+<style>
+	#qrcode canvas {
+		
+	}
+</style>
+
 <div id="main-wrapper">
 	<h1>查看讲座</h1>
 	<ul class="list-group">
@@ -13,10 +19,6 @@
 		<li class="list-group-item">
 			<span class="li-label">二维码</span>
 			<span id="qrcode"></span>
-		</li>
-		<li class="list-group-item">
-			<span class="li-label">我的昵称</span>
-			<span id="spkname"></span>
 		</li>
 	</ul>
 	<div class="btn-group-vertical">
@@ -33,19 +35,21 @@
 <script>
 	var hostUrl = 'http://yjjapp.duapp.com',
 		$btnClose = $('#btn-close');
+	
+	$.get('/do/s/me', function(resObj) {
+		var spkName = resObj['spkName'];
+		$navbar.find('#username').text(spkName);
+	});
 
 	$.get('/do/s/view', function(resObj){
 		var lectkey = resObj['lectkey'],
-			lectname = resObj['lectname'],
-			spkname = resObj['spkname'];
+			lectname = resObj['lectname'];
 		$('#lectkey').text(lectkey);
 		$('#lectname').text(lectname);
-		$('#spkname').text(spkname);
 		$('#qrcode').qrcode({
 			width: 128, height: 128,
 			text: hostUrl + '/a/#/join?key=' + lectkey
 		});
-		$navbar.find('#username').text(spkname || ' ');
 	});
 
 	$btnClose.on('click', function(){

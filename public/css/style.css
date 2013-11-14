@@ -30,12 +30,19 @@ a:hover {
 	margin-top: 8px;
 }
 
+.navbar-default .navbar-nav > .active > a {
+	background-color: #F4F4F4;
+}
+.navbar-inverse .navbar-nav > li > a {
+	color: #ddd;
+}
 #navbar {
 	margin-bottom: 0;
 }
-#navbar #username {
-	margin-left: 10px;
+#navbar .glyphicon-user {
+	margin-right: 6px;
 }
+
 #frame {
 	padding: 10px;
 	margin: auto;
@@ -142,6 +149,9 @@ textarea {
 /* 抽奖 */
 #list-viewlottery > .list-group-item > p {
 	margin-left: 40px;
+}
+#list-viewlottery #num {
+	margin-left: 8px;
 }
 #list-viewlottery #list-awardslist {
 	margin-left: 40px;

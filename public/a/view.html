@@ -13,10 +13,6 @@
 			<span class="li-label">讲座序列号</span>
 			<span id="lectkey"></span>
 		</li>
-		<li class="list-group-item">
-			<span class="li-label">我的昵称</span>
-			<span id="audiname"></span>
-		</li>
 	</ul>
 	<div class="btn-group-vertical">
 		<button href="#/audience" class="btn btn-default btn-lg btn-block">听众列表</button>
@@ -32,14 +28,16 @@
 
 <!-- js -->
 <script>
+	$.get('/do/a/me', function(resObj) {
+		var audiName = resObj['audiName'];
+		$navbar.find('#username').text(audiName);
+	});
+
 	$.get('/do/a/view', function(resObj) {
 		var lectkey = resObj['lectkey'],
-			lectname = resObj['lectname'],
-			audiname = resObj['audiname'];
+			lectname = resObj['lectname'];
 		$('#lectkey').text(lectkey);
 		$('#lectname').text(lectname);
-		$('#audiname').text(audiname);
-		$navbar.find('#username').text(audiname || ' ');
 	});
 
 	$('#btn-exit').on('click', function(){
