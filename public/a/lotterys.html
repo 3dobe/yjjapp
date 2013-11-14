@@ -1,0 +1,66 @@
+
+<style>
+    #table-lotterylist th:nth-child(1) {
+        min-width: 80px;
+    }
+    #table-lotterylist th:nth-child(2) {
+        min-width: 60px;
+    }
+    #table-lotterylist th:nth-child(3) {
+        min-width: 120px;
+    }
+</style>
+
+<div id="main-wrapper">
+    <h1>投票列表</h1>
+
+    <table id="table-lotterylist" class="table table-striped">
+        <thead>
+        <tr>
+            <th class="long">抽奖</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    var $tableList = $('#table-lotterylist'),
+        $tbody = $tableList.find('tbody');
+
+
+    updateLotteryList();
+
+    function updateLotteryList() {
+        $.get('/do/a/lotterylist', function(resObj){
+            var ok = resObj['ok'], msg = resObj['msg'];
+            msg && notify(msg, ok);
+            if (! ok) return;
+            var lotteryList = resObj['lotteryList'];
+            if (! lotteryList.length) {
+                return $tbody.html([
+                    '<tr>',
+                    '<td colspan="3">没有记录</td>',
+                    '</tr>'
+                ].join(''));
+            }
+            $tbody.html(_.reduce(lotteryList, function(memo, lottery){
+                return memo + [
+                    '<tr>',
+                    '<td>' + lottery['content'] + '</td>',
+                    '<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
+                    '<td>',
+                    '<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
+                    '</td>',
+                    '</tr>'
+                ].join('');
+            }, ''));
+        });
+    }
+
+</script>
+
+
+
