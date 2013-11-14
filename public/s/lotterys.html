@@ -84,22 +84,6 @@
 			msg && notify(msg, ok);
 			ok && reloadFrame();
 		});
-	}).delegate('a.onlottery', 'click', function(ev){
-		var $a = $(this),
-			lyid = parseInt($a.attr('data-lyid'));
-		$.get('/do/s/setlottery?state=active&lyid=' + lyid, function(resObj){
-			var ok = resObj['ok'], msg = resObj['msg'];
-			msg && notify(msg, ok);
-			ok && reloadFrame();
-		});
-	}).delegate('a.offlottery', 'click', function(ev){
-		var $a = $(this),
-			lyid = parseInt($a.attr('data-lyid'));
-		$.get('/do/s/setlottery?state=cool&lyid=' + lyid, function(resObj){
-			var ok = resObj['ok'], msg = resObj['msg'];
-			msg && notify(msg, ok);
-			ok && reloadFrame();
-		});
 	});
 
 	updateLotteryList();
@@ -123,9 +107,9 @@
 						'<td>' + lottery['content'] + '</td>',
 						'<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
 						'<td>',
-						'<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
-						'&nbsp;&nbsp;',
-						'<a data-lyid="'+ lottery['id'] +'" class="ex-link dellottery">删除</a>',
+                            '<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
+                            '&nbsp;&nbsp;',
+                            '<a data-lyid="'+ lottery['id'] + '"class="ex-link dellottery">删除</a>',
 						'</td>',
 					'</tr>'
 				].join('');
