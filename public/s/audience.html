@@ -7,6 +7,7 @@
 		<tr>
 			<th>昵称</th>
 			<th>在线时长</th>
+			<th>操作</th>
 		</tr>
 		</thead>
 		<tbody></tbody>
@@ -14,9 +15,20 @@
 </div>
 
 <script>
-	var $tableAudience = $('#table-audience');
+	var $tableAudience = $('#table-audience'),
+		$tbody = $tableAudience.children('tbody');
 
 	updateAudienceList();
+
+	$tbody.delegate('a.kickaudi', 'click', function(ev) {
+		var $a = $(this),
+			aid = parseInt($a.attr('data-aid'));
+		$.get('/do/s/kickaudience?aid=' + aid, function(resObj) {
+			var ok = resObj['ok'], msg = resObj['msg'];
+			msg && notify(msg, ok);
+			ok && reloadFrame();
+		});
+	});
 
 	function updateAudienceList() {
 		var $tbody = $tableAudience.find('tbody');
@@ -28,7 +40,7 @@
 			if (! audienceList.length) {
 				return $tbody.html([
 					'<tr>',
-						'<td colspan="2">没有记录</td>',
+						'<td colspan="3">没有记录</td>',
 					'</tr>'
 				].join(''));
 			}
@@ -37,6 +49,9 @@
 					'<tr>',
 						'<td>' + audience.name + '</td>',
 						'<td>' + strTime(Date.now() - audience.jointime, true) + '</td>',
+						'<td>',
+							'<a data-aid="'+ audience['id'] +'" class="ex-link kickaudi">踢除</a>',
+						'</td>',
 					'</tr>'
 				].join('');
 			}, ''));

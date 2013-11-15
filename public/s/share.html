@@ -64,7 +64,7 @@
 				json = RegExp.$1;
 				resObj = JSON.parse(json);
 			}
-            var ok = resObj['ok'], msg = resObj['msg'];
+			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (! ok) {
 				$form[0].reset();
@@ -79,8 +79,8 @@
 			fid = parseInt($a.attr('data-fid'));
 		$.get('/do/s/delfile?fid=' + fid, function(resObj) {
 			var ok = resObj['ok'], msg = resObj['msg'];
-            msg && notify(msg, ok);
-            ok && reloadFrame();
+			msg && notify(msg, ok);
+			ok && reloadFrame();
 		});
 	});
 	
