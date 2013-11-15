@@ -33,6 +33,7 @@ a:hover {
 .navbar-default .navbar-nav > .active > a {
 	background-color: #F4F4F4;
 }
+.navbar-inverse .navbar-brand,
 .navbar-inverse .navbar-nav > li > a {
 	color: #ddd;
 }
