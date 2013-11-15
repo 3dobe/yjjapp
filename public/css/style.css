@@ -146,7 +146,18 @@ textarea {
 	margin-bottom: 20px;
 }
 
-/* 抽奖 */
+
+/* 抽奖列表 */
+#table-lotterylist th:nth-child(1) {
+	min-width: 80px;
+}
+#table-lotterylist th:nth-child(2) {
+	min-width: 60px;
+}
+#table-lotterylist th:nth-child(3) {
+	min-width: 120px;
+}
+/* 抽奖详情 */
 #list-viewlottery > .list-group-item > p {
 	margin-left: 40px;
 }
