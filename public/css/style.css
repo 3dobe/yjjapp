@@ -116,31 +116,21 @@ textarea {
 	width: 75% !important;
 	height: auto !important;
 }
-#list-viewvote #words {
+#list-viewvote #words,
+#list-viewvote #count {
 	padding-top: 6px;
 	padding-bottom: 6px;
 }
-#list-viewvote #words > li {
+#list-viewvote #words > li,
+#list-viewvote #count > li {
 	padding: 4px;
 }
-#list-viewvote #count {
-    padding-top: 6px;
-    padding-bottom: 6px;
-}
-#list-viewvote #count > li {
-    padding: 4px;
-}
-#list-viewvote .square-word {
+#list-viewvote .square-word,
+#list-viewvote .square-count {
 	width: 24px;
 	height: 24px;
 	margin-right: 14px;
 	display: inline-block;
-}
-#list-viewvote .square-count {
-    width: 24px;
-    height: 24px;
-    margin-right: 14px;
-    display: inline-block;
 }
 #list-viewvote .word {
 	vertical-align: top;

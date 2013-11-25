@@ -51,7 +51,9 @@
                 return memo + [
                     '<li>',
                     '<div class="square-count"></div>',
-                    '<span class="word">'+ pair[1] +'(' + (pair[1]/sum)*100 + '%)</span>',
+                        '<span class="word">'+ pair[1] +' ('
+                                + (sum ? (pair[1]/sum)*100 : 0) +
+                            '%)</span>',
                     '</li>'
                 ].join('');
             }, '');
