@@ -1,9 +1,9 @@
-**/*.log
-**/node_modules
-**/bower_components
+/*.log
+/node_modules
+/public/bower_components
 
-**/.project
-**/.idea
+/.project
+/.idea
 
 /_.sublime-workspace
 /_.sublime-project
