@@ -11,6 +11,21 @@ $.ajaxSetup({
 	cache: false
 });
 
+// ajax-form
+$.fn.ajaxForm = function(options) {
+	return $(this).each(function(i, el) {
+		var $form = $(el);
+		$form.on('submit', function(ev) {
+			ev.preventDefault();
+			ajax(_.extend({
+				url: $form.attr('action'),
+				type: $form.attr('method'),
+				data: _.extend($form.serializeJSON(), options.data)
+			}, options));
+		});
+	});
+}
+
 // hash改变时自动加载子页面
 $(window).on('hashchange', function(event) {
 	event.preventDefault();
@@ -26,6 +41,20 @@ $body.delegate('[href]:not(.ex-link)', 'click', function(event) {
 }).delegate('form a[type="submit"]', 'click', function() {	// enable a[type="submit"]
 	$(this).closest('form').submit();
 });
+
+// local ajax method
+function ajax(options) {
+	options.success = (function(fn){
+		return function(res){
+			if (typeof res !== 'object')
+				res = $.parseJSON(res);
+			var ok = res['ok'], msg = res['msg'];
+			if (msg) notify(msg, ok);
+			fn(res);
+		}
+	})(options.success);
+	$.ajax(options);
+}
 
 // 加载子页面
 function loadFrame(hash, success) {

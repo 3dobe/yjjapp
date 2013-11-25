@@ -54,13 +54,10 @@
 	});
 
 	$('#btn-exit').on('click', function(){
-		$.get('/do/a/exit', function(resObj) {
-			var ok = resObj['ok'], msg = resObj['msg'];
-			msg && notify(msg, ok);
-			if (ok) {
-				loadFrame('#/join');
-				$navbar.find('.sec').addClass('hidden')
-					.filter('#sec-out').removeClass('hidden');
+		ajax({
+			url: '/do/a/exit',
+			success: function(res) {
+				if (res['ok']) $window.trigger('leave_lecture');
 			}
 		});
 	});
