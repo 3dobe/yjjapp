@@ -1,5 +1,10 @@
 ﻿
-<!-- css -->
+<style>
+	/* qrcode */
+	#qrcode > canvas {
+		width: 30%;
+	}
+</style>
 
 
 <div id="main-wrapper">
@@ -12,6 +17,10 @@
 		<li class="list-group-item">
 			<span class="li-label">讲座序列号</span>
 			<span id="lectkey"></span>
+		</li>
+		<li class="list-group-item">
+			<span class="li-label">二维码</span>
+			<span id="qrcode"></span>
 		</li>
 	</ul>
 	<div class="btn-group-vertical">
@@ -38,6 +47,10 @@
 			lectname = resObj['lectname'];
 		$('#lectkey').text(lectkey);
 		$('#lectname').text(lectname);
+		$('#qrcode').qrcode({
+			width: 256, height: 256,
+			text: hostUrl + '/a/#/join?key=' + lectkey
+		});
 	});
 
 	$('#btn-exit').on('click', function(){

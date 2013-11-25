@@ -3,6 +3,7 @@ var $window = $(window),
 	$body = $('body'),
 	$navbar = $body.find('#navbar'),
 	$frame = $body.find('#frame'),
+	hostUrl = 'http://yjjapp.duapp.com',
 	clientType = '', hashPage = '';
 
 // 禁用缓存
