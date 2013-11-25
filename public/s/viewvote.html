@@ -14,6 +14,10 @@
 			<span class="li-label">图表结果</span>
 			<canvas id="chart" width="350" height="350"></canvas>
 		</li>
+        <li class="list-group-item">
+            <span class="li-label">人数详情</span>
+            <ul id="count"></ul>
+        </li>
 	</ul>
 </div>
 
@@ -35,15 +39,30 @@
 			wordsHtml = _.reduce(pairs, function(memo, pair, i){
 				return memo + [
 					'<li>',
-						'<div class="square"></div>',
+						'<div class="square-word"></div>',
 						'<span class="word">'+ pair[0] +'</span>',
 					'</li>'
 				].join('');
-			}, '');
+			}, ''),
+            sum = _.reduce(pairs, function(memo, pair){
+                return memo + pair[1];
+            }, 0),
+            countHtml = _.reduce(pairs, function(memo, pair, i){
+                return memo + [
+                    '<li>',
+                    '<div class="square-count"></div>',
+                    '<span class="word">'+ pair[1] +'(' + (pair[1]/sum)*100 + '%)</span>',
+                    '</li>'
+                ].join('');
+            }, '');
 		$('#words').html(wordsHtml);
-		$('.square').each(function(i, el) {
+        $('#count').html(countHtml);
+		$('.square-word').each(function(i, el) {
 			$(el).css('background-color', colors[i]);
 		});
+        $('.square-count').each(function(i, el) {
+            $(el).css('background-color', colors[i]);
+        });
 
 		$('#chart').drawPieChart(options, colors);
 	});
