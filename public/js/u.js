@@ -6,8 +6,7 @@ var $body = $('body'),
 
 // 禁用缓存
 $.ajaxSetup({
-	cache: false,
-	async: false
+	cache: false
 });
 
 // hash改变时自动加载子页面
@@ -31,6 +30,7 @@ function loadFrame(hash, success) {
 	var mat = hash.substr(1).match(/^([^\?]*)(\?[^\?]*)?$/) || [],
 		href = '/' + clientType + (mat[1] || '') + '.html' + (mat[2] || '');
 	$.ajax({
+		async: false, 	// prevent over-ajax when loading frames
 		type: 'get',
 		url:	href,
 		success: function(resTxt) {
