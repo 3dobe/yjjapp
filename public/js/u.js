@@ -1,5 +1,6 @@
 ﻿
-var $body = $('body'),
+var $window = $(window),
+	$body = $('body'),
 	$navbar = $body.find('#navbar'),
 	$frame = $body.find('#frame'),
 	clientType = '', hashPage = '';
@@ -51,7 +52,7 @@ function reloadFrame(success) {
 function notify(msg, type) {
 	// type 0 => danger, 1 => success
 	$('#' + $.scojs_message.options.id).hide();
-	window.scrollTo(0); // 窗口返回最顶
+	$window.scrollTop(0); // 窗口返回最顶
 	$.scojs_message(
 		msg, $.scojs_message[[
 			'TYPE_ERROR', 'TYPE_OK'
