@@ -23,7 +23,19 @@
 					<th>操作</th>
 				</tr>
 				</thead>
-				<tbody></tbody>
+				<tbody>
+                    <script type="text/html" id= "tr-tmpl">
+                        <tr>
+                            <td><%- content %></td>
+                            <td><%= state %></td>
+                            <td>
+                                <a href="#/viewlottery?lyid=<%= id %>">详情</a>
+                                &nbsp;&nbsp;
+                                <a data-lyid="<%= id %>"class="ex-link dellottery">删除</a>
+                            </td>
+                        </tr>
+                    </script>
+				</tbody>
 			</table>
 		</div>
 		<div class="tab-pane" id="tab-add">
@@ -46,7 +58,8 @@
 	var $tableList = $('#table-lotterylist'),
 		$tbody = $tableList.find('tbody'),
 		$formAdd = $('#form-add'),
-		$inputNum = $('[name="num"]');
+		$inputNum = $('[name="num"]'),
+        trTmpl = _.template($tbody.find('#tr-tmpl').html());
 
 	$('.nav-tabs a').click(function (e) {
 		e.preventDefault();
@@ -90,17 +103,11 @@
 				].join(''));
 			}
 			$tbody.html(_.reduce(lotteryList, function(memo, lottery){
-				return memo + [
-					'<tr>',
-						'<td>' + lottery['content'] + '</td>',
-						'<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
-						'<td>',
-                            '<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
-                            '&nbsp;&nbsp;',
-                            '<a data-lyid="'+ lottery['id'] + '"class="ex-link dellottery">删除</a>',
-						'</td>',
-					'</tr>'
-				].join('');
+				return memo + trTmpl({
+                    id:lottery.id,
+                    content: lottery.content,
+                    state: lottery['state'] === 'active' ? '已结束' : '未开始'
+                });
 			}, ''));
 		});
 	}

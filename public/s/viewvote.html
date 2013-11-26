@@ -8,7 +8,14 @@
 		</li>
 		<li class="list-group-item">
 			<span class="li-label">选项相关</span>
-			<ul id="words"></ul>
+			<ul id="words">
+                <script type="text/html" id= "tr-tmpl">
+                    <li>
+                        <div class="square-word"></div>
+                        <span class="word"><%- word %></span>
+                    </li>
+                </script>
+			</ul>
 		</li>
 		<li class="list-group-item">
 			<span class="li-label">图表结果</span>
@@ -23,7 +30,9 @@
 
 <script>
 	var vid = getHashParams()['vid'],
-		colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"];
+		colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"],
+        $ulWord = $('#words'),
+        trTmpl = _.template($ulWord.find('#tr-tmpl').html());
 
 	$.get('/do/s/viewvote?vid=' + vid, function(resObj){
 		var ok = resObj['ok'], msg = resObj['msg'];
@@ -35,29 +44,25 @@
 			options = vote['options'];
 
 		$('#content').text(content);
-		var pairs = _.pairs(options),
-			wordsHtml = _.reduce(pairs, function(memo, pair, i){
-				return memo + [
-					'<li>',
-						'<div class="square-word"></div>',
-						'<span class="word">'+ pair[0] +'</span>',
-					'</li>'
-				].join('');
-			}, ''),
-            sum = _.reduce(pairs, function(memo, pair){
+		var pairs = _.pairs(options);
+            $ulWord.html(_.reduce(pairs, function(memo, pair, i){
+                return memo + trTmpl({
+                    word: pair[0]
+                });
+             }, ''));
+        var sum = _.reduce(pairs, function(memo, pair){
                 return memo + pair[1];
             }, 0),
             countHtml = _.reduce(pairs, function(memo, pair, i){
                 return memo + [
                     '<li>',
                     '<div class="square-count"></div>',
-                        '<span class="word">'+ pair[1] +' ('
+                        '<span class="count">'+ pair[1] +' ('
                                 + (sum ? (pair[1]/sum)*100 : 0) +
                             '%)</span>',
                     '</li>'
                 ].join('');
             }, '');
-		$('#words').html(wordsHtml);
         $('#count').html(countHtml);
 		$('.square-word').each(function(i, el) {
 			$(el).css('background-color', colors[i]);

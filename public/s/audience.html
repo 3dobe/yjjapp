@@ -27,7 +27,7 @@
 <script>
 	var $tableAudience = $('#table-audience'),
 		$tbody = $tableAudience.find('tbody'),
-		trTmpl = $tbody.find('#tr-tmpl').html();
+		trTmpl = _.template($tbody.find('#tr-tmpl').html());
 
 	updateAudienceList();
 
@@ -55,7 +55,7 @@
 				].join(''));
 			}
 			$tbody.html(_.reduce(audienceList, function(memo, audience){
-				return memo + _.template(trTmpl, {
+				return memo + trTmpl({
 					id: audience.id,
 					name: audience.name,
 					onlinetime: strTime(Date.now() - audience.jointime, true)
