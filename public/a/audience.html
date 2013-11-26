@@ -9,17 +9,25 @@
 			<th>在线时长</th>
 		</tr>
 		</thead>
-		<tbody></tbody>
+		<tbody>
+			<script type="text/html" id="tr-tmpl">
+				<tr>
+					<td><%- name %></td>
+					<td><%= onlinetime %></td>
+				</tr>
+			</script>
+		</tbody>
 	</table>
 </div>
 
 <script>
-	var $tableAudience = $('#table-audience');
+	var $tableAudience = $('#table-audience'),
+		$tbody = $tableAudience.find('tbody'),
+		trTmpl = $tbody.find('#tr-tmpl').html();
 
 	updateAudienceList();
 
 	function updateAudienceList() {
-		var $tbody = $tableAudience.find('tbody');
 		$.get('/do/a/audiencelist', function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
@@ -30,15 +38,13 @@
 					'<tr>',
 						'<td colspan="2">没有记录</td>',
 					'</tr>'
-				].join(''));
+					].join(''));
 			}
 			$tbody.html(_.reduce(audienceList, function(memo, audience){
-				return memo + [
-					'<tr>',
-						'<td>' + audience.name + '</td>',
-						'<td>' + strTime(Date.now() - audience.jointime, true) + '</td>',
-					'</tr>'
-				].join('');
+				return memo + _.template(trTmpl, {
+					name: audience.name,
+					onlinetime: strTime(Date.now() - audience.jointime, true)
+				});
 			}, ''));
 		});
 	}
