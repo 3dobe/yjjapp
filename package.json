@@ -9,5 +9,10 @@
 		"express": "3.4.0",
 		"taffydb": "2.7.2",
 		"chance": "0.4.3"
+	},
+	"devDependencies": {
+		"async": "0.2.9",
+		"request": "2.27.0",
+		"colors": "0.6.2"
 	}
 }
