@@ -1,7 +1,8 @@
 ﻿
 <style>
-	#qrcode canvas {
-		
+	/* qrcode */
+	#qrcode > canvas {
+		width: 55%;
 	}
 </style>
 
@@ -33,8 +34,7 @@
 
 <!-- js -->
 <script>
-	var hostUrl = 'http://yjjapp.duapp.com',
-		$btnClose = $('#btn-close');
+	var $btnClose = $('#btn-close');
 	
 	$.get('/do/s/me', function(resObj) {
 		var spkName = resObj['spkName'];
@@ -47,7 +47,7 @@
 		$('#lectkey').text(lectkey);
 		$('#lectname').text(lectname);
 		$('#qrcode').qrcode({
-			width: 128, height: 128,
+			width: 256, height: 256,
 			text: hostUrl + '/a/#/join?key=' + lectkey
 		});
 	});
