@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var readline = require('readline'),
 	_ = require('underscore'),
+	async = require('async'),
 	request = require('request'),
 	colors = require('colors'),
 	rl = readline.createInterface({
@@ -10,12 +11,12 @@ var readline = require('readline'),
 	hostUrl = 'http://127.0.0.1:3088',
 	actions = {
 		'list': list,
+		'refresh': refresh,
 		'join': join
 	},
 	jars = {},
 	lectkey = process.argv[2];
 
-rl.setPrompt('');
 request = request.defaults({
 	json: true
 });
@@ -26,17 +27,10 @@ colors.setTheme({
 	error: 'red'
 });
 
-rl.on('line', function(line){
-	var cmd = getCmd(line),
-		params = getParams(line);
-	if (_.has(actions, cmd)) {
-		actions[cmd].apply(null, params);
-	} else {
-		console.log(colors.error('No such cmd'));
-	}
-});
+rl.setPrompt('');
+loop();
 
-function join(audiname){
+function join(audiname, callback){
 	var jar = request.jar();
 	request({
 		url: hostUrl + '/do/a/join',
@@ -51,14 +45,49 @@ function join(audiname){
 		if (obj['ok']) {
 			jars[audiname] = jar;
 		}
+		callback(null);
 	});
 }
-function list(){
+function refresh(callback){
+	var count = 0;
+	async.map(_.pairs(jars), function(pair, callback){
+		var name = pair[0], jar = pair[1];
+		request({
+			method: 'get',
+			url: hostUrl + '/do/a/heartbeat',
+			jar: jar
+		}, function(err, res, obj){
+			if (! obj['ok']) {
+				delete jars[name];
+				console.log(colors.debug('removed: ' + name));
+				count ++;
+			}
+			callback(null);
+		});
+	}, function(err, results){
+		console.log(colors.debug('Remove Count: ' + count));
+		callback(null);
+	});
+}
+function list(callback){
 	var names = _.keys(jars);
-	console.log(colors.debug('Count: ' + names.length));
 	if (names.length) {
 		console.log(colors.debug(_.keys(jars).join('   ')));
 	}
+	console.log(colors.debug('List Count: ' + names.length));
+	callback(null);
+}
+function loop(){
+	rl.question('Cmd: ', function(line){
+		var cmd = getCmd(line);
+		if (_.has(actions, cmd)) {
+			var args = getParams(line).concat(loop);	// as callback
+			actions[cmd].apply(null, args);
+		} else {
+			console.log(colors.error('No such cmd'));
+			loop();
+		}
+	});
 }
 
 function handleRes(err, res, obj){
