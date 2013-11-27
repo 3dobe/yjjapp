@@ -11,6 +11,7 @@ var readline = require('readline'),
 	actions = {
 		'list': list,
 		'join': join
+
 	},
 	jars = {},
 	lectkey = process.argv[2];
