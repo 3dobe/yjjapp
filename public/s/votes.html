@@ -39,17 +39,17 @@
                     <script type="text/html" id= "tr-tmpl">
                         <tr>
                             <td><%- content %></td>
-                            <td><%= state %></td>
+                            <td><%- state %></td>
                             <td>
-                                <a href="#/viewvote?vid=<%= vid %>">详情</a>
+                                <a href="#/viewvote?vid=<%- vid %>">详情</a>
                                 &nbsp;&nbsp;
                                 <% if (state === '开启') { %>
-                                    <a data-vid="<%= vid %>" class="ex-link offvote">关闭</a>
+                                    <a data-vid="<%- vid %>" class="ex-link offvote">关闭</a>
                                 <% } else { %>
-                                    <a data-vid="<%= vid %>" class="ex-link onvote">开启</a>
+                                    <a data-vid="<%- vid %>" class="ex-link onvote">开启</a>
                                 <% } %>
                                 &nbsp;&nbsp;
-                                <a data-vid="<%= vid %>" class="ex-link delvote">删除</a>
+                                <a data-vid="<%- vid %>" class="ex-link delvote">删除</a>
                             </td>
                         </tr>
                     </script>

@@ -22,32 +22,32 @@
 		</tr>
 		</thead>
 		<tbody>
-        <script type="text/html" id= "tr-tmpl">
-            <tr>
-                <td><%- content %></td>
-                <td><%= state %></td>
-                <td><%= voted %></td>
-                <td>
-                    <% if(voted === '已参与'){ %>
-                    <a href="#/viewvote?vid=<%= vid %>">详情</a>
-                    <% }else{  %>
-                        <% if(state === '开启'){ %>
-                        <a href="#/vote?vid=<%= vid %>">参与</a>
-                        <% }else{ %>
-                        <span>等待</span>
+            <script type="text/html" id= "tr-tmpl">
+                <tr>
+                    <td><%- content %></td>
+                    <td><%- state %></td>
+                    <td><%- voted %></td>
+                    <td>
+                        <% if(voted === '已参与'){ %>
+                        <a href="#/viewvote?vid=<%- vid %>">详情</a>
+                        <% }else{  %>
+                            <% if(state === '开启'){ %>
+                            <a href="#/vote?vid=<%- vid %>">参与</a>
+                            <% }else{ %>
+                            <span>等待</span>
+                            <% } %>
                         <% } %>
-                    <% } %>
-                </td>
-            </tr>
-        </script>
+                    </td>
+                </tr>
+            </script>
 		</tbody>
 	</table>
 </div>
 
 <script>
 	var $tableList = $('#table-votelist'),
-			$tbody = $tableList.find('tbody'),
-            trTmpl = _.template($tbody.find('#tr-tmpl').html());
+		$tbody = $tableList.find('tbody'),
+        trTmpl = _.template($tbody.find('#tr-tmpl').html());
 
 	updateVoteList();
 

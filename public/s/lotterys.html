@@ -27,11 +27,11 @@
                     <script type="text/html" id= "tr-tmpl">
                         <tr>
                             <td><%- content %></td>
-                            <td><%= state %></td>
+                            <td><%- state %></td>
                             <td>
-                                <a href="#/viewlottery?lyid=<%= lyid %>">详情</a>
+                                <a href="#/viewlottery?lyid=<%- lyid %>">详情</a>
                                 &nbsp;&nbsp;
-                                <a data-lyid="<%= lyid %>"class="ex-link dellottery">删除</a>
+                                <a data-lyid="<%- lyid %>"class="ex-link dellottery">删除</a>
                             </td>
                         </tr>
                     </script>
