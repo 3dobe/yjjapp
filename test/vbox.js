@@ -12,8 +12,9 @@ var readline = require('readline'),
 	actions = {
 		'list': list,
 		'refresh': refresh,
-		'join': join
-
+		'join': join,
+        'ask':ask,
+        'vote':vote
 	},
 	jars = {},
 	lectkey = process.argv[2];
@@ -90,7 +91,42 @@ function loop(){
 		}
 	});
 }
+function ask(audiname, text, callback){
+    if (!_.has(jars, audiname)) {
+        console.log('听众不存在');
+        return ;
+    }
+    request({
+        url: hostUrl + '/do/a/sendmsg',
+        method: 'post',
+        form: {
+            text: text
+        },
+        jar: jars[audiname]
+    }, function(err, res, obj){
+        handleRes.apply(null, arguments);
+        callback(null);
+    });
 
+}
+
+function vote(audiname, vid, option, callback){
+    if (!_.has(jars, audiname)) {
+        console.log('听众不存在');
+        return ;
+    }
+    request({
+        url: hostUrl + '/do/a/vote?vid=' + vid,
+        method: 'get',
+        qs: {
+            option: option
+        },
+        jar: jars[audiname]
+    }, function(err, res, obj){
+        handleRes.apply(null, arguments);
+        callback(null);
+    });
+}
 function handleRes(err, res, obj){
 	var ok = obj['ok'],
 		color = colors[ok ? 'info' : 'warn'];
