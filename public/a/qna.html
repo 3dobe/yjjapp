@@ -1,4 +1,4 @@
-
+﻿
 <div id="main-wrapper">
 	<h1>讲座提问</h1>
 
@@ -29,8 +29,14 @@
 				<th>提问内容</th>
 			</tr>
 			</thead>
-
-			<tbody></tbody>
+			<tbody>
+                <script type="text/html" id= "tr-tmpl">
+                    <tr>
+                        <td><%- audienceName %></td>
+                        <td><%- text %></td>
+                    </tr>
+                </script>
+			</tbody>
 			</table>
 		</div>
 		<div class="tab-pane" id="tab-add">
@@ -51,7 +57,9 @@
 	var $table = $('#table-msglist'),
 		$tbody = $table.find('tbody'),
 		$formToggle = $('#form-qna-toggle'),
-		$formAdd = $('#form-add');
+		$formAdd = $('#form-add'),
+        trTmpl = _.template($tbody.find('#tr-tmpl').html());
+
 
 	$.get("/do/a/getqna", function(resObj){
 		var state = resObj['state'];
@@ -88,14 +96,13 @@
 					'</tr>'
 				].join(''));
 			}
-			$tbody.html(_.reduce(msgList, function(memo, msg){
-				return memo + [
-					'<tr>',
-						'<td>' + msg.audienceName + '</td>',
-						'<td>' + msg.text + '</td>',
-					'</tr>'
-				].join('');
-			}, ''));
+            $tbody.html(_.reduce(msgList, function(memo, msg){
+                return memo + trTmpl({
+                    audienceName:msg.audienceName,
+                    text: msg.text
+                });
+            }, ''));
+
 		});
 	}
 </script>
