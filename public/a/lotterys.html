@@ -10,16 +10,28 @@
 			<th>操作</th>
 		</tr>
 		</thead>
-		<tbody></tbody>
+		<tbody>
+            <script type="text/html" id= "tr-tmpl">
+                <tr>
+                <td><%- content %></td>
+                <td><%- state %></td>
+                <td>
+                    <a href="#/viewlottery?lyid=<%- lyid %>">详情</a>
+                    </td>
+                </tr>
+            </script>
+
+		</tbody>
 	</table>
 </div>
 
 <script>
 	var $tableList = $('#table-lotterylist'),
-		$tbody = $tableList.find('tbody');
+		$tbody = $tableList.find('tbody'),
+        trTmpl = _.template($tbody.find('#tr-tmpl').html());
 
 
-	updateLotteryList();
+	    updateLotteryList();
 
 	function updateLotteryList() {
 		$.get('/do/a/lotterylist', function(resObj){
@@ -34,17 +46,13 @@
 					'</tr>'
 				].join(''));
 			}
-			$tbody.html(_.reduce(lotteryList, function(memo, lottery){
-				return memo + [
-					'<tr>',
-					'<td>' + lottery['content'] + '</td>',
-					'<td>' + (lottery['state'] === 'active' ? '已结束' : '未开始') + '</td>',
-					'<td>',
-					'<a href="#/viewlottery?lyid='+ lottery['id'] +'">详情</a>',
-					'</td>',
-					'</tr>'
-				].join('');
-			}, ''));
+            $tbody.html(_.reduce(lotteryList, function(memo, lottery){
+                return memo + trTmpl({
+                    lyid:lottery.id,
+                    content: lottery.content,
+                    state: lottery['state'] === 'active' ? '已结束' : '未开始'
+                });
+            }, ''));
 		});
 	}
 
