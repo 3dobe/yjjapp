@@ -15,7 +15,8 @@ module.exports = function(mode) {
 			tmpDir: tmpDir,
 			shareDir: shareDir,
 			timezoneOffset: (-60) * 8,  // BJ time
-			secret: '308'
+			secret: '308',
+			pageSize: 10
 		}
 	// 确保配置文件存在
 	try {

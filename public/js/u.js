@@ -4,6 +4,7 @@ var $window = $(window),
 	$navbar = $body.find('#navbar'),
 	$frame = $body.find('#frame'),
 	hostUrl = 'http://yjjapp.duapp.com',
+	pageSize = 10,	// same as config
 	clientType = '', hashPage = '';
 
 // 禁用缓存
@@ -68,12 +69,25 @@ function loadFrame(hash, success) {
 			location.hash = hashPage = hash;	// 顺序: hashPage > location.hash
 			$frame.html(resTxt);
 			success && success();
+		},
+		error: function(){
+			/*$.get('/do/' + clientType + '/me', function(resObj){
+				loadFrame(
+					resObj['lectid'] ? '#/view' :
+						clientType === 's' ? '#/enter' : '#/join'
+				);
+			});*/
+			location.href = '/';
 		}
 	});
 	// navbar active
-	var head = hash.match(/^([^?]+)/)[1];
-	$navbar.find('a[href^="'+ head +'"]').parent('li')
-		.addClass('active').siblings().removeClass('active');
+	var mat = hash.match(/^([^?]+)/),
+		head = mat ? mat[1] : '';
+	if (mat) {
+		$navbar.find('a[href^="'+ head +'"]').parent('li')
+			.addClass('active').siblings().removeClass('active');
+	}
+	
 }
 // 刷新子页面
 function reloadFrame(success) {
