@@ -28,9 +28,11 @@
 							<li>
 								<a onclick="updateAudienceList(1)">&laquo;</a>
 							</li>
-							<li class="disabled">
-								<a>..</a>
-							</li>
+                            <% if (current > 2) { %>
+                                <li class="disabled">
+                                    <a>..</a>
+                                </li>
+                            <% } %>
 							<% if (prev) { %>
 								<li>
 									<a onclick="updateAudienceList(<%- prev %>)"><%- prev %></a>
@@ -44,9 +46,11 @@
 									<a onclick="updateAudienceList(<%- next %>)"><%- next %></a>
 								</li>
 							<% } %>
-							<li class="disabled">
-								<a>..</a>
-							</li>
+                            <% if (current < (count - 1)) { %>
+                                <li class="disabled">
+                                    <a>..</a>
+                                </li>
+                            <% } %>
 							<li>
 								<a onclick="updateAudienceList(<%- count %>)">&raquo;</a>
 							</li>
@@ -79,8 +83,8 @@
 
 	function updateAudienceList(page) {
 		$.get('/do/s/audiencelist', {
-			page: page
-		}, function(resObj){
+            page: page
+        }, function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (! ok) return;
