@@ -34,7 +34,8 @@
 
 <!-- js -->
 <script>
-	var $btnClose = $('#btn-close');
+	var $btnClose = $('#btn-close'),
+		$lectkey = $frame.find('#lectkey');
 	
 	$.get('/do/s/me', function(resObj) {
 		var spkName = resObj['spkName'];
@@ -44,7 +45,7 @@
 	$.get('/do/s/view', function(resObj){
 		var lectkey = resObj['lectkey'],
 			lectname = resObj['lectname'];
-		$('#lectkey').text(lectkey);
+		$lectkey.text(lectkey);
 		$('#lectname').text(lectname);
 		$('#qrcode').qrcode({
 			width: 256, height: 256,
@@ -58,8 +59,7 @@
 			msg && notify(msg, ok);
 			if (ok) {
 				loadFrame('#/enter');
-				$navbar.find('.sec').addClass('hidden')
-					.filter('#sec-out').removeClass('hidden');
+				updateNavbar();
 			}
 		});
 	});
