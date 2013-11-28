@@ -41,17 +41,6 @@
                             <td><%- content %></td>
                             <td><%- state %></td>
                             <td>
-<<<<<<< HEAD
-                                <a href="#/viewvote?vid=<%= vid %>">详情</a>
-                                &nbsp;&nbsp;
-                                <% if (state === '开启') { %>
-                                    <a data-vid="<%= vid %>" class="ex-link offvote">关闭</a>
-                                <% } else { %>
-                                    <a data-vid="<%= vid %>" class="ex-link onvote">开启</a>
-                                <% } %>
-                                &nbsp;&nbsp;
-                                <a data-vid="<%= vid %>" class="ex-link delvote">删除</a>
-=======
                                 <a href="#/viewvote?vid=<%- vid %>">详情</a>
                                 &nbsp;&nbsp;
                                 <% if (state === '开启') { %>
@@ -61,7 +50,6 @@
                                 <% } %>
                                 &nbsp;&nbsp;
                                 <a data-vid="<%- vid %>" class="ex-link delvote">删除</a>
->>>>>>> 95873524615cfb7556fe6699892a061e7d627b69
                             </td>
                         </tr>
                     </script>
