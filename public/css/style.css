@@ -36,6 +36,13 @@ a:hover {
 .navbar-brand {
 	cursor: default;
 }
+.navbar-brand > img {
+	height: 26px;
+	width: auto;
+	margin-right: 4px;
+	margin-top: -3px;
+	margin-bottom: -3px;
+}
 .navbar-inverse .navbar-brand,
 .navbar-inverse .navbar-nav > li > a {
 	color: #ddd;
@@ -43,7 +50,7 @@ a:hover {
 #navbar {
 	margin-bottom: 0;
 }
-#navbar .glyphicon-user {
+#navbar .glyphicon {
 	margin-right: 6px;
 }
 
