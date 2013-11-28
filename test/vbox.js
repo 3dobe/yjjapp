@@ -16,8 +16,8 @@ var readline = require('readline'),
         'ask':ask,
         'vote':vote
 	},
-	jars = {},
-	lectkey = process.argv[2];
+	clients = [],
+	lectkey ;
 
 request = request.defaults({
 	json: true
@@ -30,7 +30,10 @@ colors.setTheme({
 });
 
 rl.setPrompt('');
-loop();
+rl.question('lectkey ', function(line){
+    lectkey = line;
+    loop();
+});
 
 function join(audiname, callback){
 	var jar = request.jar();
@@ -45,22 +48,26 @@ function join(audiname, callback){
 	}, function(err, res, obj){
 		handleRes.apply(null, arguments);
 		if (obj['ok']) {
-			jars[audiname] = jar;
+			clients.push({
+                name: audiname,
+                jar:jar
+            });
 		}
 		callback(null);
 	});
 }
 function refresh(callback){
 	var count = 0;
-	async.map(_.pairs(jars), function(pair, callback){
-		var name = pair[0], jar = pair[1];
+	async.map(clients, function(client, callback){
+		var name = client.name, jar = client.jar;
 		request({
 			method: 'get',
 			url: hostUrl + '/do/a/heartbeat',
 			jar: jar
 		}, function(err, res, obj){
 			if (! obj['ok']) {
-				delete jars[name];
+				var index = clients.indexOf(client);
+                clients.splice(index,1);
 				console.log(colors.debug('removed: ' + name));
 				count ++;
 			}
@@ -72,9 +79,11 @@ function refresh(callback){
 	});
 }
 function list(callback){
-	var names = _.keys(jars);
+	var names = _.pluck(clients, 'name');
 	if (names.length) {
-		console.log(colors.debug(_.keys(jars).join('   ')));
+		console.log(colors.debug(_.reduce(names, function(memo, name, i){
+            return memo + i + '. ' + name + '   ';
+        }, '')));
 	}
 	console.log(colors.debug('List Count: ' + names.length));
 	callback(null);
@@ -91,8 +100,9 @@ function loop(){
 		}
 	});
 }
-function ask(audiname, text, callback){
-    if (!_.has(jars, audiname)) {
+function ask(index, text, callback){
+    var client = clients[index];
+    if (!client) {
         console.log('听众不存在');
         return ;
     }
@@ -102,7 +112,7 @@ function ask(audiname, text, callback){
         form: {
             text: text
         },
-        jar: jars[audiname]
+        jar:client.jar
     }, function(err, res, obj){
         handleRes.apply(null, arguments);
         callback(null);
@@ -110,8 +120,9 @@ function ask(audiname, text, callback){
 
 }
 
-function vote(audiname, vid, option, callback){
-    if (!_.has(jars, audiname)) {
+function vote(index, vid, word, callback){
+    var client = clients[index];
+    if (!client) {
         console.log('听众不存在');
         return ;
     }
@@ -119,9 +130,9 @@ function vote(audiname, vid, option, callback){
         url: hostUrl + '/do/a/vote?vid=' + vid,
         method: 'get',
         qs: {
-            option: option
+            word: word
         },
-        jar: jars[audiname]
+        jar: client.jar
     }, function(err, res, obj){
         handleRes.apply(null, arguments);
         callback(null);
