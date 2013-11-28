@@ -1,5 +1,4 @@
 
-
 <div id="main-wrapper">
 	<h1>听众列表</h1>
 	<table id="table-audience" class="table table-striped">
@@ -21,15 +20,52 @@
 				</tr>
 			</script>
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="3">
+					<script type="text/html" id="pagin-tmpl">
+						<ul class="pagination">
+							<li>
+								<a onclick="updateAudienceList(1)">&laquo;</a>
+							</li>
+							<li class="disabled">
+								<a>..</a>
+							</li>
+							<% if (prev) { %>
+								<li>
+									<a onclick="updateAudienceList(<%- prev %>)"><%- prev %></a>
+								</li>
+							<% } %>
+							<li class="active">
+								<a onclick="updateAudienceList(<%- current %>)"><%- current %></a>
+							</li>
+							<% if (next) { %>
+								<li>
+									<a onclick="updateAudienceList(<%- next %>)"><%- next %></a>
+								</li>
+							<% } %>
+							<li class="disabled">
+								<a>..</a>
+							</li>
+							<li>
+								<a onclick="updateAudienceList(<%- count %>)">&raquo;</a>
+							</li>
+						</ul>
+					</script>
+				</td>
+			</tr>
+		</tfoot>
 	</table>
 </div>
 
 <script>
 	var $tableAudience = $('#table-audience'),
 		$tbody = $tableAudience.find('tbody'),
-		trTmpl = _.template($tbody.find('#tr-tmpl').html());
+		trTmpl = _.template($tbody.find('#tr-tmpl').html()),
+		$paginTmpl = $tableAudience.find('#pagin-tmpl'),
+		paginTmpl = _.template($paginTmpl.html());
 
-	updateAudienceList();
+	updateAudienceList(1);
 
 	$tbody.delegate('a.kickaudi', 'click', function(ev) {
 		var $a = $(this),
@@ -41,15 +77,19 @@
 		});
 	});
 
-	function updateAudienceList() {
-		$.get('/do/s/audiencelist', function(resObj){
+	function updateAudienceList(page) {
+		$.get('/do/s/audiencelist', {
+			page: page
+		}, function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (! ok) return;
-			var audienceList = resObj['audienceList'];
+			var total = resObj['total'],
+				audienceList = resObj['audienceList'];
+			// records
 			if (! audienceList.length) {
 				return $tbody.html([
-					'<tr>',
+					'<tr class="text-center">',
 						'<td colspan="3">没有记录</td>',
 					'</tr>'
 				].join(''));
@@ -61,6 +101,15 @@
 					onlinetime: strTime(Date.now() - audience.jointime, true)
 				});
 			}, ''));
+			// pagination
+			var count = Math.ceil(total / pageSize);
+			$paginTmpl.next().remove();
+			$paginTmpl.after(paginTmpl({
+				current: page,
+				prev: page > 1 ? page - 1 : null,
+				next: page < count ? page + 1 : null,
+				count: count
+			}));
 		});
 	}
 </script>

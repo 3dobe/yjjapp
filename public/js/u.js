@@ -4,6 +4,7 @@ var $window = $(window),
 	$navbar = $body.find('#navbar'),
 	$frame = $body.find('#frame'),
 	hostUrl = 'http://yjjapp.duapp.com',
+	pageSize = 10,	// same as config
 	clientType = '', hashPage = '';
 
 // 禁用缓存

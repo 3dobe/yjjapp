@@ -37,6 +37,9 @@ a:hover {
 .btn-group-vertical {
 	display: block;
 }
+.pagination {
+	margin: 10px 0;
+}
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
 	cursor: pointer;
@@ -91,7 +94,7 @@ th {
 th, td {
 	word-break: break-all;
 }
-th[colspan], td[colspan] {
+.text-center {
 	text-align: center;
 }
 
