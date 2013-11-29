@@ -67,6 +67,7 @@ a:hover {
 }
 
 .glyphicon {
+	top: 0.1em;
 	margin-right: 0.4em;
 }
 
@@ -97,6 +98,9 @@ th, td {
 }
 .text-center {
 	text-align: center;
+}
+th.op {
+	width: 1%;
 }
 
 /* 表单 */
@@ -185,9 +189,6 @@ textarea {
 #table-lotterylist th:nth-child(2) {
 	min-width: 60px;
 }
-#table-lotterylist th:nth-child(3) {
-	min-width: 120px;
-}
 /* 抽奖详情 */
 #list-viewlottery > .list-group-item > p {
 	margin-left: 40px;
@@ -199,4 +200,12 @@ textarea {
 	margin-left: 40px;
 	margin-right: 40px;
 	text-align: center;
+}
+
+/* vote list */
+#table-votelist th:nth-child(1) {
+	min-width: 80px;
+}
+#table-votelist th:nth-child(2) {
+	min-width: 50px;
 }

@@ -1,4 +1,10 @@
 
+<style>
+	#table-lotterylist th.op {
+		min-width: 100px;
+	}
+</style>
+
 <div id="main-wrapper">
 	
 	<h1>
@@ -22,7 +28,7 @@
 				<tr>
 					<th class="long">抽奖</th>
 					<th>状态</th>
-					<th>操作</th>
+					<th class="op">操作</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -85,7 +91,7 @@
 					<textarea class="form-control" rows="3" name="content" placeholder="奖项详情"></textarea>
 				</div>
 				<div class="form-group">
-					<input type="text" class="form-control" name="num" placeholder="人数(请输入数字)">
+					<input type="text" class="form-control" name="num" placeholder="人数 (请输入数字)">
 				</div>
 				<button type="submit" class="btn btn-primary btn-lg btn-block">
 					添加抽奖
