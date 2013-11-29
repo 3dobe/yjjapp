@@ -61,7 +61,7 @@ function joinOne(audiname, callback){
 
 function joinMore(num, callback){
     async.times(num, function(i, next){
-        joinOne('用户'+(nameNum++), function(){
+        joinOne('用户 '+(nameNum++), function(){
             next(null);
         });
     }, function(err) {
