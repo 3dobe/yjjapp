@@ -12,12 +12,14 @@ var readline = require('readline'),
 	actions = {
 		'list': list,
 		'refresh': refresh,
-		'join': join,
+        'join':joinOne,
         'ask':ask,
-        'vote':vote
+        'vote':vote,
+        'joinm':joinMore
 	},
 	clients = [],
-	lectkey ;
+	lectkey ,
+    nameNum = 0;
 
 request = request.defaults({
 	json: true
@@ -35,7 +37,7 @@ rl.question('lectkey ', function(line){
     loop();
 });
 
-function join(audiname, callback){
+function joinOne(audiname, callback){
 	var jar = request.jar();
 	request({
 		url: hostUrl + '/do/a/join',
@@ -55,6 +57,17 @@ function join(audiname, callback){
 		}
 		callback(null);
 	});
+}
+
+function joinMore(num, callback){
+    async.times(num, function(i, next){
+        joinOne('用户'+(nameNum++), function(){
+            next(null);
+        });
+    }, function(err) {
+        callback(null);
+    });
+
 }
 function refresh(callback){
 	var count = 0;
