@@ -24,7 +24,9 @@ $window.on('enter_lecture', function(event, hash){
 	heartbeatTimerId = null;
 	$navbar.find('.sec').addClass('hidden')
 		.filter('#sec-out').removeClass('hidden');
-	loadFrame('#/join');
+	var hash = /^#\/join\?/.test(location.hash) ?
+			location.hash : '#/join';
+	loadFrame(hash);
 });
 
 function heartbeat() {

@@ -71,12 +71,6 @@ function loadFrame(hash, success) {
 			success && success();
 		},
 		error: function(){
-			/*$.get('/do/' + clientType + '/me', function(resObj){
-				loadFrame(
-					resObj['lectid'] ? '#/view' :
-						clientType === 's' ? '#/enter' : '#/join'
-				);
-			});*/
 			location.href = '/';
 		}
 	});
@@ -102,6 +96,21 @@ function notify(msg, type) {
 			'TYPE_ERROR', 'TYPE_OK'
 		][parseInt(type) || 0]]
 	);
+}
+
+// 获取search参数
+function getSearchParams(search) {
+	var pat = /([^?=&#]*)=([^?=&#]+)/g, params = {};
+	decodeURIComponent(search || window.location.search)
+		.replace(pat, function(a, b, c){
+			if (b in params) {	// 已有该键
+				if (! _.isArray(params[b])) params[b] = [params[b]];	// 数组化
+				params[b].push(c);
+			} else {
+				params[b] = c;
+			}
+		});
+	return params;
 }
 
 // 获取hash参数
