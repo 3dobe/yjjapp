@@ -105,8 +105,8 @@ function loop(){
 	rl.question('Cmd: ', function(line){
 		var cmd = getCmd(line);
 		if (_.has(actions, cmd)) {
-            var args = getParams(line).concat(loop);
-            // as callback
+            var args = getParams(line).concat(loop);// as callback
+
             actions[cmd].apply(null, args);
 		} else {
 			console.log(colors.error('No such cmd'));
@@ -134,7 +134,7 @@ function ask(index, text, callback){
 
 }
 
-function vote(index, vid, word, callback){
+function vote(index, vid, optionindex, callback){
     var client = clients[index];
     if (!client) {
         console.log('听众不存在');
@@ -144,7 +144,7 @@ function vote(index, vid, word, callback){
         url: hostUrl + '/do/a/vote?vid=' + vid,
         method: 'get',
         qs: {
-            word: word
+            index: optionindex
         },
         jar: client.jar
     }, function(err, res, obj){
