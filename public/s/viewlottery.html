@@ -52,7 +52,8 @@
 					$btnStart.attr('disabled', true);
 					var ok = resObj['ok'], msg = resObj['msg'];
 					msg && notify(msg, ok);
-					loadFrame('#/viewlottery?play=1&lyid=' + lyid);
+					loadFrame('#/viewlottery?lyid=' + lyid
+						+ (ok ? '&play=1' : ''));
 				});
 			});
 		}
