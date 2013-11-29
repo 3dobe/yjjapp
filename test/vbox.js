@@ -12,10 +12,14 @@ var readline = require('readline'),
 	actions = {
 		'list': list,
 		'refresh': refresh,
-		'join': join
+        'join':joinOne,
+        'ask':ask,
+        'vote':vote,
+        'joinm':joinMore
 	},
-	jars = {},
-	lectkey = process.argv[2];
+	clients = [],
+	lectkey ,
+    nameNum = 0;
 
 request = request.defaults({
 	json: true
@@ -28,9 +32,12 @@ colors.setTheme({
 });
 
 rl.setPrompt('');
-loop();
+rl.question('lectkey ', function(line){
+    lectkey = line;
+    loop();
+});
 
-function join(audiname, callback){
+function joinOne(audiname, callback){
 	var jar = request.jar();
 	request({
 		url: hostUrl + '/do/a/join',
@@ -43,22 +50,37 @@ function join(audiname, callback){
 	}, function(err, res, obj){
 		handleRes.apply(null, arguments);
 		if (obj['ok']) {
-			jars[audiname] = jar;
+			clients.push({
+                name: audiname,
+                jar:jar
+            });
 		}
 		callback(null);
 	});
 }
+
+function joinMore(num, callback){
+    async.times(num, function(i, next){
+        joinOne('用户'+(nameNum++), function(){
+            next(null);
+        });
+    }, function(err) {
+        callback(null);
+    });
+
+}
 function refresh(callback){
 	var count = 0;
-	async.map(_.pairs(jars), function(pair, callback){
-		var name = pair[0], jar = pair[1];
+	async.map(clients, function(client, callback){
+		var name = client.name, jar = client.jar;
 		request({
 			method: 'get',
 			url: hostUrl + '/do/a/heartbeat',
 			jar: jar
 		}, function(err, res, obj){
 			if (! obj['ok']) {
-				delete jars[name];
+				var index = clients.indexOf(client);
+                clients.splice(index,1);
 				console.log(colors.debug('removed: ' + name));
 				count ++;
 			}
@@ -70,9 +92,11 @@ function refresh(callback){
 	});
 }
 function list(callback){
-	var names = _.keys(jars);
+	var names = _.pluck(clients, 'name');
 	if (names.length) {
-		console.log(colors.debug(_.keys(jars).join('   ')));
+		console.log(colors.debug(_.reduce(names, function(memo, name, i){
+            return memo + i + '. ' + name + '   ';
+        }, '')));
 	}
 	console.log(colors.debug('List Count: ' + names.length));
 	callback(null);
@@ -81,15 +105,53 @@ function loop(){
 	rl.question('Cmd: ', function(line){
 		var cmd = getCmd(line);
 		if (_.has(actions, cmd)) {
-			var args = getParams(line).concat(loop);	// as callback
-			actions[cmd].apply(null, args);
+            var args = getParams(line).concat(loop);// as callback
+
+            actions[cmd].apply(null, args);
 		} else {
 			console.log(colors.error('No such cmd'));
 			loop();
 		}
 	});
 }
+function ask(index, text, callback){
+    var client = clients[index];
+    if (!client) {
+        console.log('听众不存在');
+        return callback(null);
+    }
+    request({
+        url: hostUrl + '/do/a/sendmsg',
+        method: 'post',
+        form: {
+            text: text
+        },
+        jar:client.jar
+    }, function(err, res, obj){
+        handleRes.apply(null, arguments);
+        callback(null);
+    });
 
+}
+
+function vote(index, vid, optionindex, callback){
+    var client = clients[index];
+    if (!client) {
+        console.log('听众不存在');
+        return callback(null);
+    }
+    request({
+        url: hostUrl + '/do/a/vote?vid=' + vid,
+        method: 'get',
+        qs: {
+            index: optionindex
+        },
+        jar: client.jar
+    }, function(err, res, obj){
+        handleRes.apply(null, arguments);
+        callback(null);
+    });
+}
 function handleRes(err, res, obj){
 	var ok = obj['ok'],
 		color = colors[ok ? 'info' : 'warn'];

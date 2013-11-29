@@ -5,15 +5,15 @@ $.fn.drawPieChart = function(options, colors){
         values=[],
         data = [];
 
-    if (_.every(options, function(num, word) {
-        return num === 0;
+    if (_.every(options, function(option) {
+        return option.count === 0;
     })) {
-        values = _.map(options, function(){
+        values = _.map(options, function(option, i){
             return 1;
         });
     } else {
-        values = _.map(options, function(num, word){
-            return num;
+        values = _.map(options, function(option, i){
+            return option.count;
         });
     }
     _.each(values, function(val, i) {

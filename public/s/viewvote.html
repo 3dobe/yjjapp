@@ -23,7 +23,7 @@
 		</li>
         <li class="list-group-item">
             <span class="li-label">人数详情</span>
-            <ul id="count"></ul>
+            <ul id="counts"></ul>
         </li>
 	</ul>
 </div>
@@ -44,26 +44,25 @@
 			options = vote['options'];
 
 		$('#content').text(content);
-		var pairs = _.pairs(options);
-            $ulWord.html(_.reduce(pairs, function(memo, pair, i){
-                return memo + trTmpl({
-                    word: pair[0]
-                });
-             }, ''));
-        var sum = _.reduce(pairs, function(memo, pair){
-                return memo + pair[1];
+        $ulWord.html(_.reduce(options, function(memo, option){
+            return memo + trTmpl({
+                word: option.word
+            });
+         }, ''));
+        var sum = _.reduce(options, function(memo, option){
+                return memo + option.count;
             }, 0),
-            countHtml = _.reduce(pairs, function(memo, pair, i){
+            countHtml = _.reduce(options, function(memo, option){
                 return memo + [
                     '<li>',
                     '<div class="square-count"></div>',
-                        '<span class="count">'+ pair[1] +' ('
-                                + (sum ? (pair[1]/sum)*100 : 0) +
+                        '<span class="count">'+ option.count +' ('
+                                + (sum ? ((option.count/sum)*100).toFixed(2) : 0) +
                             '%)</span>',
                     '</li>'
                 ].join('');
             }, '');
-        $('#count').html(countHtml);
+        $('#counts').html(countHtml);
 		$('.square-word').each(function(i, el) {
 			$(el).css('background-color', colors[i]);
 		});

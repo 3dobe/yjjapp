@@ -1,7 +1,9 @@
 
 <div id="main-wrapper">
-	<h1>抽奖管理</h1>
-
+	
+	<h1>
+		<i class="glyphicon glyphicon-th"></i>抽奖管理
+	</h1>
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs">
 		<li>
@@ -36,6 +38,45 @@
                         </tr>
                     </script>
 				</tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <script type="text/html" id="pagin-tmpl">
+                                <ul class="pagination">
+                                    <li>
+                                        <a onclick="updateLotteryList(1)">&laquo;</a>
+                                    </li>
+                                    <% if (current > 2) { %>
+                                    <li class="disabled">
+                                        <a>..</a>
+                                    </li>
+                                    <% } %>
+                                    <% if (prev) { %>
+                                    <li>
+                                        <a onclick="updateLotteryList(<%- prev %>)"><%- prev %></a>
+                                    </li>
+                                    <% } %>
+                                    <li class="active">
+                                        <a onclick="updateLotteryList(<%- current %>)"><%- current %></a>
+                                    </li>
+                                    <% if (next) { %>
+                                    <li>
+                                        <a onclick="updateLotteryList(<%- next %>)"><%- next %></a>
+                                    </li>
+                                    <% } %>
+                                    <% if (current < (count - 1)) { %>
+                                    <li class="disabled">
+                                        <a>..</a>
+                                    </li>
+                                    <% } %>
+                                    <li>
+                                        <a onclick="updateLotteryList(<%- count %>)">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </script>
+                        </td>
+                    </tr>
+                </tfoot>
 			</table>
 		</div>
 		<div class="tab-pane" id="tab-add">
@@ -59,11 +100,13 @@
 		$tbody = $tableList.find('tbody'),
 		$formAdd = $('#form-add'),
 		$inputNum = $('[name="num"]'),
-        trTmpl = _.template($tbody.find('#tr-tmpl').html());
+        trTmpl = _.template($tbody.find('#tr-tmpl').html()),
+        $paginTmpl = $tableList.find('#pagin-tmpl'),
+        paginTmpl = _.template($paginTmpl.html());
 
 	$('.nav-tabs a').click(function (e) {
 		e.preventDefault();
-		updateLotteryList();
+		updateLotteryList(1);
 		$(this).tab('show');
 	}).first().tab('show');
 
@@ -87,17 +130,20 @@
 		});
 	});
 
-	updateLotteryList();
+	updateLotteryList(1);
 
-	function updateLotteryList() {
-		$.get('/do/s/lotterylist', function(resObj){
+	function updateLotteryList(page) {
+		$.get('/do/s/lotterylist', {
+            page: page
+        }, function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (! ok) return;
-            var lotteryList = resObj['lotteryList'];
+            var total = resObj['total'],
+                lotteryList = resObj['lotteryList'];
 			if (! lotteryList.length) {
 				return $tbody.html([
-					'<tr>',
+					'<tr class="text-center">',
 						'<td colspan="3">没有记录</td>',
 					'</tr>'
 				].join(''));
@@ -109,6 +155,15 @@
                     state: lottery['state'] === 'active' ? '已结束' : '未开始'
                 });
 			}, ''));
+            // pagination
+            var count = Math.ceil(total / pageSize);
+            $paginTmpl.next().remove();
+            $paginTmpl.after(paginTmpl({
+                current: page,
+                prev: page > 1 ? page - 1 : null,
+                next: page < count ? page + 1 : null,
+                count: count
+            }));
 		});
 	}
 	// 限制输入为数字
