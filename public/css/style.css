@@ -142,12 +142,12 @@ textarea {
 	height: auto !important;
 }
 #list-viewvote #words,
-#list-viewvote #count {
+#list-viewvote #counts {
 	padding-top: 6px;
 	padding-bottom: 6px;
 }
 #list-viewvote #words > li,
-#list-viewvote #count > li {
+#list-viewvote #counts > li {
 	padding: 4px;
 }
 #list-viewvote .square-word,
@@ -157,7 +157,8 @@ textarea {
 	margin-right: 14px;
 	display: inline-block;
 }
-#list-viewvote .word {
+#list-viewvote .word,
+#list-viewvote .count{
 	vertical-align: top;
 }
 /* 听众反应 */

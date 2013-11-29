@@ -23,7 +23,7 @@
 		</li>
         <li class="list-group-item">
             <span class="li-label">人数详情</span>
-            <ul id="count"></ul>
+            <ul id="counts"></ul>
         </li>
 	</ul>
 </div>
@@ -58,12 +58,12 @@
                     '<li>',
                     '<div class="square-count"></div>',
                         '<span class="count">'+ pair[1] +' ('
-                            + (sum ? (pair[1]/sum)*100 : 0) +
+                            + (sum ? ((pair[1]/sum)*100).toFixed(2) : 0) +
                             '%)</span>',
                     '</li>'
                 ].join('');
             }, '');
-        $('#count').html(countHtml);
+        $('#counts').html(countHtml);
 		$('.square-word').each(function(i, el){
 			$(el).css('background-color', colors[i]);
 		});
