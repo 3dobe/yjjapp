@@ -3,9 +3,8 @@ clientType = 'a';   // 客户端类型
 var heartbeatTimerId = null;
 
 $.get('/do/a/me', function(resObj) {
-	var lectid = resObj['lectid'],
-		audiName = resObj['audiName'];
-	if (lectid) { // 已有讲座
+	var audiName = resObj['audiName'];
+	if (audiName) { // 已有讲座
 		$navbar.find('#username').text(audiName);
 		$window.trigger('enter_lecture');
 	} else {
@@ -19,7 +18,7 @@ $window.on('enter_lecture', function(event, hash){
 	heartbeatTimerId = setInterval(heartbeat, 15 * 1000);  // 15s
 	$navbar.find('.sec').addClass('hidden')
 		.filter('#sec-in').removeClass('hidden');
-	loadFrame(hash || location.hash);
+	loadFrame(hash || location.hash || '#/view');
 }).on('leave_lecture', function(event){
 	clearInterval(heartbeatTimerId);
 	heartbeatTimerId = null;
