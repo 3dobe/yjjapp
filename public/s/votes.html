@@ -55,6 +55,45 @@
                         </tr>
                     </script>
 				</tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <script type="text/html" id="pagin-tmpl">
+                                <ul class="pagination">
+                                    <li>
+                                        <a onclick="updateVoteList(1)">&laquo;</a>
+                                    </li>
+                                    <% if (current > 2) { %>
+                                    <li class="disabled">
+                                        <a>..</a>
+                                    </li>
+                                    <% } %>
+                                    <% if (prev) { %>
+                                    <li>
+                                        <a onclick="updateVoteList(<%- prev %>)"><%- prev %></a>
+                                    </li>
+                                    <% } %>
+                                    <li class="active">
+                                        <a onclick="updateVoteList(<%- current %>)"><%- current %></a>
+                                    </li>
+                                    <% if (next) { %>
+                                    <li>
+                                        <a onclick="updateVoteList(<%- next %>)"><%- next %></a>
+                                    </li>
+                                    <% } %>
+                                    <% if (current < (count - 1)) { %>
+                                    <li class="disabled">
+                                        <a>..</a>
+                                    </li>
+                                    <% } %>
+                                    <li>
+                                        <a onclick="updateVoteList(<%- count %>)">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </script>
+                        </td>
+                    </tr>
+                </tfoot>
 			</table>
 		</div>
 		<div class="tab-pane" id="tab-add">
@@ -87,11 +126,13 @@
 	var $tableList = $('#table-votelist'),
 		$tbody = $tableList.find('tbody'),
 		$formAdd = $('#form-add'),
-        trTmpl = _.template($tbody.find('#tr-tmpl').html());
+        trTmpl = _.template($tbody.find('#tr-tmpl').html()),
+        $paginTmpl = $tableList.find('#pagin-tmpl'),
+        paginTmpl = _.template($paginTmpl.html());
 
 	$('.nav-tabs a').click(function(ev){
 		ev.preventDefault();
-		updateVoteList();
+		updateVoteList(1);
 		$(this).tab('show');
 	}).first().tab('show');
 
@@ -131,17 +172,20 @@
 		});
 	});
 
-	updateVoteList();
+	updateVoteList(1);
 
-	function updateVoteList() {
-		$.get('/do/s/votelist', function(resObj){
+	function updateVoteList(page) {
+		$.get('/do/s/votelist',{
+            page: page
+        }, function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
             msg && notify(msg, ok);
 			if (! ok) return;
-			var voteList = resObj['voteList'];
+			var total = resObj['total'],
+                voteList = resObj['voteList'];
 			if (! voteList.length) {
 				return $tbody.html([
-					'<tr>',
+					'<tr class="text-center">',
 						'<td colspan="3">没有记录</td>',
 					'</tr>'
 				].join(''));
@@ -153,6 +197,15 @@
                     state: vote['state'] === 'active' ? '开启' : '关闭'
                 });
 			}, ''));
+            // pagination
+            var count = Math.ceil(total / pageSize);
+            $paginTmpl.next().remove();
+            $paginTmpl.after(paginTmpl({
+                current: page,
+                prev: page > 1 ? page - 1 : null,
+                next: page < count ? page + 1 : null,
+                count: count
+            }));
 		});
 	}
 </script>
