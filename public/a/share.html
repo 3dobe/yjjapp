@@ -5,10 +5,10 @@
 		min-width: 80px;
 	}
 </style>
-
 <div id="main-wrapper">
-	<h1>文件共享</h1>
-
+	<h1>
+		<i class="glyphicon glyphicon-file"></i>文件共享
+	</h1>
 	<table id="table-filelist" class="table table-striped">
 		<thead>
 		<tr>
@@ -17,26 +17,69 @@
 			<th>下载次数</th>
 		</tr>
 		</thead>
-
 		<tbody></tbody>
+		<tfoot>
+			<tr>
+				<td colspan="3">
+					<script type="text/html" id="pagin-tmpl">
+						<ul class="pagination">
+							<li>
+								<a onclick="getFileList(1)">&laquo;</a>
+							</li>
+							<% if (current > 2){ %>
+								<li class="disabled">
+									<a>..</a>
+								</li>
+							<% } %>
+							<% if (prev) { %>
+								<li>
+									<a onclick="getFileList(<%- prev %>)"><%- prev %></a>
+								</li>
+							<% } %>
+							<li class="active">
+								<a onclick="getFileList(<%- current %>)"><%- current %></a>
+							</li>
+							<% if (next) { %>
+								<li>
+									<a onclick="getFileList(<%- next %>)"><%- next %></a>
+								</li>
+							<% } %>
+							<% if(current < (count - 1)){ %>
+									<li class="disabled">
+										<a>..</a>
+									</li>
+							<% } %>
+							<li>
+								<a onclick="getFileList(<%- count %>)">&raquo;</a>
+							</li>
+						</ul>
+					</script>
+				</td>
+			</tr>
+		</tfoot>
 	</table>
 </div>
 
 <script>
 	var $table = $('#table-filelist'),
 			$tbody = $table.find('tbody');
+			$paginTmpl = $table.find('#pagin-tmpl'),
+			paginTmpl = _.template($paginTmpl.html());
 	
-	getFileList();
+	getFileList(1);
 
-	function getFileList() {
-		$.get('/do/a/filelist', function(resObj) {
+	function getFileList(page) {
+		$.get('/do/a/filelist',{
+			page:page
+		}, function(resObj) {
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (! ok) return;
-			var fileList = resObj['fileList'];
+			var total = resObj['total'],
+			    fileList = resObj['fileList'];
 			if (! fileList.length) {
 				return $tbody.html([
-					'<tr>',
+					'<tr class="text-center">',
 						'<td colspan="3">没有记录</td>',
 					'</tr>'
 				].join(''));
@@ -54,6 +97,15 @@
 					'</tr>'
 				].join('');
 			}, ''));
+			// pagination
+			var count = Math.ceil(total / pageSize);
+			$paginTmpl.next().remove();
+			$paginTmpl.after(paginTmpl({
+				current: page,
+				prev: page > 1 ? page - 1 : null,
+				next: page < count ? page + 1 : null,
+				count: count
+			}));
 		});
 	}
 </script>

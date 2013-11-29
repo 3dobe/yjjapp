@@ -65,8 +65,9 @@ a:hover {
 #navbar {
 	margin-bottom: 0;
 }
-#navbar .glyphicon {
-	margin-right: 6px;
+
+.glyphicon {
+	margin-right: 0.4em;
 }
 
 #frame {
