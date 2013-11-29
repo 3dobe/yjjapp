@@ -13,29 +13,73 @@
 			<script type="text/html" id="tr-tmpl">
 				<tr>
 					<td><%- name %></td>
-					<td><%= onlinetime %></td>
+					<td><%- onlinetime %></td>
 				</tr>
 			</script>
 		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="2">
+					<script type="text/html" id="pagin-tmpl">
+						<ul class="pagination">
+							<li>
+								<a onclick="updateAudienceList(1)">&laquo;</a>
+							</li>
+							<% if (current > 2){ %>
+								<li class="disabled">
+									<a>..</a>
+								</li>
+							<% } %>
+							<% if (prev) { %>
+								<li>
+									<a onclick="updateAudienceList(<%- prev %>)"><%- prev %></a>
+								</li>
+							<% } %>
+							<li class="active">
+								<a onclick="updateAudienceList(<%- current %>)"><%- current %></a>
+							</li>
+							<% if (next) { %>
+								<li>
+									<a onclick="updateAudienceList(<%- next %>)"><%- next %></a>
+								</li>
+							<% } %>
+							<% if(current < (count - 1)){ %>
+								<li class="disabled">
+									<a>..</a>
+								</li>
+							<% } %>
+							<li>
+								<a onclick="updateAudienceList(<%- count %>)">&raquo;</a>
+							</li>
+						</ul>
+					</script>
+				</td>
+			</tr>
+		</tfoot>
 	</table>
 </div>
 
 <script>
 	var $tableAudience = $('#table-audience'),
 		$tbody = $tableAudience.find('tbody'),
-		trTmpl = _.template($tbody.find('#tr-tmpl').html());
+		trTmpl = _.template($tbody.find('#tr-tmpl').html()),
+		$paginTmpl = $tableAudience.find('#pagin-tmpl'),
+		paginTmpl = _.template($paginTmpl.html());
 
-	updateAudienceList();
+	updateAudienceList(1);
 
-	function updateAudienceList() {
-		$.get('/do/a/audiencelist', function(resObj){
+	function updateAudienceList(page) {
+		$.get('/do/a/audiencelist', {
+			page:page
+		}, function(resObj){
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (! ok) return;
-			var audienceList = resObj['audienceList'];
+			var total = resObj['total'],
+				audienceList = resObj['audienceList'];				
 			if (! audienceList.length) {
 				return $tbody.html([
-					'<tr>',
+					'<tr class="text-center">',
 						'<td colspan="2">没有记录</td>',
 					'</tr>'
 					].join(''));
@@ -46,6 +90,15 @@
 					onlinetime: strTime(Date.now() - audience.jointime, true)
 				});
 			}, ''));
+			// pagination
+			var count = Math.ceil(total / pageSize);
+			$paginTmpl.next().remove();
+			$paginTmpl.after(paginTmpl({
+				current: page,
+				prev: page > 1 ? page - 1 : null,
+				next: page < count ? page + 1 : null,
+				count: count
+			}));
 		});
 	}
 </script>

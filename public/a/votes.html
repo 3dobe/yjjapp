@@ -1,4 +1,4 @@
-
+﻿
 <style>
 	#table-votelist th:nth-child(1) {
 		min-width: 80px;
@@ -21,25 +21,89 @@
 			<th>操作</th>
 		</tr>
 		</thead>
-		<tbody></tbody>
+		<tbody>
+            <script type="text/html" id= "tr-tmpl">
+                <tr>
+                    <td><%- content %></td>
+                    <td><%- state %></td>
+                    <td><%- voted %></td>
+                    <td>
+                        <% if(voted === '已参与'){ %>
+                        <a href="#/viewvote?vid=<%- vid %>">详情</a>
+                        <% }else{  %>
+                            <% if(state === '开启'){ %>
+                            <a href="#/vote?vid=<%- vid %>">参与</a>
+                            <% }else{ %>
+                            <span>等待</span>
+                            <% } %>
+                        <% } %>
+                    </td>
+                </tr>
+            </script>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="4">
+					<script type="text/html" id="pagin-tmpl">
+						<ul class="pagination">
+							<li>
+								<a onclick="updateVoteList(1)">&laquo;</a>
+							</li>
+							<% if (current > 2){ %>
+								<li class="disabled">
+									<a>..</a>
+								</li>
+							<% } %>
+							<% if (prev) { %>
+								<li>
+									<a onclick="updateVoteList(<%- prev %>)"><%- prev %></a>
+								</li>
+							<% } %>
+							<li class="active">
+								<a onclick="updateVoteList(<%- current %>)"><%- current %></a>
+							</li>
+							<% if (next) { %>
+								<li>
+									<a onclick="updateVoteList(<%- next %>)"><%- next %></a>
+								</li>
+							<% } %>
+							<% if(current < (count - 1)){ %>
+								<li class="disabled">
+									<a>..</a>
+								</li>
+							<% } %>
+							<li>
+								<a onclick="updateVoteList(<%- count %>)">&raquo;</a>
+							</li>
+						</ul>
+					</script>
+				</td>
+			</tr>
+		</tfoot>
 	</table>
 </div>
 
 <script>
 	var $tableList = $('#table-votelist'),
-			$tbody = $tableList.find('tbody');
+		$tbody = $tableList.find('tbody'),
+        trTmpl = _.template($tbody.find('#tr-tmpl').html()),
+        $paginTmpl = $tableList.find('#pagin-tmpl'),
+		paginTmpl = _.template($paginTmpl.html());
 
-	updateVoteList();
+	updateVoteList(1);
 
-	function updateVoteList() {
-		$.get('/do/a/votelist', function(resObj) {
+	function updateVoteList(page) {
+		$.get('/do/a/votelist',{
+			page:page
+		}, function(resObj) {
 			var ok = resObj['ok'], msg = resObj['msg'];
 			msg && notify(msg, ok);
 			if (! ok) return;
-			var voteList = resObj['voteList'];
+			var total = resObj['total'],
+				voteList = resObj['voteList'];
 			if (! voteList.length) {
 				return $tbody.html([
-					'<tr>',
+					'<tr class="text-center">',
 						'<td colspan="4">没有记录</td>',
 					'</tr>'
 				].join(''));
@@ -49,19 +113,22 @@
 				var vid = vote['id'],
 					active = vote['state'] === 'active',
 					voted = _.contains(votedList, vid);
-				return memo + [
-					'<tr>',
-						'<td>' + vote['content'] + '</td>',
-						'<td>' + (active ? '开启' : '关闭') + '</td>',
-						'<td>' + (voted ? '已参与' : '未参与') + '</td>',
-						'<td>',
-							(voted ? '<a href="#/viewvote?vid='+ vid +'">详情</a>':
-								active ? '<a href="#/vote?vid='+ vid +'">参与</a>':
-										'<span>等待</span>'),
-						'</td>',
-					'</tr>'
-				].join('');
+				return memo +trTmpl({
+                    vid:vote.id,
+                    content: vote.content,
+                    state: vote['state'] === 'active' ? '开启' : '关闭',
+                    voted: voted ? '已参与' : '未参与'
+                });
 			}, ''));
+			// pagination
+			var count = Math.ceil(total / pageSize);
+			$paginTmpl.next().remove();
+			$paginTmpl.after(paginTmpl({
+				current: page,
+				prev: page > 1 ? page - 1 : null,
+				next: page < count ? page + 1 : null,
+				count: count
+			}));
 		});
 	}
 </script>

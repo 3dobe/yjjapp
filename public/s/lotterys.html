@@ -27,11 +27,11 @@
                     <script type="text/html" id= "tr-tmpl">
                         <tr>
                             <td><%- content %></td>
-                            <td><%= state %></td>
+                            <td><%- state %></td>
                             <td>
-                                <a href="#/viewlottery?lyid=<%= id %>">详情</a>
+                                <a href="#/viewlottery?lyid=<%- lyid %>">详情</a>
                                 &nbsp;&nbsp;
-                                <a data-lyid="<%= id %>"class="ex-link dellottery">删除</a>
+                                <a data-lyid="<%- lyid %>"class="ex-link dellottery">删除</a>
                             </td>
                         </tr>
                     </script>
@@ -104,7 +104,7 @@
 			}
 			$tbody.html(_.reduce(lotteryList, function(memo, lottery){
 				return memo + trTmpl({
-                    id:lottery.id,
+                    lyid:lottery.id,
                     content: lottery.content,
                     state: lottery['state'] === 'active' ? '已结束' : '未开始'
                 });
