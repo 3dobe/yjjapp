@@ -7,6 +7,7 @@ html, body {
 	background-color: #fafafa;
 	font-family: "微软雅黑", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	height: 100%;
+	word-break: break-all;
 }
 #main {
 	min-height: 100%;
@@ -38,7 +39,7 @@ a:hover {
 	display: block;
 }
 .pagination {
-	margin: 10px 0;
+	margin: 6px 0 10px 0;
 }
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
@@ -92,9 +93,6 @@ a:hover {
 }
 th {
 	min-width: 80px;
-}
-th, td {
-	word-break: break-all;
 }
 .text-center {
 	text-align: center;
@@ -166,13 +164,6 @@ textarea {
 #list-viewvote .count{
 	vertical-align: top;
 }
-/* 听众反应 */
-#table-msg th {
-	min-width: 80px;
-}
-#table-audience th {
-	min-width: 80px;
-}
 
 #page_message {
 	opacity: 0.94;
@@ -182,13 +173,6 @@ textarea {
 }
 
 
-/* 抽奖列表 */
-#table-lotterylist th:nth-child(1) {
-	min-width: 80px;
-}
-#table-lotterylist th:nth-child(2) {
-	min-width: 60px;
-}
 /* 抽奖详情 */
 #list-viewlottery > .list-group-item > p {
 	margin-left: 40px;
@@ -203,9 +187,6 @@ textarea {
 }
 
 /* vote list */
-#table-votelist th:nth-child(1) {
-	min-width: 80px;
-}
 #table-votelist th:nth-child(2) {
 	min-width: 50px;
 }
