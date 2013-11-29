@@ -21,7 +21,7 @@ $.fn.drawPieChart = function(options, colors){
     if (_.isEqual(_.compact(values), [1])) {
         var index = values.indexOf(1),
             ix = index === 0 ? 1 : index - 1,
-            diff = 0.000001;
+            diff = 0.0000001;
         values[index] -= diff;
         values[ix] += diff;
     }
