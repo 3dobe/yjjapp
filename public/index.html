@@ -25,7 +25,7 @@
 	</head>
 	<body>
 		<div id="body-wrapper">
-			<div id="frame">
+			<div id="frame" class="hidden">
 				<div class="thumbnail">
 					<img id="logo" src="/img/logo.jpg" />
 					<div class="caption">
@@ -47,6 +47,10 @@
 			$('#frame').delegate('[href]', 'click', function(){
 				location.href = $(this).attr('href');
 			});
+			// show after img loaded
+			window.onload = function(){
+				$('#frame').removeClass('hidden');
+			}
 		</script>
 	</body>
 </html>
