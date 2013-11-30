@@ -7,7 +7,7 @@
 			<p id="content"></p>
 		</li>
 		<li class="list-group-item">
-			<span class="li-label">选项相关</span>
+			<span class="li-label">相关选项</span>
 			<ul id="words">
                 <script type="text/html" id= "li-tmpl">
                     <li>
@@ -17,13 +17,23 @@
                 </script>
             </ul>
 		</li>
-		<li class="list-group-item">
-			<span class="li-label">图表结果</span>
-			<canvas id="chart" width="350" height="350"></canvas>
-		</li>
         <li class="list-group-item">
-            <span class="li-label">人数详情</span>
-            <ul id="counts"></ul>
+            <ul class="nav nav-tabs">
+                <li>
+                    <a class="ex-link" href="#tab-chart" data-toggle="tab">图表结果</a>
+                </li>
+                <li>
+                    <a class="ex-link" href="#tab-counts" data-toggle="tab">人数详情</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-chart">
+                    <canvas id="chart" width="350" height="350"></canvas>
+                </div>
+                <div class="tab-pane active" id="tab-counts">
+                    <ul id="counts"></ul>
+                </div>
+            </div>
         </li>
 	</ul>
 </div>
@@ -32,43 +42,54 @@
 	var vid = getHashParams()['vid'],
 		colors = ["#F38630", "#E0E4CC", "#69D2E7", "#5E344C"],
         $ulWord = $('#words'),
-        trTmpl = _.template($ulWord.find('#li-tmpl').html());
+        liTmpl = _.template($ulWord.find('#li-tmpl').html());
 
-	$.get('/do/a/viewvote?vid=' + vid, function(resObj) {
-		var ok = resObj['ok'], msg = resObj['msg'];
-		msg && notify(msg, ok);
-		if (! ok) return window.history.back();
+        // tabs pages
+    $('.nav-tabs a').click(function(ev){
+        ev.preventDefault();
+        update();
+        $(this).tab('show');
+    }).first().tab('show');
 
-		var vote = resObj['vote'],
-			content = vote['content'],
-			options = vote['options'];
+    update();
 
-		$('#content').text(content);
-        $ulWord.html(_.reduce(options, function(memo, option){
-            return memo + trTmpl({
-                word: option.word
+    function update(){
+        $.get('/do/a/viewvote?vid=' + vid, function(resObj) {
+            var ok = resObj['ok'], msg = resObj['msg'];
+            msg && notify(msg, ok);
+            if (! ok) return window.history.back();
+
+            var vote = resObj['vote'],
+                content = vote['content'],
+                options = vote['options'];
+
+            $('#content').text(content);
+            $ulWord.html(_.reduce(options, function(memo, option){
+                return memo + liTmpl({
+                    word: option.word
+                });
+            }, ''));
+            var sum = _.reduce(options, function(memo, option){
+                    return memo + option.count;
+                }, 0),
+                countHtml = _.reduce(options, function(memo, option){
+                    return memo + [
+                        '<li>',
+                        '<div class="square-count"></div>',
+                            '<span class="count">'+ option.count +'&nbsp;&nbsp;&nbsp;('
+                                + (sum ? ((option.count/sum)*100).toFixed(2) : 0) +
+                                '%)</span>',
+                        '</li>'
+                    ].join('');
+                }, '');
+            $('#counts').html(countHtml);
+            $('.square-word').each(function(i, el){
+                $(el).css('background-color', colors[i]);
             });
-        }, ''));
-        var sum = _.reduce(options, function(memo, option){
-                return memo + option.count;
-            }, 0),
-            countHtml = _.reduce(options, function(memo, option){
-                return memo + [
-                    '<li>',
-                    '<div class="square-count"></div>',
-                        '<span class="count">'+ option.count +'&nbsp;&nbsp;&nbsp;('
-                            + (sum ? ((option.count/sum)*100).toFixed(2) : 0) +
-                            '%)</span>',
-                    '</li>'
-                ].join('');
-            }, '');
-        $('#counts').html(countHtml);
-		$('.square-word').each(function(i, el){
-			$(el).css('background-color', colors[i]);
-		});
-        $('.square-count').each(function(i, el){
-            $(el).css('background-color', colors[i]);
+            $('.square-count').each(function(i, el){
+                $(el).css('background-color', colors[i]);
+            });
+            $('#chart').drawPieChart(options, colors);
         });
-        $('#chart').drawPieChart(options, colors);
-	});
+    }
 </script>
