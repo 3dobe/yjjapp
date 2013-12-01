@@ -45,15 +45,18 @@
 			awlist = lottery['awlist'];
 		if (state === 'active') {
 			$btnStart.attr('disabled', true);
-
 		} else {
 			$btnStart.on('click', function(){
+				$btnStart.attr('disabled', true);
 				$.get('/do/s/startlottery?lyid=' + lyid, function(resObj){
-					$btnStart.attr('disabled', true);
 					var ok = resObj['ok'], msg = resObj['msg'];
 					msg && notify(msg, ok);
-					loadFrame('#/viewlottery?lyid=' + lyid
-						+ (ok ? '&play=1' : ''));
+					if (ok) {
+						loadFrame('#/viewlottery?lyid=' + lyid
+							+ (ok ? '&play=1' : ''));
+					} else {
+						$btnStart.attr('disabled', false);
+					}
 				});
 			});
 		}
