@@ -54,11 +54,11 @@
     update();
 
     function update(){
+        $('.tab-content').hide();
         $.get('/do/a/viewvote?vid=' + vid, function(resObj) {
             var ok = resObj['ok'], msg = resObj['msg'];
             msg && notify(msg, ok);
             if (! ok) return window.history.back();
-
             var vote = resObj['vote'],
                 content = vote['content'],
                 options = vote['options'];
@@ -90,6 +90,7 @@
                 $(el).css('background-color', colors[i]);
             });
             $('#chart').drawPieChart(options, colors);
+            $('.tab-content').show();
         });
     }
 </script>
