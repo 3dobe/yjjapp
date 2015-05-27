@@ -3,7 +3,7 @@ var $window = $(window),
 	$body = $('body'),
 	$navbar = $body.find('#navbar'),
 	$frame = $body.find('#frame'),
-	hostUrl = 'http://yjjapp.duapp.com',
+	hostUrl = location.origin + '',
 	pageSize = 10,	// same as config
 	clientType = '', hashPage = '';
 

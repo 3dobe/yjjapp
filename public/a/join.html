@@ -24,10 +24,16 @@
 		$formJoin.find('[name="key"]').attr('readonly', true).val(key);
 	}
 
+$.get('/do/a/me', function(resObj) {
+	var audiName = resObj['audiName'];
+	if (audiName) { // 已登录
+		return loadFrame('#/view');
+	}
 	$formJoin.ajaxForm({
 		url: '/do/a/join',
 		success: function(res){
 			if (res['ok']) $window.trigger('enter_lecture', '#/view');
 		}
 	});
+});
 </script>
