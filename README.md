@@ -1,9 +1,28 @@
 ﻿## 演讲家App
+
 一个连接讲端和听端，催化各类互动环节的演讲应用
+
 - 3dobe, 2013软件设计大赛
 - 16-308 @ WYU
 
+在线演示: <http://yjjapp.3dobe.fritx.me>
+
+## 参赛资料
+
+<img width="300" src="pic/0-open.png">&nbsp;&nbsp;&nbsp;
+<img width="300" src="pic/1-join.png">
+
+<img width="300" src="pic/2-files.png">&nbsp;&nbsp;&nbsp;
+<img width="300" src="pic/3-voting.png">
+
+<img width="300" src="pic/4-qna.png">&nbsp;&nbsp;&nbsp;
+<img width="300" src="pic/5-lottery.png">
+
+<img width="300" src="pic/6-pros.png">&nbsp;&nbsp;&nbsp;
+<img width="300" src="pic/7-plans.png">
+
 ## 使用说明
+
 1. 安装Node.js(v0.10.22以上) 网址 http://nodejs.org/
 2. 命令行下进入该项目目录下
 		`cd yjjapp`
